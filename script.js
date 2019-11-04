@@ -5,7 +5,7 @@ function setup() {
     console.log("Setup audio context and oscillator...");
     audioCtx = new AudioContext();
     oscillator = audioCtx.createOscillator();
-    oscillator.type = 'square';
+    oscillator.type = 'sine';
     oscillator.connect(audioCtx.destination);
 }
 
@@ -60,14 +60,14 @@ window.onload = function() {
     });
     [...document.getElementsByClassName("setFreqBtn")].forEach((elem) => {
         elem.onclick = () => {
+            var fundamental = elem.parentElement.querySelector(".freqSlider").value;
+
             var harmonic = 1;
             var harmonicNum = elem.parentElement.querySelector(".harmonicNum");
             if (harmonicNum != null) {
                 harmonic = parseInt(harmonicNum.value);
-                console.log("Using harmonic of " + harmonic);
+                console.log("Using fundamental of " + fundamental + " and harmonic of " + harmonic);
             }
-            var fundamental = elem.parentElement.querySelector(".freqSlider").value;
-            console.log("Using fundamental of " + fundamental);
             var frequency = harmonicFrequency(fundamental, harmonic);
             console.log("Setting frequency to " + frequency);
             setFrequency(frequency);
