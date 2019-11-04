@@ -33,6 +33,16 @@ function setFrequency(x) {
     oscillator.frequency.setValueAtTime(x, audioCtx.currentTime);
 }
 
+// fundamental is the frequency in hertz
+// harmonic is an int for which value in the harmonic series to play
+function harmonicFrequency(fundamental, harmonic) {
+    if (typeof(harmonic) === 'number' && Number.isInteger(harmonic) && harmonic > 0)
+        return fundamental * harmonic;
+    else
+        console.log("Trouble calculating harmonic " + harmonic);
+        return undefined;
+}
+
 window.onload = function() {
     document.getElementById("setupBtn").onclick = () => {
         setup();
@@ -43,12 +53,24 @@ window.onload = function() {
     document.getElementById("pauseBtn").onclick = (event) => {
         togglePlayback(event.target);
     }
-    document.getElementById("freqSlider").onchange = (event) => {
-        document.getElementById("freqTxt").value = event.target.value;
-    }
-    document.getElementById("setFreqBtn").onclick = () => {
-        var frequency = document.getElementById("freqSlider").value;
-        console.log("Setting frequency to " + frequency);
-        setFrequency(frequency);
-    }
+    [...document.getElementsByClassName("freqSlider")].forEach((elem) => {
+        elem.onchange = (event) => {
+            elem.parentElement.querySelector(".freqTxt").value = event.target.value;
+        };
+    });
+    [...document.getElementsByClassName("setFreqBtn")].forEach((elem) => {
+        elem.onclick = () => {
+            var harmonic = 1;
+            var harmonicNum = elem.parentElement.querySelector(".harmonicNum");
+            if (harmonicNum != null) {
+                harmonic = parseInt(harmonicNum.value);
+                console.log("Using harmonic of " + harmonic);
+            }
+            var fundamental = elem.parentElement.querySelector(".freqSlider").value;
+            console.log("Using fundamental of " + fundamental);
+            var frequency = harmonicFrequency(fundamental, harmonic);
+            console.log("Setting frequency to " + frequency);
+            setFrequency(frequency);
+        }
+    });
 }

@@ -13,10 +13,17 @@
             <button id="pauseBtn">Pause</button>
         </div>
         <div>
-            <h2>Pitch</h2>
-            <input type="text" value="440" id="freqTxt" readonly>
-            <input type="range" min="20" max="10000" value="440" class="slider" id="freqSlider">
-            <button id="setFreqBtn">Set frequency</button>
+            <h2>Single Pitch</h2>
+            <input type="text" value="440" class="freqTxt" readonly>
+            <input type="range" min="20" max="10000" value="440" class="slider freqSlider">
+            <button class="setFreqBtn">Set frequency</button>
+        </div>
+        <div>
+            <h2>Single Harmonic</h2>
+            <input type="text" value="440" class="freqTxt" readonly>
+            <input type="range" min="20" max="10000" value="440" class="slider freqSlider">
+            <input type="number" min="1" value="1" class="harmonicNum">
+            <button class="setFreqBtn">Set frequency</button>
         </div>
     </body>
 </html>
