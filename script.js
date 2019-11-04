@@ -1,18 +1,29 @@
-var audioCtx;
-var oscillator;
+let audioCtx;
+let gainNode;
+let oscillators = [];
 
 function setup() {
     console.log("Setup audio context and oscillator...");
     audioCtx = new AudioContext();
-    oscillator = audioCtx.createOscillator();
+    gainNode = audioCtx.createGain();
+    gainNode.connect(audioCtx.destination);
+    createOsc();
+}
+
+function createOsc() {
+    console.log("Creating a new oscillator...");
+    var oscillator = audioCtx.createOscillator();
     oscillator.type = 'sine';
-    oscillator.connect(audioCtx.destination);
+    oscillator.connect(gainNode);
+    oscillators.push(oscillator);
+    gainNode.gain.value = 1 / oscillators.length;
+    console.log("There are " + oscillators.length + " oscillators and a total gain of " + gainNode.gain.value);
 }
 
 function start() {
     console.log("Starting oscillator...");
-    oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // value in hertz
-    oscillator.start();
+    oscillators[0].frequency.setValueAtTime(440, audioCtx.currentTime); // value in hertz
+    oscillators[0].start();
 }
 
 function togglePlayback(button) {
@@ -30,7 +41,7 @@ function togglePlayback(button) {
 }
 
 function setFrequency(x) {
-    oscillator.frequency.setValueAtTime(x, audioCtx.currentTime);
+    oscillators[0].frequency.setValueAtTime(x, audioCtx.currentTime);
 }
 
 // fundamental is the frequency in hertz
