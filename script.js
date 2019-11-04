@@ -17,14 +17,20 @@ function start() {
 
 function togglePlayback(button) {
     if (audioCtx.state === 'running') {
+        console.log("Suspending playback...");
         audioCtx.suspend().then(() => {
             button.textContent = 'Resume';
         });
-        } else if (audioCtx.state === 'suspended') {
+    } else if (audioCtx.state === 'suspended') {
+        console.log("Resuming playback...");
         audioCtx.resume().then(() => {
             button.textContent = 'Pause';
         });  
     }
+}
+
+function setFrequency(x) {
+    oscillator.frequency.setValueAtTime(x, audioCtx.currentTime);
 }
 
 window.onload = function() {
@@ -34,8 +40,15 @@ window.onload = function() {
     document.getElementById("startBtn").onclick = () => {
         start();
     }
-    var pauseBtn = document.getElementById("pauseBtn");
-    pauseBtn.onclick = () => {
-        togglePlayback(pauseBtn);
+    document.getElementById("pauseBtn").onclick = (event) => {
+        togglePlayback(event.target);
+    }
+    document.getElementById("freqSlider").onchange = (event) => {
+        document.getElementById("freqTxt").value = event.target.value;
+    }
+    document.getElementById("setFreqBtn").onclick = () => {
+        var frequency = document.getElementById("freqSlider").value;
+        console.log("Setting frequency to " + frequency);
+        setFrequency(frequency);
     }
 }

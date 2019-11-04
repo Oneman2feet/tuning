@@ -6,8 +6,17 @@
     </head>
     <body>
         <h1>Tuning</h1>
-        <button id="setupBtn">Setup</button>
-        <button id="startBtn">Start</button>
-        <button id="pauseBtn">Pause</button>
+        <div>
+            <h2>Playback</h2>
+            <button id="setupBtn">Setup</button>
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn">Pause</button>
+        </div>
+        <div>
+            <h2>Pitch</h2>
+            <input type="text" value="440" id="freqTxt" readonly>
+            <input type="range" min="20" max="10000" value="440" class="slider" id="freqSlider">
+            <button id="setFreqBtn">Set frequency</button>
+        </div>
     </body>
 </html>
