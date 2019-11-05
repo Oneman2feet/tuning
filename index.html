@@ -51,19 +51,20 @@
                 <option value="3/2">Perfect fifth</option>
                 <option value="4/3">Perfect fourth</option>
                 <option value="5/3">Major sixth (from 5 to 3)</option>
-                <option value="5/4">Major third</option>
+                <option value="5/4">Just major third</option>
                 <option value="6/5">Just minor third (from 3 to 5)</option>
                 <option value="7/5">Barbershop tritone (from 3 to 7)</option>
                 <option value="7/6">Septimal minor third (from 5 to 7)</option>
                 <option value="7/4">Barbershop minor seventh (7th harmonic)</option>
-                <option value="8/5">Minor sixth (from 3 to 1)</option>
-                <option value="8/7">Major second (ultra major from 7 to 1)</option>
+                <option value="8/5">Minor sixth (from 3 to 8)</option>
+                <option value="8/7">Supermajor second (7 to 8)</option>
                 <option value="9/5">Minor seventh (3 to 9)</option>
-                <option value="9/8">Major second (major tone)</option>
-                <option value="9/7">Major third (major tone)</option>
-                <option value="10/9">Major second (minor tone)</option>
-                <option value="11/10">Major second (ultra minor tone)</option>
+                <option value="9/8">Greater tone (8 to 9)</option>
+                <option value="9/7">Greater major third (7 to 9)</option>
+                <option value="10/9">Lesser tone (9 to 10)</option>
+                <option value="11/10">Lesser undecimal neutral second (11th-related)</option>
                 <option value="11/9">Neutral third (from 9 to 11)</option>
+                <option value="13/8">Minor sixth</option>
                 <option value="15/8">Major seventh</option>
                 <option value="16/9">Minor 7th (from 9 to 1)</option>
                 <option value="16/15">Minor second</option>
@@ -76,17 +77,17 @@
             <input type="text" value="440" class="freqTxt" readonly>
             <input type="range" min="50" max="1000" value="440" class="slider freqSlider">
             <select class="chordSelect">
-                <option value="[2, 3, 4]">Fifth chord (1 5 1)</option>
-                <option value="[3, 4, 5, 6]">Major chord (1 5 1 3)</option>
-                <option value="[4, 5, 6]">Major chord (1 3 5)</option>
-                <option value="[4, 5, 6, 7]">Seventh chord (1 3 5 7)</option>
-                <option value="[5, 6, 7]">Minor chord (3 5 7)</option>
-                <option value="[6, 7, 8]">Diminished chord (5 7 9)</option>
-                <option value="[4, 5, 6, 8]">Major chord (1 3 5 1)</option>
-                <option value="[7, 9]">Cluster (7 1 9)</option>
+                <option value="[4, 5, 6]">Major triad root position</option>
+                <option value="[4, 5, 6, 7]">Barbershop seventh</option>
+                <option value="[5, 6, 7, 9]">Dominant ninth root omitted (3 5 7 9)</option>
                 <option value="[4, 5, 6, 9]">Ninth chord (1 3 5 9)</option>
-                <option value="[4, 5, 7, 9]">Seventh-Ninth chord (1 3 7 9)</option>
-                <option value="[4, 6, 7, 9]">Seventh-Ninth chord (1 5 7 9)</option>
+                <option value="[10, 12, 15]">Minor triad root position</option>
+
+
+                minor sevenths, minor sixths, half-diminished
+sevenths, diminished sevenths, major sevenths, major sixths, major chords with added
+ninth, augmented triads, augmented dominant sevenths, and dominant
+sevenths with flatted fifth.
             </select>
             <button class="setFreqBtn">Set chord</button>
             <button class="clearFreqBtn">Clear chord</button>
