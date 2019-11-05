@@ -8,6 +8,16 @@ function harmonicFrequency(fundamental, harmonic) {
         return undefined;
 }
 
+// fundamental is the frequency in hertz
+// ratio is a positive float for which interval above to play
+function intervalFrequency(fundamental, ratio) {
+    if (typeof(ratio) === 'number' && Number.isFinite(ratio) && ratio > 0)
+        return fundamental * ratio;
+    else
+        console.log("Trouble calculating interval with ratio " + ratio);
+        return undefined;
+}
+
 window.onload = function() {
     document.getElementById("setupBtn").onclick = (event) => {
         setup(event.target);
@@ -24,6 +34,7 @@ window.onload = function() {
             var frequency;
             var harmonicNum = elem.parentElement.querySelector(".harmonicNum");
             var harmonicSelect = elem.parentElement.querySelectorAll(".harmonicSelect");
+            var intervalSelect = elem.parentElement.querySelector(".intervalSelect");
             if (harmonicNum != null) {
                 harmonic = parseInt(harmonicNum.value);
                 console.log("Using fundamental of " + fundamental + " and harmonic of " + harmonic);
@@ -39,6 +50,12 @@ window.onload = function() {
                     return frequency;
                 });
                 playChord(notes);
+            } else if (intervalSelect != null) {
+                console.log(intervalSelect);
+                var selected = intervalSelect[intervalSelect.selectedIndex].value;
+                var ratio = parseFloat(eval(selected));
+                frequency = intervalFrequency(fundamental, ratio);
+                playChord([fundamental, frequency])
             } else {
                 frequency = harmonicFrequency(fundamental, 1);
                 playChord([frequency]);

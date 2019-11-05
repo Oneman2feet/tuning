@@ -41,5 +41,22 @@
             <input type="checkbox" name="harmonic11" class="harmonicSelect" value="11" /> 11
             <button class="setFreqBtn">Set frequencies</button>
         </div>
+        <div>
+            <h2>Intervals</h2>
+            <input type="text" value="440" class="freqTxt" readonly>
+            <input type="range" min="50" max="1000" value="440" class="slider freqSlider">
+            <select class="intervalSelect">
+                <option value="1">Perfect unison</option>
+                <option value="2">Perfect octave</option>
+                <option value="3/2">Perfect fifth</option>
+                <option value="4/3">Perfect fourth</option>
+                <option value="5/4">Major third</option>
+                <option value="6/5">Just minor third (between 3 and 5)</option>
+                <option value="7/6">Septimal minor third (between 5 and 7)</option>
+                <option value="8/7">Interval from minor 7 to 1</option>
+                <option value="9/8">Major second (a la ninth)</option>
+            </select>
+            <button class="setFreqBtn">Set interval</button>
+        </div>
     </body>
 </html>
