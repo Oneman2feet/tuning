@@ -49,14 +49,12 @@ function calcGain() {
 
 // adds a new oscillator to the oscillator list
 function addOscillator(frequency) {
-    console.log("Creating a new oscillator with frequency " + frequency);
     var oscillator = audioCtx.createOscillator();
     oscillator.type = 'sine';
     oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
     oscillator.connect(gainNode);
     oscillators.push(oscillator);
     calcGain();
-    console.log("There are " + oscillators.length + " oscillators and a total gain of " + gainNode.gain.value);
     oscillator.start();
 }
 
@@ -82,14 +80,24 @@ function clearOscillators() {
 
 // change the frequency of an oscillator
 function setFrequency(oscillator, frequency) {
-    console.log("Setting frequency of oscillator " + oscillator + " to " + frequency);
     oscillators[oscillator].frequency.setValueAtTime(frequency, audioCtx.currentTime);
 }
 
 // given a list of frequencies, play them
 function playChord(frequencyList) {
     clearOscillators();
-    for (frequencyIndex in frequencyList) {
-        addOscillator(frequencyList[frequencyIndex]);
+    if (frequencyList && frequencyList.length > 0) {
+        if (frequencyList.length == 1) {
+            console.log("Playing frequency " + frequencyList);
+        } else if (frequencyList.length == 2) {
+            console.log("Playing interval of " + frequencyList)
+        } else {
+            console.log("Playing chord of " + frequencyList);
+        } 
+        for (frequencyIndex in frequencyList) {
+            addOscillator(frequencyList[frequencyIndex]);
+        }
+    } else {
+        console.log("Ending all oscillators...");
     }
 }

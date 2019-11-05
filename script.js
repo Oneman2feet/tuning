@@ -38,7 +38,6 @@ window.onload = function() {
             var chordSelect = elem.parentElement.querySelector(".chordSelect");
             if (harmonicNum != null) {
                 harmonic = parseInt(harmonicNum.value);
-                console.log("Using fundamental of " + fundamental + " and harmonic of " + harmonic);
                 frequency = harmonicFrequency(fundamental, harmonic);
                 playChord([frequency]);
             } else if (harmonicSelect.length > 0) {
