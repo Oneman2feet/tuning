@@ -35,6 +35,7 @@ window.onload = function() {
             var harmonicNum = elem.parentElement.querySelector(".harmonicNum");
             var harmonicSelect = elem.parentElement.querySelectorAll(".harmonicSelect");
             var intervalSelect = elem.parentElement.querySelector(".intervalSelect");
+            var chordSelect = elem.parentElement.querySelector(".chordSelect");
             if (harmonicNum != null) {
                 harmonic = parseInt(harmonicNum.value);
                 console.log("Using fundamental of " + fundamental + " and harmonic of " + harmonic);
@@ -51,11 +52,20 @@ window.onload = function() {
                 });
                 playChord(notes);
             } else if (intervalSelect != null) {
-                console.log(intervalSelect);
                 var selected = intervalSelect[intervalSelect.selectedIndex].value;
                 var ratio = parseFloat(eval(selected));
                 frequency = intervalFrequency(fundamental, ratio);
-                playChord([fundamental, frequency])
+                playChord([fundamental, frequency]);
+            } else if (chordSelect != null) {
+                var selected = chordSelect[chordSelect.selectedIndex].value;
+                var partialList = eval(selected);
+                if (partialList.length) {
+                    var firstPartial = partialList[0];
+                    notes = partialList.map((elem) => {
+                        return elem / firstPartial * fundamental;
+                    });
+                    playChord(notes);
+                }
             } else {
                 frequency = harmonicFrequency(fundamental, 1);
                 playChord([frequency]);
