@@ -7,30 +7,39 @@ function setup() {
     audioCtx = new AudioContext();
     gainNode = audioCtx.createGain();
     gainNode.connect(audioCtx.destination);
-    createOsc();
+    createOsc(440);
+    audioCtx.suspend();
 }
 
-function createOsc() {
-    console.log("Creating a new oscillator...");
+// todo, make a separate class to handle playing a chord of frequencies (like an arraylist)
+function createOsc(frequency) {
+    console.log("Creating a new oscillator with frequency " + frequency);
     var oscillator = audioCtx.createOscillator();
     oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
     oscillator.connect(gainNode);
     oscillators.push(oscillator);
     gainNode.gain.value = 1 / oscillators.length;
     console.log("There are " + oscillators.length + " oscillators and a total gain of " + gainNode.gain.value);
+    oscillator.start();
 }
 
-function startOsc(oscillator) {
-    console.log("Starting oscillator " + oscillator + "...");
-    oscillators[oscillator].frequency.setValueAtTime(440, audioCtx.currentTime); // value in hertz
-    oscillators[oscillator].start();
+// stops and removes all oscillators in the list after the first n
+function cullOscs(n) {
+    var oscillator;
+    while (oscillators.length > n) {
+        oscillator = oscillators.pop();
+        oscillator.stop();
+        oscillator.disconnect(gainNode);
+        gainNode.gain.value = 1 / oscillators.length;
+    }
 }
 
 function togglePlayback(button) {
     if (audioCtx.state === 'running') {
         console.log("Suspending playback...");
         audioCtx.suspend().then(() => {
-            button.textContent = 'Resume';
+            button.textContent = 'Play';
         });
     } else if (audioCtx.state === 'suspended') {
         console.log("Resuming playback...");
@@ -59,10 +68,7 @@ window.onload = function() {
     document.getElementById("setupBtn").onclick = () => {
         setup();
     }
-    document.getElementById("startBtn").onclick = () => {
-        startOsc(0);
-    }
-    document.getElementById("pauseBtn").onclick = (event) => {
+    document.getElementById("playPauseBtn").onclick = (event) => {
         togglePlayback(event.target);
     }
     [...document.getElementsByClassName("freqSlider")].forEach((elem) => {
@@ -82,21 +88,25 @@ window.onload = function() {
                 console.log("Using fundamental of " + fundamental + " and harmonic of " + harmonic);
                 frequency = harmonicFrequency(fundamental, harmonic);
                 setFrequency(0, frequency);
+                cullOscs(1);
             } else if (harmonicSelect.length > 0) {
-                var checkedHarmonics = [...harmonicSelect].filter((elem) => {
+                var notes = [...harmonicSelect].filter((elem) => {
                     return elem.checked;
-                }).forEach((elem, index) => {
-                    if (oscillators.length <= index) {
-                        createOsc();
-                        startOsc(index);
-                    }
+                });
+                notes.forEach((elem, index) => {
                     harmonic = parseInt(elem.value);
                     frequency = harmonicFrequency(fundamental, harmonic);
-                    setFrequency(index, frequency);
+                    if (oscillators.length <= index) {
+                        createOsc(frequency);
+                    } else {
+                        setFrequency(index, frequency);
+                    }
                 });
+                cullOscs(notes.length);
             } else {
                 frequency = harmonicFrequency(fundamental, 1);
                 setFrequency(0, frequency);
+                cullOscs(1);
             }
         }
     });
