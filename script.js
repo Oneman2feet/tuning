@@ -27,6 +27,11 @@ window.onload = function() {
             elem.parentElement.querySelector(".freqTxt").value = event.target.value;
         };
     });
+    [...document.getElementsByClassName("clearFreqBtn")].forEach((elem) => {
+        elem.onclick = () => {
+            playChord([]);
+        };
+    });
     [...document.getElementsByClassName("setFreqBtn")].forEach((elem) => {
         elem.onclick = () => {
             var fundamental = elem.parentElement.querySelector(".freqSlider").value;
