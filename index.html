@@ -50,11 +50,18 @@
                 <option value="2">Perfect octave</option>
                 <option value="3/2">Perfect fifth</option>
                 <option value="4/3">Perfect fourth</option>
+                <option value="5/3">Major sixth (from 5 to 3)</option>
                 <option value="5/4">Major third</option>
-                <option value="6/5">Just minor third (between 3 and 5)</option>
+                <option value="6/5">Just minor third (from 3 to 5)</option>
                 <option value="7/6">Septimal minor third (between 5 and 7)</option>
-                <option value="8/7">Interval from minor 7 to 1</option>
-                <option value="9/8">Major second (a la ninth)</option>
+                <option value="7/4">Minor seventh</option>
+                <option value="8/5">Minor sixth (from 3 to 1)</option>
+                <option value="8/7">Major second (ultra major from 7 to 1)</option>
+                <option value="9/8">Major second (major tone)</option>
+                <option value="9/7">Major third (major tone)</option>
+                <option value="10/9">Major second (minor tone)</option>
+                <option value="11/10">Major second (ultra minor tone)</option>
+                <option value="11/9">Neutral third (from 9 to 11)</option>
             </select>
             <button class="setFreqBtn">Set interval</button>
         </div>
@@ -63,11 +70,17 @@
             <input type="text" value="440" class="freqTxt" readonly>
             <input type="range" min="50" max="1000" value="440" class="slider freqSlider">
             <select class="chordSelect">
-                <option value="[4, 5, 6]">Major chord</option>
-                <option value="[4, 5, 6, 7]">Seventh chord</option>
-                <option value="[5, 6, 7]">Minor chord</option>
-                <option value="[6, 7, 8]">Diminished chord</option>
-                <option value="[4, 5, 6, 9]">Ninth chord</option>
+                <option value="[2, 3, 4]">Fifth chord (1 5 1)</option>
+                <option value="[3, 4, 5, 6]">Major chord (1 5 1 3)</option>
+                <option value="[4, 5, 6]">Major chord (1 3 5)</option>
+                <option value="[4, 5, 6, 7]">Seventh chord (1 3 5 7)</option>
+                <option value="[5, 6, 7]">Minor chord (3 5 7)</option>
+                <option value="[6, 7, 8]">Diminished chord (5 7 9)</option>
+                <option value="[4, 5, 6, 8]">Major chord (1 3 5 1)</option>
+                <option value="[7, 9]">Cluster (7 1 9)</option>
+                <option value="[4, 5, 6, 9]">Ninth chord (1 3 5 9)</option>
+                <option value="[4, 5, 7, 9]">Seventh-Ninth chord (1 3 7 9)</option>
+                <option value="[4, 6, 7, 9]">Seventh-Ninth chord (1 5 7 9)</option>
             </select>
             <button class="setFreqBtn">Set interval</button>
         </div>
