@@ -31,7 +31,11 @@ function cullOscs(n) {
         oscillator = oscillators.pop();
         oscillator.stop();
         oscillator.disconnect(gainNode);
-        gainNode.gain.value = 1 / oscillators.length;
+        if (oscillators.length > 0) {
+            gainNode.gain.value = 1 / oscillators.length;
+        } else {
+            gainNode.gain.value = 1;
+        }
     }
 }
 
