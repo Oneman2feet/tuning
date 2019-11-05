@@ -20,10 +20,10 @@ function createOsc() {
     console.log("There are " + oscillators.length + " oscillators and a total gain of " + gainNode.gain.value);
 }
 
-function start() {
-    console.log("Starting oscillator...");
-    oscillators[0].frequency.setValueAtTime(440, audioCtx.currentTime); // value in hertz
-    oscillators[0].start();
+function startOsc(oscillator) {
+    console.log("Starting oscillator " + oscillator + "...");
+    oscillators[oscillator].frequency.setValueAtTime(440, audioCtx.currentTime); // value in hertz
+    oscillators[oscillator].start();
 }
 
 function togglePlayback(button) {
@@ -40,8 +40,9 @@ function togglePlayback(button) {
     }
 }
 
-function setFrequency(x) {
-    oscillators[0].frequency.setValueAtTime(x, audioCtx.currentTime);
+function setFrequency(oscillator, frequency) {
+    console.log("Setting frequency of oscillator " + oscillator + " to " + frequency);
+    oscillators[oscillator].frequency.setValueAtTime(frequency, audioCtx.currentTime);
 }
 
 // fundamental is the frequency in hertz
@@ -59,7 +60,7 @@ window.onload = function() {
         setup();
     }
     document.getElementById("startBtn").onclick = () => {
-        start();
+        startOsc(0);
     }
     document.getElementById("pauseBtn").onclick = (event) => {
         togglePlayback(event.target);
@@ -72,16 +73,31 @@ window.onload = function() {
     [...document.getElementsByClassName("setFreqBtn")].forEach((elem) => {
         elem.onclick = () => {
             var fundamental = elem.parentElement.querySelector(".freqSlider").value;
-
-            var harmonic = 1;
+            var harmonic;
+            var frequency;
             var harmonicNum = elem.parentElement.querySelector(".harmonicNum");
+            var harmonicSelect = elem.parentElement.querySelectorAll(".harmonicSelect");
             if (harmonicNum != null) {
                 harmonic = parseInt(harmonicNum.value);
                 console.log("Using fundamental of " + fundamental + " and harmonic of " + harmonic);
+                frequency = harmonicFrequency(fundamental, harmonic);
+                setFrequency(0, frequency);
+            } else if (harmonicSelect.length > 0) {
+                var checkedHarmonics = [...harmonicSelect].filter((elem) => {
+                    return elem.checked;
+                }).forEach((elem, index) => {
+                    if (oscillators.length <= index) {
+                        createOsc();
+                        startOsc(index);
+                    }
+                    harmonic = parseInt(elem.value);
+                    frequency = harmonicFrequency(fundamental, harmonic);
+                    setFrequency(index, frequency);
+                });
+            } else {
+                frequency = harmonicFrequency(fundamental, 1);
+                setFrequency(0, frequency);
             }
-            var frequency = harmonicFrequency(fundamental, harmonic);
-            console.log("Setting frequency to " + frequency);
-            setFrequency(frequency);
         }
     });
 }
