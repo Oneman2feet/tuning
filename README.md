@@ -8,6 +8,8 @@ Exploration into perfect tuning
 
 # references
 - https://www.barbershop.org/files/MUS%20details.pdf
+- https://www.math.wustl.edu/~wright/Math109/00Book.pdf
+- https://ia800304.us.archive.org/18/items/theoryofharmonyi00shiruoft/theoryofharmonyi00shiruoft.pdf
 - https://www.kylegann.com/tuning.html
 - https://www.oberton.org/en/overtone-singing/harmonic-series/
 

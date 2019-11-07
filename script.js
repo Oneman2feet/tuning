@@ -62,14 +62,12 @@ window.onload = function() {
                 playChord([fundamental, frequency]);
             } else if (chordSelect != null) {
                 var selected = chordSelect[chordSelect.selectedIndex].value;
-                var partialList = eval(selected);
-                if (partialList.length) {
-                    var firstPartial = partialList[0];
-                    notes = partialList.map((elem) => {
-                        return elem / firstPartial * fundamental;
-                    });
-                    playChord(notes);
-                }
+                var partialList = selected.split(":");
+                var firstPartial = partialList[0];
+                notes = partialList.map((elem) => {
+                    return parseInt(elem) / firstPartial * fundamental;
+                });
+                playChord(notes);
             } else {
                 frequency = harmonicFrequency(fundamental, 1);
                 playChord([frequency]);
