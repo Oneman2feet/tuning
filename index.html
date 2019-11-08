@@ -73,12 +73,34 @@
             <button class="clearFreqBtn">Clear interval</button>
         </div>
         <div>
+            <h2>Triads</h2>
+            <input type="text" value="440" class="freqTxt" readonly>
+            <input type="range" min="50" max="1000" value="440" class="slider freqSlider">
+            <select class="chordSelect">
+                <option value="4:5:6">Just major triad</option>
+                <option value="5:6:7">Perfect diminished triad (5:6:7)</option>
+                <option value="6:7:9">Minor triad (6:7:9)</option>
+                <option value="8:10:13">Perfect augmented triad (M3 and m6)</option>
+                <option value="10:12:15">Just minor triad (m3 and M3)</option>
+                <option value="12:15:19">Greater augmented triad (12:15:19)</option>
+                <option value="16:20:25">Just augmented triad (stacked M3)</option>
+                <option value="16:19:24">Minor triad (16:19:24)</option>
+                <option value="25:30:36">Diminished triad (stacked m3)</option>
+                <option value="27:32:40">Supertonic triad (alternate minor)</option>
+                <option value="45:54:64">Diminished triad (45:54:64)</option>
+                <option value="54:64:81">Pythagorean minor triad</option>
+            </select>
+            <button class="setFreqBtn">Set triad</button>
+            <button class="clearFreqBtn">Clear triad</button>
+        </div>
+        <div>
             <h2>Chords</h2>
             <input type="text" value="440" class="freqTxt" readonly>
             <input type="range" min="50" max="1000" value="440" class="slider freqSlider">
             <select class="chordSelect">
                 <option value="4:5:6">Major triad root position</option>
                 <option value="4:5:6:7">Barbershop dominant seventh</option>
+                <option value="5:6:7">Diminished triad (5:6:7)</option>
                 <option value="5:6:7:9">Dominant ninth root omitted</option>
                 <option value="4:5:7:9">Dominant ninth fifth omitted</option>
                 <option value="4:5:6:9">Major triad add ninth</option>
@@ -86,6 +108,7 @@
                 <option value="10:12:15">Minor triad root position</option>
                 <option value="10:12:15:18">Minor seventh</option>
                 <option value="16:20:25">Augmented triad</option>
+                <option value="25:30:36">Diminished triad (stacked just m3)</option>
                 <option value="25:30:36:45">Half-diminished seventh</option>
                 <option value="45:54:64">Diminished triad</option>
                 <option value="40:48:60:75">Minor-major seventh</option>
