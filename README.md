@@ -2,6 +2,8 @@
 Exploration into perfect tuning
 
 # to do
+- Set chord root using equal tempered notes
+- Compare different tunings of same chord
 - Relative volume in chords
 - Set fundamental based on note name
 - Improve usability
