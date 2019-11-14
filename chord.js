@@ -119,11 +119,10 @@ function playChord(frequencyList) {
 
 // given a list of chords, play them in succession
 function playChords(chordList) {
-    addOscillatorTime(440, 0, 2);
-    //var speed = 2; // each chord is this many seconds long
-    //for (chordIndex in chordList) {
-    //    playChordTime(chordList[chordIndex], chordIndex * speed, speed);
-    //}
+    var speed = 2; // each chord is this many seconds long
+    for (chordIndex in chordList) {
+        playChordTime(chordList[chordIndex], chordIndex * speed, speed);
+    }
 }
 
 function stopChords() {
