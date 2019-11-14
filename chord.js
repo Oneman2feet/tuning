@@ -4,7 +4,7 @@ let oscillators = []; // to keep track of all active oscillators
 
 // initialize the audio context and gain node
 function setup(button) {
-    console.log("Setup audio context and oscillator...");
+    console.log("Setup audio context and gain node...");
     audioCtx = new AudioContext();
     gainNode = audioCtx.createGain();
     gainNode.connect(audioCtx.destination);
@@ -48,14 +48,23 @@ function calcGain() {
 }
 
 // adds a new oscillator to the oscillator list
-function addOscillator(frequency) {
+// schedules it to play after a certain amount of time, for a certain duration
+function addOscillatorTime(frequency, time, duration) {
     var oscillator = audioCtx.createOscillator();
     oscillator.type = 'sine';
     oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
     oscillator.connect(gainNode);
     oscillators.push(oscillator);
     calcGain();
-    oscillator.start();
+    oscillator.start(audioCtx.currentTime + time);
+    if (duration != undefined) {
+        oscillator.stop(audioCtx.currentTime + time + duration);
+    }
+}
+
+// adds a new oscillator to the oscillator list
+function addOscillator(frequency) {
+    addOscillatorTime(frequency, 0);
 }
 
 // stops and removes all oscillators in the list after the first n
@@ -84,8 +93,8 @@ function setFrequency(oscillator, frequency) {
 }
 
 // given a list of frequencies, play them
-function playChord(frequencyList) {
-    clearOscillators();
+// start playing after a certain amount of time, with a certain duration
+function playChordTime(frequencyList, time, duration) {
     if (frequencyList && frequencyList.length > 0) {
         if (frequencyList.length == 1) {
             console.log("Playing frequency " + frequencyList);
@@ -95,9 +104,28 @@ function playChord(frequencyList) {
             console.log("Playing chord of " + frequencyList);
         } 
         for (frequencyIndex in frequencyList) {
-            addOscillator(frequencyList[frequencyIndex]);
+            addOscillatorTime(frequencyList[frequencyIndex], time, duration);
         }
     } else {
         console.log("Ending all oscillators...");
     }
+}
+
+// given a list of frequencies, play them
+function playChord(frequencyList) {
+    clearOscillators();
+    playChordTime(frequencyList, 0);
+}
+
+// given a list of chords, play them in succession
+function playChords(chordList) {
+    addOscillatorTime(440, 0, 2);
+    //var speed = 2; // each chord is this many seconds long
+    //for (chordIndex in chordList) {
+    //    playChordTime(chordList[chordIndex], chordIndex * speed, speed);
+    //}
+}
+
+function stopChords() {
+    clearOscillators();
 }

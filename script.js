@@ -74,4 +74,31 @@ window.onload = function() {
             }
         }
     });
+    [...document.getElementsByClassName("queueFreqsBtn")].forEach((elem) => {
+        elem.onclick = () => {
+            var fundamental = elem.parentElement.querySelector(".freqSlider").value;
+            var chords = [];
+            var cadenceSelect = elem.parentElement.querySelector(".cadenceSelect");
+            if (cadenceSelect != null) {
+                var selected = cadenceSelect[cadenceSelect.selectedIndex].value;
+                var chordList = selected.split(",");
+                for (chordIndex in chordList) {
+                    var chord = chordList[chordIndex];
+                    var partialList = chord.split(":");
+                    var firstPartial = partialList[0];
+                    chords.push(partialList.map((elem) => {
+                        return parseInt(elem) / firstPartial * fundamental;
+                    }));
+                }
+                playChords(chords);
+            } else {
+                console.log("error finding cadences!");
+            }
+        };
+    });
+    [...document.getElementsByClassName("clearFreqsBtn")].forEach((elem) => {
+        elem.onclick = () => {
+            stopChords();
+        };
+    });
 }
