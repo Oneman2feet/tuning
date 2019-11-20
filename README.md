@@ -14,6 +14,7 @@ Exploration into perfect tuning
 - https://ia800304.us.archive.org/18/items/theoryofharmonyi00shiruoft/theoryofharmonyi00shiruoft.pdf
 - https://www.kylegann.com/tuning.html
 - https://www.oberton.org/en/overtone-singing/harmonic-series/
+- https://www.classicalguitar.org/2008/12/types-of-cadences/
 
 # notes
 With rare exceptions, the music must use only chords in the barbershop chord vocabulary.

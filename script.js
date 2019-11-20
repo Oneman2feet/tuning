@@ -85,9 +85,8 @@ window.onload = function() {
                 for (chordIndex in chordList) {
                     var chord = chordList[chordIndex];
                     var partialList = chord.split(":");
-                    var firstPartial = partialList[0];
                     chords.push(partialList.map((elem) => {
-                        return parseInt(elem) / firstPartial * fundamental;
+                        return eval(elem) * fundamental; // evaluate fractions
                     }));
                 }
                 playChords(chords);
