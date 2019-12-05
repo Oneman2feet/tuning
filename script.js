@@ -30,7 +30,7 @@ window.onload = function() {
             elem.parentElement.querySelector(".freqTxt").value = event.target.value;
         };
     });
-    [...document.getElementsByClassName("pitch")].forEach((elem) => {
+    [...document.getElementsByName("pitch")].forEach((elem) => {
         elem.onclick = () => {
             console.log("Setting fundamental to " + elem.value);
             fundamental = elem.value;
