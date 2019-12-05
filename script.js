@@ -1,3 +1,6 @@
+/* GLOBALS */
+var fundamental;
+
 // fundamental is the frequency in hertz
 // harmonic is an int for which value in the harmonic series to play
 function harmonicFrequency(fundamental, harmonic) {
@@ -25,6 +28,18 @@ window.onload = function() {
     [...document.getElementsByClassName("freqSlider")].forEach((elem) => {
         elem.onchange = (event) => {
             elem.parentElement.querySelector(".freqTxt").value = event.target.value;
+        };
+    });
+    [...document.getElementsByClassName("pitch")].forEach((elem) => {
+        elem.onclick = () => {
+            console.log("Setting pitch to " + elem.value);
+            fundamental = elem.value;
+        };
+        elem.onmousedown = () => {
+            playNote(elem.value);
+        };
+        elem.onmouseup = () => {
+            stopNote();
         };
     });
     [...document.getElementsByClassName("clearFreqBtn")].forEach((elem) => {

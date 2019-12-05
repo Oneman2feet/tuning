@@ -125,6 +125,15 @@ function playChords(chordList) {
     }
 }
 
+// given a frequency, play it
+function playNote(frequency) {
+    playChord([frequency]);
+}
+
 function stopChords() {
+    clearOscillators();
+}
+
+function stopNote() {
     clearOscillators();
 }
