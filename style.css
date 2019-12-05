@@ -32,13 +32,3 @@ input[type="radio"][name="pitch"]:active + label {
 input[type="radio"][name="pitch"]:hover + label {
     border-color: #444;
 }
-
-button.pitch {
-    width: 60px;
-    height: 30px;
-}
-
-button.pitch.active {
-    background-color: #666;
-    color: white;
-}
