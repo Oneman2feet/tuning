@@ -1,5 +1,5 @@
 /* GLOBALS */
-var fundamental;
+var fundamental = 440;
 
 // fundamental is the frequency in hertz
 // harmonic is an int for which value in the harmonic series to play
@@ -32,7 +32,7 @@ window.onload = function() {
     });
     [...document.getElementsByClassName("pitch")].forEach((elem) => {
         elem.onclick = () => {
-            console.log("Setting pitch to " + elem.value);
+            console.log("Setting fundamental to " + elem.value);
             fundamental = elem.value;
         };
         elem.onmousedown = () => {
@@ -42,14 +42,8 @@ window.onload = function() {
             stopNote();
         };
     });
-    [...document.getElementsByClassName("clearFreqBtn")].forEach((elem) => {
-        elem.onclick = () => {
-            playChord([]);
-        };
-    });
     [...document.getElementsByClassName("setFreqBtn")].forEach((elem) => {
         elem.onclick = () => {
-            var fundamental = elem.parentElement.querySelector(".freqSlider").value;
             var harmonic;
             var frequency;
             var harmonicNum = elem.parentElement.querySelector(".harmonicNum");
@@ -91,7 +85,6 @@ window.onload = function() {
     });
     [...document.getElementsByClassName("queueFreqsBtn")].forEach((elem) => {
         elem.onclick = () => {
-            var fundamental = elem.parentElement.querySelector(".freqSlider").value;
             var chords = [];
             var cadenceSelect = elem.parentElement.querySelector(".cadenceSelect");
             if (cadenceSelect != null) {

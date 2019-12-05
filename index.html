@@ -28,22 +28,13 @@
             <button class="pitch" value="783.99">G</button>
         </div>
         <div>
-            <h2>Single Pitch</h2>
-            <input type="text" value="440" class="freqTxt" readonly>
-            <input type="range" min="20" max="10000" value="440" class="slider freqSlider">
-            <button class="setFreqBtn">Set frequency</button>
-        </div>
-        <div>
             <h2>Single Harmonic</h2>
-            <input type="text" value="440" class="freqTxt" readonly>
-            <input type="range" min="20" max="10000" value="440" class="slider freqSlider">
             <input type="number" min="1" value="1" class="harmonicNum">
             <button class="setFreqBtn">Set frequency</button>
+            <button class="clearFreqsBtn">Clear harmonic</button>
         </div>
         <div>
             <h2>Multiple Harmonics</h2>
-            <input type="text" value="440" class="freqTxt" readonly>
-            <input type="range" min="50" max="1000" value="440" class="slider freqSlider">
             <input type="checkbox" name="harmonic1" class="harmonicSelect" value="1" /> 1
             <input type="checkbox" name="harmonic2" class="harmonicSelect" value="2" /> 2
             <input type="checkbox" name="harmonic3" class="harmonicSelect" value="3" /> 3
@@ -56,11 +47,10 @@
             <input type="checkbox" name="harmonic10" class="harmonicSelect" value="10" /> 10
             <input type="checkbox" name="harmonic11" class="harmonicSelect" value="11" /> 11
             <button class="setFreqBtn">Set frequencies</button>
+            <button class="clearFreqsBtn">Clear harmonics</button>
         </div>
         <div>
             <h2>Intervals</h2>
-            <input type="text" value="440" class="freqTxt" readonly>
-            <input type="range" min="50" max="1000" value="440" class="slider freqSlider">
             <select class="intervalSelect">
                 <option value="1">Perfect unison</option>
                 <option value="2">Perfect octave</option>
@@ -86,12 +76,10 @@
                 <option value="16/15">Minor second</option>
             </select>
             <button class="setFreqBtn">Set interval</button>
-            <button class="clearFreqBtn">Clear interval</button>
+            <button class="clearFreqsBtn">Clear interval</button>
         </div>
         <div>
             <h2>Triads</h2>
-            <input type="text" value="440" class="freqTxt" readonly>
-            <input type="range" min="50" max="1000" value="440" class="slider freqSlider">
             <select class="chordSelect">
                 <option value="4:5:6">Just major triad</option>
                 <option value="5:6:7">Perfect diminished triad (5:6:7)</option>
@@ -107,12 +95,10 @@
                 <option value="54:64:81">Pythagorean minor triad</option>
             </select>
             <button class="setFreqBtn">Set triad</button>
-            <button class="clearFreqBtn">Clear triad</button>
+            <button class="clearFreqsBtn">Clear triad</button>
         </div>
         <div>
             <h2>Chords</h2>
-            <input type="text" value="440" class="freqTxt" readonly>
-            <input type="range" min="50" max="1000" value="440" class="slider freqSlider">
             <select class="chordSelect">
                 <option value="4:5:6">Major chord</option>
                 <option value="4:5:6:7">Barbershop dominant seventh</option>
@@ -136,12 +122,10 @@
                 <option value="125:150:180:216">Diminished seventh</option>
             </select>
             <button class="setFreqBtn">Set chord</button>
-            <button class="clearFreqBtn">Clear chord</button>
+            <button class="clearFreqsBtn">Clear chord</button>
         </div>
         <div>
             <h2>Cadences</h2>
-            <input type="text" value="440" class="freqTxt" readonly>
-            <input type="range" min="50" max="1000" value="440" class="slider freqSlider">
             <select class="cadenceSelect">
                 <option value="4/6:5/6:6/6:7/6,2/4:3/4:4/4:5/4">Heart of my Heart IV7 - I</option>
                 <option value="4/14:7/14:10/14:12/14,4/15:6/15:10/15:14/15,2/8:3/8:5/8:8/8">Down our Way II7 - bII7 - I</option>
