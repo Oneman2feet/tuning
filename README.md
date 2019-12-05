@@ -10,6 +10,7 @@ Exploration into perfect tuning
 - add live feedback of what notes are playing, what key the system is currently in, etc.
 - add ability to play undertones
 - add ability to change octave of the pitch pipe
+- make the setup button a modal thing
 
 # references
 - https://www.barbershop.org/files/MUS%20details.pdf
