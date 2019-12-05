@@ -3,6 +3,7 @@ input[type="radio"][name="pitch"] {
     position: fixed;
     width: 60px;
     height: 30px;
+    margin: 0.1px;
 }
 
 input[type="radio"][name="pitch"] + label {
@@ -10,26 +11,26 @@ input[type="radio"][name="pitch"] + label {
     background-color: #ddd;
     font-family: sans-serif, Arial;
     font-size: 16px;
-    border: 2px solid #444;
-    border-radius: 4px;
+    border: 0.1px solid #888;
+    box-sizing: border-box;
     width: 60px;
     height: 30px;
     text-align: center;
-    display: table-cell;
-    vertical-align: middle;
+    line-height: 30px;
 }
 
 input[type="radio"][name="pitch"]:checked + label {
-    background-color:#bfb;
-    border-color: #4c4;
+    background-color: #aaa;
 }
 
-input[type="radio"][name="pitch"]:focus + label {
-    border: 2px dashed #444;
+input[type="radio"][name="pitch"]:active + label {
+    background-color: #888;
+    border-color: #444;
+    color: white;
 }
 
 input[type="radio"][name="pitch"]:hover + label {
-    background-color: #dfd;
+    border-color: #444;
 }
 
 button.pitch {
