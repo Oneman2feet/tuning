@@ -10,6 +10,7 @@ function setup(button) {
     gainNode.connect(audioCtx.destination);
     createPlayPause(button.parentNode);
     button.parentNode.removeChild(button);
+    console.log("Setup complete.");
 }
 
 // play or pause audio system
