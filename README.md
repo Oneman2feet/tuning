@@ -10,7 +10,6 @@ Exploration into perfect tuning
 - add ability to play undertones
 - add ability to change octave of the pitch pipe
 - make the setup button a modal thing
-- bug with hitbox on buttons in pitch pipe when scrolling
 
 # references
 - https://www.barbershop.org/files/MUS%20details.pdf
