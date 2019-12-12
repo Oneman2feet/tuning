@@ -49,6 +49,26 @@ function calcGain() {
 }
 
 // adds a new oscillator to the oscillator list
+// schedules it to play after a certain amount of time, for a certain duration, with a given gain
+function addOscillatorGainTime(frequency, gain, time, duration) {
+    // create a gain node for the oscillator
+    var oscillatorGainNode = audioCtx.createGain();
+    oscillatorGainNode.connect(gainNode);
+    oscillatorGainNode.gain.value = gain;
+    // create an oscillator and connect them
+    var oscillator = audioCtx.createOscillator();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+    oscillator.connect(oscillatorGainNode);
+    oscillators.push(oscillator);
+    calcGain();
+    oscillator.start(audioCtx.currentTime + time);
+    if (duration != undefined) {
+        oscillator.stop(audioCtx.currentTime + time + duration);
+    }
+}
+
+// adds a new oscillator to the oscillator list
 // schedules it to play after a certain amount of time, for a certain duration
 function addOscillatorTime(frequency, time, duration) {
     var oscillator = audioCtx.createOscillator();
@@ -94,6 +114,29 @@ function setFrequency(oscillator, frequency) {
 }
 
 // given a list of frequencies, play them
+// use the pyramid method for balance (lower = louder)
+// start playing after a certain amount of time, with a certain duration
+function playChordPyramidTime(frequencyList, time, duration) {
+    if (frequencyList && frequencyList.length > 0) {
+        if (frequencyList.length == 1) {
+            console.log("Playing frequency " + frequencyList);
+        } else if (frequencyList.length == 2) {
+            console.log("Playing interval of " + frequencyList)
+        } else {
+            console.log("Playing chord of " + frequencyList);
+        }
+        frequencyList.sort();
+        console.log(frequencyList);
+        for (frequencyIndex in frequencyList) {
+            // gain is lowest freq divided by current freq
+            addOscillatorGainTime(frequencyList[frequencyIndex], frequencyList[0]/frequencyList[frequencyIndex], time, duration);
+        }
+    } else {
+        console.log("Ending all oscillators...");
+    }
+}
+
+// given a list of frequencies, play them
 // start playing after a certain amount of time, with a certain duration
 function playChordTime(frequencyList, time, duration) {
     if (frequencyList && frequencyList.length > 0) {
@@ -122,7 +165,7 @@ function playChord(frequencyList) {
 function playChords(chordList) {
     var speed = 2; // each chord is this many seconds long
     for (chordIndex in chordList) {
-        playChordTime(chordList[chordIndex], chordIndex * speed, speed);
+        playChordPyramidTime(chordList[chordIndex], chordIndex * speed, speed);
     }
 }
 
