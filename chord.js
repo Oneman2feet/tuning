@@ -1,15 +1,17 @@
-let audioCtx; // the audio context
+let audioCtx = new AudioContext(); // the audio context
 let gainNode; // the main gain node
 let oscillators = []; // to keep track of all active oscillators
 
 // initialize the audio context and gain node
 function setup(button) {
     console.log("Setup audio context and gain node...");
-    audioCtx = new AudioContext();
+    biquadFilter.connect(audioCtx.destination);
+    //audioCtx = new AudioContext();
     gainNode = audioCtx.createGain();
-    gainNode.connect(audioCtx.destination);
+    gainNode.connect(biquadFilter);
     createPlayPause(button.parentNode);
     button.parentNode.removeChild(button);
+    audioCtx.resume();
     console.log("Setup complete.");
 }
 
@@ -49,11 +51,12 @@ function calcGain() {
 }
 
 // adds a new oscillator to the oscillator list
-// schedules it to play after a certain amount of time, for a certain duration, with a given gain
-function addOscillatorGainTime(frequency, gain, time, duration) {
+// schedules it to play after a certain amount of time, for a certain duration, with a given loudness
+function addOscillatorGainTime(frequency, dbfs, time, duration) {
     // create a gain node for the oscillator
     var oscillatorGainNode = audioCtx.createGain();
     oscillatorGainNode.connect(gainNode);
+    var gain = Math.pow(10, dbfs / 20); // calculate gain from loudness
     oscillatorGainNode.gain.value = gain;
     // create an oscillator and connect them
     var oscillator = audioCtx.createOscillator();
@@ -129,7 +132,7 @@ function playChordPyramidTime(frequencyList, time, duration) {
         console.log(frequencyList);
         for (frequencyIndex in frequencyList) {
             // gain is lowest freq divided by current freq
-            addOscillatorGainTime(frequencyList[frequencyIndex], frequencyList[0]/frequencyList[frequencyIndex], time, duration);
+            addOscillatorGainTime(frequencyList[frequencyIndex], frequencyIndex * -10, time, duration);
         }
     } else {
         console.log("Ending all oscillators...");
