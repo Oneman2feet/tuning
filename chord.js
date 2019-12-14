@@ -1,4 +1,3 @@
-let audioCtx = new AudioContext(); // the audio context
 let gainNode; // the main gain node
 let oscillators = []; // to keep track of all active oscillators
 
@@ -14,6 +13,7 @@ function setup(button) {
     button.parentNode.removeChild(button);
     audioCtx.resume();
     console.log("Setup complete.");
+    osc.start(); // remove
 }
 
 // play or pause audio system
