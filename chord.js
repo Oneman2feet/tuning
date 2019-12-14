@@ -5,10 +5,11 @@ let oscillators = []; // to keep track of all active oscillators
 // initialize the audio context and gain node
 function setup(button) {
     console.log("Setup audio context and gain node...");
-    biquadFilter.connect(audioCtx.destination);
+    //biquadFilter.connect(audioCtx.destination);
     //audioCtx = new AudioContext();
     gainNode = audioCtx.createGain();
-    gainNode.connect(biquadFilter);
+    //gainNode.connect(biquadFilter);
+    gainNode.connect(audioCtx.destination);
     createPlayPause(button.parentNode);
     button.parentNode.removeChild(button);
     audioCtx.resume();
@@ -132,7 +133,8 @@ function playChordPyramidTime(frequencyList, time, duration) {
         console.log(frequencyList);
         for (frequencyIndex in frequencyList) {
             // gain is lowest freq divided by current freq
-            addOscillatorGainTime(frequencyList[frequencyIndex], frequencyIndex * -10, time, duration);
+            //addOscillatorGainTime(frequencyList[frequencyIndex], frequencyIndex * -1, time, duration);
+            addOscillatorTime(frequencyList[frequencyIndex], time, duration);
         }
     } else {
         console.log("Ending all oscillators...");
