@@ -17,6 +17,10 @@ function toPitchClass(semitones) {
     return ((semitones % 12) + 12) % 12;
 }
 
+function midiToNotation(midi) {
+    return Tone.Frequency(midi, "midi").toNote().replace(/[0-9]/g, "").replace("#", "\u266f");
+}
+
 // play higher frequencies softer
 function volOfFreq(freq) {
     var vol = Math.min(1, 15000 / Math.pow(freq, 2));
@@ -214,11 +218,11 @@ function updateChordNames() {
         // find out what note is the root using the midi mapping
         var rootInt = currentChord.integer.split(",")[chordType.root];
         var rootMidi = Object.keys(currentChord.midi).find(key => currentChord.midi[key]==rootInt);
-        var root = Tone.Frequency(rootMidi, "midi").toNote().replace(/[0-9]/g, "");
+        var root = midiToNotation(rootMidi);
         if (chordType.notation)
         {
             var bassMidi = Object.keys(currentChord.midi).find(key => currentChord.midi[key]==0);
-            var bass = Tone.Frequency(bassMidi, "midi").toNote().replace(/[0-9]/g, "");
+            var bass = midiToNotation(bassMidi);
             var shortName = chordType.notation.replace("X", root).replace("Y", bass);
             document.getElementById("chordtype").innerHTML = shortName;
         }

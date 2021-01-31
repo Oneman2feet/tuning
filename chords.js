@@ -28,7 +28,7 @@ const chordTypes = {
     "0,4,9": { "root": 2, "type": "Minor (first inversion)", "notation": "Xm/Y"},
     "0,5,8": { "root": 1, "type": "Minor (second inversion)", "notation": "Xm/Y"},
     "0,3,6": { "root": 0, "type": "Diminished", "notation": "X<sup>\u006f</sup>", "tuning": "5:6:7"}, // also "25:30:36"
-    "0,4,8": { "root": 0, "type": "Augmented", "notation": "Xaug", "tuning": "8:10:13"}, // perfect augmented
+    "0,4,8": { "root": 0, "type": "Augmented", "notation": "X+", "tuning": "8:10:13"}, // perfect augmented
     "0,4,10": { "root": 0, "type": "Dominant Seventh (fifth omitted)", "tuning": "4:5:7"},
 
 // -------------- TETRADS -------------------------
@@ -38,18 +38,18 @@ const chordTypes = {
     "0,3,5,9": { "root": 2, "type": "Dominant Seventh (second inversion)", "notation": "X7/Y", "tuning": "6:7:8:10"},
     "0,2,6,9": { "root": 1, "type": "Dominant Seventh (third inversion)", "notation": "X7/Y", "tuning": "7:8:10:12"},
     "0,3,7,10": { "root": 0, "type": "Minor Seventh", "notation": "Xm7", "tuning": "10:12:15:18"}, // note there is also septimal tuning
-    "0,4,7,9": { "root": 3, "type": "Minor Seventh (first inversion)", "notation": "Xm7/Y",},
-    "0,3,5,8": { "root": 2, "type": "Minor Seventh (second inversion)", "notation": "Xm7/Y",},
-    "0,2,5,9": { "root": 1, "type": "Minor Seventh (third inversion)", "notation": "Xm7/Y",},
+    "0,4,7,9": { "root": 0, "type": "Major Sixth", "notation": "XM6", "tuning": "12:15:18:20"},
+    "0,3,5,8": { "root": 2, "type": "Major Sixth", "notation": "XM6/Y"},
+    "0,2,5,9": { "root": 1, "type": "Major Sixth", "notation": "XM6/Y"},
     "0,3,6,10": { "root": 0, "type": "Half-diminished Seventh", "notation":"X<sup>\u00f8</sup>", "tuning": "5:6:7:9"},
     "0,3,7,9": { "root": 3, "type": "Half-diminished Seventh (first inversion)", "notation":"X<sup>\u00f8</sup>/Y", "tuning": "6:7:9:10"},
     "0,4,6,9": { "root": 2, "type": "Half-diminished Seventh (second inversion)", "notation":"X<sup>\u00f8</sup>/Y"},
     "0,2,5,8": { "root": 1, "type": "Half-diminished Seventh (third inversion)", "notation":"X<sup>\u00f8</sup>/Y"},
-    "0,4,7,11": { "root": 0, "type": "Major Seventh", "notation": "XM7", "tuning": "8:10:12:15" },
-    "0,3,7,8": { "root": 3, "type": "Major Seventh (first inversion)", "notation": "XM7/Y", "tuning": "10:12:15:16" },
-    "0,4,5,9": { "root": 2, "type": "Major Seventh (second inversion)", "notation": "XM7/Y", "tuning": "12:15:16:20" },
-    "0,1,5,8": { "root": 1, "type": "Major Seventh (third inversion)", "notation": "XM7/Y", "tuning": "15:16:20:24" },
-    "0,2,4,10": { "root": 0, "type": "Dominant Ninth (fifth omitted)", "notation": "X9", "tuning": "8:9:10:14" }
+    "0,4,7,11": { "root": 0, "type": "Major Seventh", "notation": "XM7", "tuning": "8:10:12:15"},
+    "0,3,7,8": { "root": 3, "type": "Major Seventh (first inversion)", "notation": "XM7/Y", "tuning": "10:12:15:16"},
+    "0,4,5,9": { "root": 2, "type": "Major Seventh (second inversion)", "notation": "XM7/Y", "tuning": "12:15:16:20"},
+    "0,1,5,8": { "root": 1, "type": "Major Seventh (third inversion)", "notation": "XM7/Y", "tuning": "15:16:20:24"},
+    "0,2,4,10": { "root": 0, "type": "Dominant Ninth (fifth omitted)", "notation": "X9", "tuning": "8:9:10:14"}
 
 };
 
@@ -77,9 +77,9 @@ const chordTunings = {
 // ----------------- TRIADS -----------------------
 
     "1/3/5":"Just Major",
-    "1/5/7": "Dominant Seventh (fifth omitted)",
+    "1/5/7": "Dominant Seventh",
     "3/5/7": "Perfect Diminished",
-    "3/7/9": "Dominant Ninth (root and third omitted)",
+    "3/7/9": "Dominant Ninth",
     "1/5/13": "Perfect Augmented",
     "3/5/15": "Just Minor",
     "6/15/19": "Greater Augmented",
@@ -94,11 +94,11 @@ const chordTunings = {
 
     "1/3/5/7": "Dominant Seventh",
     "3/5/7/9": "Half-diminished Seventh",
-    "1/5/7/9": "Dominant Ninth (fifth omitted)",
+    "1/5/7/9": "Dominant Ninth",
     "1/3/5/9": "Added Ninth",
     "1/3/5/15": "Just Major Seventh",
-    "3/5/9/15": "Just Minor Seventh / Major Sixth",
-    "3/7/9/21": "Septimal Minor Seventh / Major Sixth",
+    "3/5/9/15": "Just Minor Seventh",
+    "3/7/9/21": "Septimal Minor Seventh",
     "9/15/25/45": "45-Limit Half-diminished Seventh",
     "3/5/15/75": "Minor-major Seventh",
     "5/9/25/125": "Augmented Dominant Seventh",

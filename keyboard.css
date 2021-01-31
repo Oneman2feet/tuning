@@ -164,30 +164,30 @@ input[type="radio"]:hover + label {
     width: 200px;
 }
 
-#metrics #tunings {
-    min-width: 600px;
-}
-
 #metrics #chords > div, #metrics #tunings > div {
     min-height: 100px;
 }
 
-#metrics #chords {
+#metrics #chords, #metrics #tunings {
     min-width: 500px;
     display: flex;
     flex-direction: column;
 }
 
-#metrics #ratios, #metrics #undertone, #metrics #overtone, #metrics #stability {
-    font-size: 48px;
+#metrics p {
+    font-size: 32px;
     font-weight: bold;
     text-align: left;
 }
 
-#metrics #chordtype, #metrics #chordtuning {
-    font-size: 32px;
-    font-weight: bold;
-    text-align: left;
+#metrics p sup {
+    vertical-align: baseline;
+    position: relative;
+    top: -0.4em;
+}
+
+#metrics #ratios {
+    font-size: 42px;
 }
 
 #setFundamental {
