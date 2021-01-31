@@ -215,7 +215,18 @@ function updateChordNames() {
         var rootInt = currentChord.integer.split(",")[chordType.root];
         var rootMidi = Object.keys(currentChord.midi).find(key => currentChord.midi[key]==rootInt);
         var root = Tone.Frequency(rootMidi, "midi").toNote().replace(/[0-9]/g, "");
-        document.getElementById("chordtype").innerHTML = root + " " + chordType.type;
+        if (chordType.notation)
+        {
+            var bassMidi = Object.keys(currentChord.midi).find(key => currentChord.midi[key]==0);
+            var bass = Tone.Frequency(bassMidi, "midi").toNote().replace(/[0-9]/g, "");
+            var shortName = chordType.notation.replace("X", root).replace("Y", bass);
+            document.getElementById("chordtype").innerHTML = shortName;
+        }
+        else
+        {
+            var fullName = root + " " + chordType.type; // old long notation for chord
+            document.getElementById("chordtype").innerHTML = fullName;
+        }
     }
     else {
         document.getElementById("chordtype").innerHTML = "";

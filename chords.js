@@ -1,55 +1,55 @@
 const chordTypes = {
 
-    "0": { "root": 0, "type": "Unison", "tuning": "1"},
+    "0": { "root": 0, "type": "Unison", "notation": "X P1", "tuning": "1"},
 
 // ------------- INTERVALS ------------------------
 
-    "0,1": { "root": 0, "type": "Minor Second", "tuning": "15:16"},
-    "0,2": { "root": 0, "type": "Major Second", "tuning": "8:9"}, // greater tone
-    "0,3": { "root": 0, "type": "Minor Third", "tuning": "5:6"}, // just is 5:6, septimal is 6:7
-    "0,4": { "root": 0, "type": "Major Third", "tuning": "4:5"},
-    "0,5": { "root": 0, "type": "Perfect Fourth", "tuning": "3:4"},
-    "0,6": { "root": 0, "type": "Tritone"},
-    "0,7": { "root": 0, "type": "Perfect Fifth", "tuning": "2:3"},
-    "0,8": { "root": 0, "type": "Minor Sixth"},
-    "0,9": { "root": 0, "type": "Major Sixth"},
-    "0,10": { "root": 0, "type": "Minor Seventh"},
-    "0,11": { "root": 0, "type": "Major Seventh"},
+    "0,1": { "root": 0, "type": "Minor Second", "notation": "X m2", "tuning": "15:16"},
+    "0,2": { "root": 0, "type": "Major Second", "notation": "X M2", "tuning": "8:9"}, // greater tone
+    "0,3": { "root": 0, "type": "Minor Third", "notation": "X m3", "tuning": "5:6"}, // just is 5:6, septimal is 6:7
+    "0,4": { "root": 0, "type": "Major Third", "notation": "X M3", "tuning": "4:5"},
+    "0,5": { "root": 0, "type": "Perfect Fourth", "notation": "X P4", "tuning": "3:4"},
+    "0,6": { "root": 0, "type": "Tritone", "notation": "X A4"},
+    "0,7": { "root": 0, "type": "Perfect Fifth", "notation": "X P5", "tuning": "2:3"},
+    "0,8": { "root": 0, "type": "Minor Sixth", "notation": "X m6"},
+    "0,9": { "root": 0, "type": "Major Sixth", "notation": "X M6"},
+    "0,10": { "root": 0, "type": "Minor Seventh", "notation": "X m7"},
+    "0,11": { "root": 0, "type": "Major Seventh", "notation": "X M7"},
     //"0,12": { "root": 0, "type": "Octave"},
     //"0,13": { "root": 0, "type": "Minor Ninth"},
     //"0,14": { "root": 0, "type": "Major Ninth"},
 
 // ------------- TRIADS ---------------------------
 
-    "0,4,7": { "root": 0, "type": "Major", "tuning": "4:5:6"},
-    "0,3,8": { "root": 2, "type": "Major (first inversion)", "tuning": "5:6:8"},
-    "0,5,9": { "root": 1, "type": "Major (second inversion)", "tuning": "6:8:10"},
-    "0,3,7": { "root": 0, "type": "Minor", "tuning": "10:12:15"}, // just minor triad
-    "0,4,9": { "root": 2, "type": "Minor (first inversion)"},
-    "0,5,8": { "root": 1, "type": "Minor (second inversion)"},
-    "0,3,6": { "root": 0, "type": "Diminished", "tuning": "5:6:7"}, // also "25:30:36"
-    "0,4,8": { "root": 0, "type": "Augmented", "tuning": "8:10:13"}, // perfect augmented
+    "0,4,7": { "root": 0, "type": "Major", "notation": "X", "tuning": "4:5:6"},
+    "0,3,8": { "root": 2, "type": "Major (first inversion)", "notation": "X/Y", "tuning": "5:6:8"},
+    "0,5,9": { "root": 1, "type": "Major (second inversion)", "notation": "X/Y", "tuning": "6:8:10"},
+    "0,3,7": { "root": 0, "type": "Minor", "notation": "Xm", "tuning": "10:12:15"}, // just minor triad
+    "0,4,9": { "root": 2, "type": "Minor (first inversion)", "notation": "Xm/Y"},
+    "0,5,8": { "root": 1, "type": "Minor (second inversion)", "notation": "Xm/Y"},
+    "0,3,6": { "root": 0, "type": "Diminished", "notation": "X<sup>\u006f</sup>", "tuning": "5:6:7"}, // also "25:30:36"
+    "0,4,8": { "root": 0, "type": "Augmented", "notation": "Xaug", "tuning": "8:10:13"}, // perfect augmented
     "0,4,10": { "root": 0, "type": "Dominant Seventh (fifth omitted)", "tuning": "4:5:7"},
 
 // -------------- TETRADS -------------------------
 
-    "0,4,7,10": { "root": 0, "type": "Dominant Seventh", "tuning": "4:5:6:7"},
-    "0,3,6,8": { "root": 3, "type": "Dominant Seventh (first inversion)", "tuning": "5:6:7:8"},
-    "0,3,5,9": { "root": 2, "type": "Dominant Seventh (second inversion)", "tuning": "6:7:8:10"},
-    "0,2,6,9": { "root": 1, "type": "Dominant Seventh (third inversion)", "tuning": "7:8:10:12"},
-    "0,3,7,10": { "root": 0, "type": "Minor Seventh", "tuning": "10:12:15:18"}, // note there is also septimal tuning
-    "0,4,7,9": { "root": 3, "type": "Minor Seventh (first inversion)"},
-    "0,3,5,8": { "root": 2, "type": "Minor Seventh (second inversion)"},
-    "0,2,5,9": { "root": 1, "type": "Minor Seventh (third inversion)"},
-    "0,3,6,10": { "root": 0, "type": "Half-diminished Seventh", "tuning": "5:6:7:9"},
-    "0,3,7,9": { "root": 3, "type": "Half-diminished Seventh (first inversion)", "tuning": "6:7:9:10"},
-    "0,4,6,9": { "root": 2, "type": "Half-diminished Seventh (second inversion)"},
-    "0,2,5,8": { "root": 1, "type": "Half-diminished Seventh (third inversion)"},
-    "0,4,7,11": { "root": 0, "type": "Major Seventh", "tuning": "8:10:12:15" },
-    "0,3,7,8": { "root": 3, "type": "Major Seventh (first inversion)", "tuning": "10:12:15:16" },
-    "0,4,5,9": { "root": 2, "type": "Major Seventh (second inversion)", "tuning": "12:15:16:20" },
-    "0,1,5,8": { "root": 1, "type": "Major Seventh (third inversion)", "tuning": "15:16:20:24" },
-    "0,2,4,10": { "root": 0, "type": "Dominant Ninth (fifth omitted)", "tuning": "8:9:10:14" }
+    "0,4,7,10": { "root": 0, "type": "Dominant Seventh", "notation": "X7", "tuning": "4:5:6:7"},
+    "0,3,6,8": { "root": 3, "type": "Dominant Seventh (first inversion)", "notation": "X7/Y", "tuning": "5:6:7:8"},
+    "0,3,5,9": { "root": 2, "type": "Dominant Seventh (second inversion)", "notation": "X7/Y", "tuning": "6:7:8:10"},
+    "0,2,6,9": { "root": 1, "type": "Dominant Seventh (third inversion)", "notation": "X7/Y", "tuning": "7:8:10:12"},
+    "0,3,7,10": { "root": 0, "type": "Minor Seventh", "notation": "Xm7", "tuning": "10:12:15:18"}, // note there is also septimal tuning
+    "0,4,7,9": { "root": 3, "type": "Minor Seventh (first inversion)", "notation": "Xm7/Y",},
+    "0,3,5,8": { "root": 2, "type": "Minor Seventh (second inversion)", "notation": "Xm7/Y",},
+    "0,2,5,9": { "root": 1, "type": "Minor Seventh (third inversion)", "notation": "Xm7/Y",},
+    "0,3,6,10": { "root": 0, "type": "Half-diminished Seventh", "notation":"X<sup>\u00f8</sup>", "tuning": "5:6:7:9"},
+    "0,3,7,9": { "root": 3, "type": "Half-diminished Seventh (first inversion)", "notation":"X<sup>\u00f8</sup>/Y", "tuning": "6:7:9:10"},
+    "0,4,6,9": { "root": 2, "type": "Half-diminished Seventh (second inversion)", "notation":"X<sup>\u00f8</sup>/Y"},
+    "0,2,5,8": { "root": 1, "type": "Half-diminished Seventh (third inversion)", "notation":"X<sup>\u00f8</sup>/Y"},
+    "0,4,7,11": { "root": 0, "type": "Major Seventh", "notation": "XM7", "tuning": "8:10:12:15" },
+    "0,3,7,8": { "root": 3, "type": "Major Seventh (first inversion)", "notation": "XM7/Y", "tuning": "10:12:15:16" },
+    "0,4,5,9": { "root": 2, "type": "Major Seventh (second inversion)", "notation": "XM7/Y", "tuning": "12:15:16:20" },
+    "0,1,5,8": { "root": 1, "type": "Major Seventh (third inversion)", "notation": "XM7/Y", "tuning": "15:16:20:24" },
+    "0,2,4,10": { "root": 0, "type": "Dominant Ninth (fifth omitted)", "notation": "X9", "tuning": "8:9:10:14" }
 
 };
 
