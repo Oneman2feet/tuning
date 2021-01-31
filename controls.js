@@ -1,3 +1,11 @@
+// GLOBALS
+var synth;
+var tune;
+var fundamental = {
+    "frequency": undefined,
+    "semitonesFromC3": undefined
+};
+
 function setFundamental(freq, semitones) {
     fundamental['frequency'] = freq;
     fundamental['semitonesFromC3'] = semitones;

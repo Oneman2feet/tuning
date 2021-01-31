@@ -1,3 +1,6 @@
+// GLOBALS
+var activeNotes = {};
+
 function setupMidiInput() {
     var midiName = document.getElementById("selectMidi").value;
 
