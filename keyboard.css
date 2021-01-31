@@ -1,0 +1,22 @@
+#keyboard {
+    margin: 20px;
+    display: inline-flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    border: 1px solid black;
+}
+
+#keyboard .key {
+    width: 30px;
+    height: 200px;
+    border: 1px solid black;
+}
+
+#keyboard .blackKey {
+    z-index: 2;
+    width: 20px;
+    height: 120px;
+    margin-left: -10px;
+    margin-right: -10px;
+    background-color: black;
+}

@@ -21,6 +21,9 @@ function adjustFundamental(ratio, semitones) {
 }
 
 window.onload = function() {
+    // UI
+    generateKeyboard();
+
     // Controls
     [...document.getElementsByName("temperament")].forEach((elem) => {
         elem.onclick = () => {
