@@ -1,4 +1,4 @@
-const chordTypes = {
+export const chordTypes = {
 
     "0": { "root": 0, "type": "Unison", "notation": "X P1", "tuning": "1"},
 
@@ -69,7 +69,7 @@ const chordTypes = {
 };
 
 
-const chordTunings = {
+export const chordTunings = {
 
 // --------------- INTERVALS ----------------------
 
@@ -131,7 +131,7 @@ function removeOctave(number) {
 };
 
 // lower all notes to their lowest possible octave in the harmonic series
-function reduceChord(chord) {
+export function reduceChord(chord) {
     // lower notes and sort
     var ratios = chord.split("/").map(removeOctave).sort((a, b) => a - b);
     // remove duplicates

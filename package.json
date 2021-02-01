@@ -1,0 +1,28 @@
+{
+  "name": "tuning",
+  "version": "1.0.0",
+  "description": "Exploration into perfect tuning",
+  "private": "true",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\u0016https://github.com/Oneman2feet/tuning"
+  },
+  "author": "Oneman2feet@gmail.com",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "fraction.js": "^4.0.13",
+    "mathjs": "^9.1.0",
+    "tone": "^14.7.77",
+    "webmidi": "^2.5.1"
+  },
+  "devDependencies": {
+    "css-loader": "^5.0.1",
+    "html-webpack-plugin": "^4.5.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.19.0",
+    "webpack-cli": "^4.4.0"
+  }
+}

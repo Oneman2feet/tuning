@@ -1,10 +1,15 @@
+import {now, Frequency} from 'tone';
+
+import {chordTypes} from './chords.js';
+import {differenceInCents, toPitchClass, volOfFreq} from './utility.js';
+
 /*
  * DYNAMIC TUNING
  */
 
 // given an anchor note, tune the current chord
 // using the chord types dictionary
-function tuneDynamically(anchor, notes, noteToPlay) {
+function tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay) {
     var chordInt = currentChord.integer;
     var dynamicTuning = chordTypes[chordInt].tuning;
     var anchorInt = currentChord.midi[anchor.midi];
@@ -17,7 +22,7 @@ function tuneDynamically(anchor, notes, noteToPlay) {
     var harmonicSeriesFundamental = anchor.freq / anchorRatio;
 
     // for each note in the chord, compute the adjusted frequency to use
-    for (note in notes) {
+    for (var note in notes) {
         var currentName = notes[note].name;
         var currentMidi = notes[note].midi;
         var currentInt = currentChord.midi[currentMidi]
@@ -26,7 +31,7 @@ function tuneDynamically(anchor, notes, noteToPlay) {
         var currentFreq = harmonicSeriesFundamental * currentRatio;
 
         // calculate cents difference and change octaves as needed
-        var equal = Tone.Frequency(currentName).toFrequency();
+        var equal = Frequency(currentName).toFrequency();
 
         while (parseInt(differenceInCents(currentFreq, equal)) > 600) {
             currentFreq /= 2;
@@ -38,35 +43,35 @@ function tuneDynamically(anchor, notes, noteToPlay) {
 
         // always play this note if this is the noteToPlay
         if (activeNotes[currentName]==noteToPlay) {
-            synth.triggerAttack(currentFreq, Tone.now(), volOfFreq(currentFreq));
+            synth.triggerAttack(currentFreq, now(), volOfFreq(currentFreq));
             activeNotes[currentName] = currentFreq;
         }
         else if (parseInt(differenceInCents(currentFreq, activeNotes[currentName]))!==0)//activeNotes[currentName]!=currentFreq)
         {
             console.log("adjusting note from " + activeNotes[currentName] + " to " + currentFreq);
             // TODO: change pitch without triggering a new attack
-            synth.triggerRelease(activeNotes[currentName], Tone.now());
-            synth.triggerAttack(currentFreq, Tone.now(), volOfFreq(currentFreq));
+            synth.triggerRelease(activeNotes[currentName], now());
+            synth.triggerAttack(currentFreq, now(), volOfFreq(currentFreq));
             activeNotes[currentName] = currentFreq;
         }
     }
 }
 
-function updateDynamicTuning(noteToPlay) {
+export default function updateDynamicTuning(synth, activeNotes, currentChord, fundamental, noteToPlay) {
     if (chordTypes[currentChord.integer]
         && chordTypes[currentChord.integer]
         && chordTypes[currentChord.integer].tuning) {
         var notes = [];
-        for (key in activeNotes) {
+        for (var key in activeNotes) {
             if (activeNotes[key]) {
-                notes.push({"name": key, "pitchClass": toPitchClass(Tone.Frequency(key).toMidi()), "midi": Tone.Frequency(key).toMidi(), "freq": activeNotes[key]});
+                notes.push({"name": key, "pitchClass": toPitchClass(Frequency(key).toMidi()), "midi": Frequency(key).toMidi(), "freq": activeNotes[key]});
             }
         }
         // if the fundamental is being played, anchor around it
         var tonic = toPitchClass(fundamental['semitonesFromC3']);
         var anchor = notes.find(el => el.pitchClass == tonic);
         if (anchor) {
-            tuneDynamically(anchor, notes, noteToPlay);
+            tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay);
         }
         else {
             // if tonic is not present, anchor on the justly tuned fifth
@@ -77,7 +82,7 @@ function updateDynamicTuning(noteToPlay) {
                 var just = fundamental.frequency / 2 * 3;
 
                 // calculate cents difference and change octaves as needed
-                var equal = Tone.Frequency(anchor.name).toFrequency();
+                var equal = Frequency(anchor.name).toFrequency();
 
                 while (parseInt(differenceInCents(just, equal)) > 600) {
                     just /= 2;
@@ -88,7 +93,7 @@ function updateDynamicTuning(noteToPlay) {
                 }
 
                 anchor.freq = just;
-                tuneDynamically(anchor, notes, noteToPlay);
+                tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay);
             }
             else {
                 // third option is to anchor around subdominant
@@ -99,7 +104,7 @@ function updateDynamicTuning(noteToPlay) {
                     var just = fundamental.frequency / 3 * 4;
 
                     // calculate cents difference and change octaves as needed
-                    var equal = Tone.Frequency(anchor.name).toFrequency();
+                    var equal = Frequency(anchor.name).toFrequency();
 
                     while (parseInt(differenceInCents(just, equal)) > 600) {
                         just /= 2;
@@ -110,17 +115,17 @@ function updateDynamicTuning(noteToPlay) {
                     }
 
                     anchor.freq = just;
-                    tuneDynamically(anchor, notes, noteToPlay);
+                    tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay);
                 }
                 else {
                     if (noteToPlay!==undefined) {
-                        synth.triggerAttack(noteToPlay, Tone.now(), volOfFreq(noteToPlay));//, e.velocity);
+                        synth.triggerAttack(noteToPlay, now(), volOfFreq(noteToPlay));//, e.velocity);
                     }
                 }
             }
         }
     }
     else if (noteToPlay!==undefined) {
-        synth.triggerAttack(noteToPlay, Tone.now(), volOfFreq(noteToPlay));//, e.velocity);
+        synth.triggerAttack(noteToPlay, now(), volOfFreq(noteToPlay));//, e.velocity);
     }
 }

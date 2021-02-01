@@ -1,16 +1,26 @@
-// GLOBALS
+import {now, start, PolySynth, Frequency} from 'tone';
+
+import Tune from './tune.js';
+import {differenceInCents} from './utility.js';
+import setupMidiInput from './input.js';
+import {activateKey, deactivateKey, deactivateAllKeys, generateKeyboard} from './keyboard.js';
+import updateMetrics from './metrics.js';
+import updateDynamicTuning from './dynamictuning.js';
+import './style.css';
+
 var synth;
 var tune;
 var fundamental = {
-    "frequency": undefined,
-    "semitonesFromC3": undefined
+   "frequency": undefined,
+   "semitonesFromC3": undefined
 };
+var activeNotes = {};
 
 function setFundamental(freq, semitones) {
     fundamental['frequency'] = freq;
     fundamental['semitonesFromC3'] = semitones;
     tune.tonicize(freq);
-    var equal = Tone.Frequency("C3").transpose(semitones);
+    var equal = Frequency("C3").transpose(semitones);
     document.getElementById("fundamental").innerHTML = "<strong>" + equal.toNote() + "</strong> " + differenceInCents(freq, equal.toFrequency()) + " <em>(" + freq.toFixed(2) + ")</em>";
 }
 
@@ -18,6 +28,61 @@ function adjustFundamental(ratio, semitones) {
     var freq = fundamental['frequency'] * ratio;
     var semi = parseInt(fundamental['semitonesFromC3']) + parseInt(semitones);
     setFundamental(freq, semi);
+}
+
+function noteOn(e) {
+    // convert from midi to scale
+    var note = tune.note(e.note.number - fundamental['semitonesFromC3'] - 60, 1);
+
+    // keep track of this note
+    var notename = e.note.name + e.note.octave;
+    if (activeNotes[notename]) {
+        console.log("this key is already pressed: " + notename);
+        synth.triggerRelease([activeNotes[notename]], now());
+    }
+    else {
+        activeNotes[notename] = note;
+
+        // make this note active in the visualization
+        activateKey(e.note.number);
+    }
+
+    // play note
+    //synth.triggerAttack(note, now(), volOfFreq(note));//, e.velocity);
+
+    var currentChord = updateMetrics(activeNotes);
+
+    // dynamic tuning
+    if (document.getElementById("dynamic").checked) {
+        updateDynamicTuning(synth, activeNotes, currentChord, fundamental, note); // this also plays the note
+        updateMetrics(activeNotes);
+    }
+    else {
+        synth.triggerAttack(note, now(), volOfFreq(note));//, e.velocity);
+    }
+}
+
+function noteOff(e) {
+    // release the note(s) that are currently held from this midi key
+    var notename = e.note.name + e.note.octave;
+    if (activeNotes[notename]) {
+        synth.triggerRelease([activeNotes[notename]], now());
+        delete activeNotes[notename];
+
+        // make this note inactive in the visualization
+        deactivateKey(e.note.number);
+    }
+    else {
+        console.log("released note that was not pressed: " + notename);
+    }
+
+    var currentChord = updateMetrics(activeNotes);
+
+    // dynamic tuning
+    if (document.getElementById("dynamic").checked) {
+        updateDynamicTuning(synth, activeNotes, currentChord, fundamental);
+        updateMetrics(activeNotes);
+    }
 }
 
 window.onload = function() {
@@ -36,7 +101,7 @@ window.onload = function() {
             // elem.value is the number of semitones above C3
             var semitones = elem.value
             // set fundamental using equal temperament
-            var freq = Tone.Frequency("C3").transpose(semitones).toFrequency();
+            var freq = Frequency("C3").transpose(semitones).toFrequency();
             setFundamental(freq, semitones);
         };
     });
@@ -45,7 +110,7 @@ window.onload = function() {
         synth.releaseAll();
         activeNotes = {};
         deactivateAllKeys();
-        updateMetrics();
+        updateMetrics(activeNotes);
     }
 
     document.getElementById("volslider").oninput = function() {
@@ -54,13 +119,13 @@ window.onload = function() {
 
     // Start audio system
     document.getElementById("enterBtn").addEventListener('click', async () => {
-        var succeeded = setupMidiInput();
+        var succeeded = setupMidiInput(noteOn, noteOff);
 
         if (succeeded) {
-            await Tone.start();
+            await start();
 
             // create a synth and connect it to the main output (your speakers)
-            synth = new Tone.PolySynth().toDestination();
+            synth = new PolySynth().toDestination();
 
             synth.set({
                 "envelope": {
@@ -89,7 +154,7 @@ window.onload = function() {
 
             // Set the fundamental using equal temperament and checked tonic
             var semitones = document.querySelector('input[name="tonic"]:checked').value;
-            var freq = Tone.Frequency("C3").transpose(semitones).toFrequency();
+            var freq = Frequency("C3").transpose(semitones).toFrequency();
             setFundamental(freq, semitones);
 
             // change UI
@@ -97,12 +162,3 @@ window.onload = function() {
         }
     });
 }
-
-WebMidi.enable(function (err) {
-    for (input in WebMidi.inputs) {
-        var option = document.createElement("option");
-        option.value = WebMidi.inputs[input].name;
-        option.innerHTML = WebMidi.inputs[input].name;
-        document.getElementById("selectMidi").appendChild(option);
-    }
-});

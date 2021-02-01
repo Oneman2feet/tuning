@@ -1,25 +1,29 @@
+import {gcd, lcm} from 'mathjs';
+import Fraction from 'fraction.js';
+import {Frequency} from 'tone';
+
+import {chordTypes, chordTunings, reduceChord} from './chords.js';
+import {differenceInCents, midiToNotation, toPitchClass} from './utility.js';
+
 // GLOBALS
 var activeNoteRatios;
-var currentChord = {
-    "midi": {}, // mapping of midi to integer
-    "integer": "" // comma delimited integer notation
-};
 
-function updateMetrics() {
-    updateNotes();
-    updateNoteRatios();
-    updateImpliedFundamental();
-    updateLowestSharedOvertone();
-    //updateStability();
-    updateChordNames();
+export default function updateMetrics(activeNotes) {
+    updateNotes(activeNotes);
+    updateNoteRatios(activeNotes);
+    updateImpliedFundamental(activeNotes);
+    updateLowestSharedOvertone(activeNotes);
+    //updateStability(activeNotes);
+    var currentChord = updateChordNames(activeNotes);
     updateChordTunings();
+    return currentChord;
 }
 
-function updateNotes() {
+function updateNotes(activeNotes) {
     var notes = [];
-    for (key in activeNotes) {
+    for (var key in activeNotes) {
         if (activeNotes[key]) {
-            var equal = Tone.Frequency(key).toFrequency();
+            var equal = Frequency(key).toFrequency();
             var cents = differenceInCents(activeNotes[key], equal);
             notes.push({
                 "name": key,
@@ -33,10 +37,10 @@ function updateNotes() {
     document.getElementById("notes").innerHTML = notes;
 }
 
-function updateNoteRatios() {
+function updateNoteRatios(activeNotes) {
     var notes = [];
     var ratios = "";
-    for (key in activeNotes) {
+    for (var key in activeNotes) {
         if (activeNotes[key]) {
             notes.push(activeNotes[key]);
         }
@@ -46,25 +50,25 @@ function updateNoteRatios() {
         var lowest = notes[0];
         notes = notes.map(note => new Fraction(note / lowest).simplify());
         var den = 1;
-        for (note in notes) {
+        for (var note in notes) {
             den *= notes[note].d;
         }
         notes = notes.map(note => Math.round(note * den)); // rounding for floating point errors
 
-        var gcd = math.gcd.apply(null, notes); // reduce ration by gcd
-        notes = notes.map(note => note / gcd);
+        var greatestCommonDivisor = gcd.apply(null, notes); // reduce ration by gcd
+        notes = notes.map(note => note / greatestCommonDivisor);
         activeNoteRatios = notes.slice(0); // clone array
         ratios = notes.join("/");
     }
     document.getElementById("ratios").innerHTML = ratios;
 }
 
-function updateImpliedFundamental() {
+function updateImpliedFundamental(activeNotes) {
     // The implied fundamental of a series of notes
     // is given by the relative frequency ratios of those notes
-    undertone = "";
+    var undertone = "";
     var notes = [];
-    for (key in activeNotes) {
+    for (var key in activeNotes) {
         if (activeNotes[key]) {
             notes.push(activeNotes[key]);
         }
@@ -73,12 +77,12 @@ function updateImpliedFundamental() {
     {
         notes.sort(); // sort notes lowest to highest
         var fundamental = notes[0] / activeNoteRatios[0];
-        undertone = Tone.Frequency(fundamental).toNote();
+        undertone = Frequency(fundamental).toNote();
     }
     document.getElementById("undertone").innerHTML = undertone;
 }
 
-function updateLowestSharedOvertone() {
+function updateLowestSharedOvertone(activeNotes) {
     // The lowest shared overtone of a series of notes
     // is by definition the smallest integer solution to
     // ax=by=cz=...
@@ -89,9 +93,9 @@ function updateLowestSharedOvertone() {
     // Therefore, the frequency of the lowest overtone can be found
     // as the frequency of the lowest note divided by its coefficient
     //  times the least common multiple of the whole ratio.
-    overtone = "";
+    var overtone = "";
     var notes = [];
-    for (key in activeNotes) {
+    for (var key in activeNotes) {
         if (activeNotes[key]) {
             notes.push(activeNotes[key]);
         }
@@ -99,18 +103,18 @@ function updateLowestSharedOvertone() {
     if (notes.length > 1)
     {
         notes.sort(); // sort notes lowest to highest
-        var x = math.lcm.apply(this, activeNoteRatios);
+        var x = lcm.apply(this, activeNoteRatios);
         var freq = x / activeNoteRatios[0] * notes[0];
-        overtone = Tone.Frequency(freq).toNote();
+        overtone = Frequency(freq).toNote();
     }
     document.getElementById("overtone").innerHTML = overtone;
 }
 
-function updateStability() {
+function updateStability(activeNotes) {
     var notes = [];
     var partials = [...Array(Math.pow(2,4)).keys()];
     var stability = "";
-    for (key in activeNotes) {
+    for (var key in activeNotes) {
         if (activeNotes[key]) {
             notes.push(activeNotes[key]);
         }
@@ -150,23 +154,24 @@ function updateStability() {
 
         // find all shared overtones
         var sharedHarmonics = overtones.reduce(intersection.bind(this, isEqual));
-        stability = sharedHarmonics.map(freq => Tone.Frequency(freq).toNote()).toString();//sharedHarmonics.length;
+        stability = sharedHarmonics.map(freq => Frequency(freq).toNote()).toString();//sharedHarmonics.length;
     }
     document.getElementById("stability").innerHTML = stability;
 }
 
-function updateChordNames() {
+function updateChordNames(activeNotes) {
+    var currentChord = {};
     var notes = [];
-    for (key in activeNotes) {
+    for (var key in activeNotes) {
         if (activeNotes[key]) {
-            notes.push(Tone.Frequency(key).toMidi());
+            notes.push(Frequency(key).toMidi());
         }
     }
     notes.sort();
     var bass = notes[0];
     // make mapping of midi notes to integer notation
     currentChord.midi = {};
-    for (note in notes) {
+    for (var note in notes) {
         currentChord.midi[notes[note]] = toPitchClass(notes[note] - bass);
     }
     // reduce to integer notation, drop all notes to the same octave
@@ -193,6 +198,7 @@ function updateChordNames() {
     else {
         document.getElementById("chordtype").innerHTML = "";
     }
+    return currentChord;
 }
 
 function updateChordTunings() {

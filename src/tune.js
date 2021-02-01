@@ -2,7 +2,7 @@
 // See all scales at: http://abbernie.github.io/tune/scales.html
 
 
-function Tune(){
+export default function Tune(){
 
 	// the scale as ratios
 	this.scale = []

@@ -21,6 +21,6 @@
     background-color: black;
 }
 
-#keyboard .key:hover, #keyboard .key.active {
+#keyboard .key.active {
     background-color: firebrick;
 }
