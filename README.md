@@ -1,9 +1,9 @@
-# Quickstart
+# Quickstart / Dev
 
 - `npm install`
 - `npm start`
 
-# Build
+# Build / Prod
 
 - `npm install`
 - `npm run build`

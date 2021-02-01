@@ -170,7 +170,7 @@ input[type="radio"]:hover + label {
 }
 
 #metrics #chords, #metrics #tunings {
-    min-width: 500px;
+    width: 500px;
     display: flex;
     flex-direction: column;
 }
