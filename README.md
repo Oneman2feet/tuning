@@ -1,5 +1,5 @@
 # Quickstart
 
-npm install
-npx webpack
-dist/index.html
+- `npm install`
+- `npm run build`
+- open `dist/index.html` in your browser
