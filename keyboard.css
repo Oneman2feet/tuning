@@ -20,3 +20,7 @@
     margin-right: -10px;
     background-color: black;
 }
+
+#keyboard .key:hover, #keyboard .key.active {
+    background-color: firebrick;
+}

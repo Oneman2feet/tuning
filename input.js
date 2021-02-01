@@ -22,6 +22,9 @@ function setupMidiInput() {
                 }
                 else {
                     activeNotes[notename] = note;
+
+                    // make this note active in the visualization
+                    activateKey(e.note.number);
                 }
 
                 // play note
@@ -46,6 +49,9 @@ function setupMidiInput() {
                 if (activeNotes[notename]) {
                     synth.triggerRelease([activeNotes[notename]], Tone.now());
                     delete activeNotes[notename];
+
+                    // make this note inactive in the visualization
+                    deactivateKey(e.note.number);
                 }
                 else {
                     console.log("released note that was not pressed: " + notename);

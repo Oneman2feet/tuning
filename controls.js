@@ -44,6 +44,7 @@ window.onload = function() {
     document.getElementById("clearNotes").onclick = function() {
         synth.releaseAll();
         activeNotes = {};
+        deactivateAllKeys();
         updateMetrics();
     }
 
