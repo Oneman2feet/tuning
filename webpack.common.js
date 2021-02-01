@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/controls.js',
-  mode: 'development',
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Tuning',
