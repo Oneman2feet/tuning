@@ -5,7 +5,7 @@ var blackKeys = [1,3,6,8,10];
 export function generateKeyboard() {
     var container = document.getElementById("keyboard");
     var midiStart = 48;
-    var numKeys = 24;
+    var numKeys = 25;
     for (var i=0; i<numKeys; i++)
     {
         var midiVal = midiStart + i;

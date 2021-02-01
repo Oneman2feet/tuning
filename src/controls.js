@@ -1,7 +1,7 @@
 import {now, start, PolySynth, Frequency} from 'tone';
 
 import Tune from './tune.js';
-import {differenceInCents} from './utility.js';
+import {differenceInCents, volOfFreq} from './utility.js';
 import setupMidiInput from './input.js';
 import {activateKey, deactivateKey, deactivateAllKeys, generateKeyboard} from './keyboard.js';
 import updateMetrics from './metrics.js';
