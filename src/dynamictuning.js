@@ -57,7 +57,7 @@ function tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteTo
     }
 }
 
-export default function updateDynamicTuning(synth, activeNotes, currentChord, fundamental, noteToPlay) {
+export default function updateDynamicTuning(synth, tune, activeNotes, currentChord, fundamental, noteToPlay) {
     if (chordTypes[currentChord.integer]
         && chordTypes[currentChord.integer]
         && chordTypes[currentChord.integer].tuning) {
@@ -67,22 +67,23 @@ export default function updateDynamicTuning(synth, activeNotes, currentChord, fu
                 notes.push({"name": key, "pitchClass": toPitchClass(Frequency(key).toMidi()), "midi": Frequency(key).toMidi(), "freq": activeNotes[key]});
             }
         }
-        // if the fundamental is being played, anchor around it
-        var tonic = toPitchClass(fundamental['semitonesFromC3']);
-        var anchor = notes.find(el => el.pitchClass == tonic);
-        if (anchor) {
-            tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay);
-        }
-        else {
-            // if tonic is not present, anchor on the justly tuned fifth
-            var dominant = toPitchClass(parseInt(fundamental['semitonesFromC3']) + 7);
-            var anchor = notes.find(el => el.pitchClass == dominant);
-            if (anchor) {
-                // tune the anchor justly first
-                var just = fundamental.frequency / 2 * 3;
+
+        var tuned = false;
+        var anchorPriority = [0, 7, 5, 9, 2, 4, 11, 3, 1]; // 0=I (tonic), 7=V, 5=IV, 9=vi, 2=ii, 4=iii, 11=vii, 3=biii, 1=#I
+        var anchorIndex = 0;
+
+        while (!tuned && anchorIndex < anchorPriority.length) {
+            // see if anchor is being played
+            var anchorPitch = toPitchClass(fundamental['semitonesFromC3'] + anchorPriority[anchorIndex]);
+            var anchorNote = notes.find(el => el.pitchClass == anchorPitch);
+
+            // if so, tune around it
+            if (anchorNote) {
+                // tune the anchor to the fundamental first
+                var just = tune.note(anchorNote.midi - fundamental['semitonesFromC3'] - 60, 1);
 
                 // calculate cents difference and change octaves as needed
-                var equal = Frequency(anchor.name).toFrequency();
+                var equal = Frequency(anchorNote.name).toFrequency();
 
                 while (parseInt(differenceInCents(just, equal)) > 600) {
                     just /= 2;
@@ -92,38 +93,80 @@ export default function updateDynamicTuning(synth, activeNotes, currentChord, fu
                     just *= 2;
                 }
 
-                anchor.freq = just;
-                tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay);
+                anchorNote.freq = just;
+
+                console.log("tuning around "+anchorNote.name);
+                tuneDynamically(synth, anchorNote, notes, activeNotes, currentChord, noteToPlay);
+                tuned = true;
             }
-            else {
-                // third option is to anchor around subdominant
-                var subdominant = toPitchClass(parseInt(fundamental['semitonesFromC3']) + 5);
-                var anchor = notes.find(el => el.pitchClass == subdominant);
-                if (anchor) {
-                    // tune the anchor justly first
-                    var just = fundamental.frequency / 3 * 4;
 
-                    // calculate cents difference and change octaves as needed
-                    var equal = Frequency(anchor.name).toFrequency();
-
-                    while (parseInt(differenceInCents(just, equal)) > 600) {
-                        just /= 2;
-                    }
-
-                    while (parseInt(differenceInCents(just, equal)) < -600) {
-                        just *= 2;
-                    }
-
-                    anchor.freq = just;
-                    tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay);
-                }
-                else {
-                    if (noteToPlay!==undefined) {
-                        synth.triggerAttack(noteToPlay, now(), volOfFreq(noteToPlay));//, e.velocity);
-                    }
-                }
-            }
+            // otherwise move on to the next anchor
+            anchorIndex++;
         }
+
+        // Fallback on playing the note
+        if (!tuned && noteToPlay!==undefined) {
+            synth.triggerAttack(noteToPlay, now(), volOfFreq(noteToPlay));//, e.velocity);
+        }
+
+
+        // // if the fundamental is being played, anchor around it
+        // var tonic = toPitchClass(fundamental['semitonesFromC3']);
+        // var anchor = notes.find(el => el.pitchClass == tonic);
+        // if (anchor) {
+        //     tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay);
+        // }
+        // else {
+        //     // if tonic is not present, anchor on the justly tuned fifth
+        //     var dominant = toPitchClass(parseInt(fundamental['semitonesFromC3']) + 7);
+        //     var anchor = notes.find(el => el.pitchClass == dominant);
+        //     if (anchor) {
+        //         // tune the anchor justly first
+        //         var just = fundamental.frequency / 2 * 3;
+
+        //         // calculate cents difference and change octaves as needed
+        //         var equal = Frequency(anchor.name).toFrequency();
+
+        //         while (parseInt(differenceInCents(just, equal)) > 600) {
+        //             just /= 2;
+        //         }
+
+        //         while (parseInt(differenceInCents(just, equal)) < -600) {
+        //             just *= 2;
+        //         }
+
+        //         anchor.freq = just;
+        //         tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay);
+        //     }
+        //     else {
+        //         // third option is to anchor around subdominant
+        //         var subdominant = toPitchClass(parseInt(fundamental['semitonesFromC3']) + 5);
+        //         var anchor = notes.find(el => el.pitchClass == subdominant);
+        //         if (anchor) {
+        //             // tune the anchor justly first
+        //             var just = fundamental.frequency / 3 * 4;
+
+        //             // calculate cents difference and change octaves as needed
+        //             var equal = Frequency(anchor.name).toFrequency();
+
+        //             while (parseInt(differenceInCents(just, equal)) > 600) {
+        //                 just /= 2;
+        //             }
+
+        //             while (parseInt(differenceInCents(just, equal)) < -600) {
+        //                 just *= 2;
+        //             }
+
+        //             anchor.freq = just;
+        //             tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay);
+        //         }
+        //         else {
+        //             if (noteToPlay!==undefined) {
+        //                 synth.triggerAttack(noteToPlay, now(), volOfFreq(noteToPlay));//, e.velocity);
+        //             }
+        //         }
+        //     }
+        // }
     }
     else if (noteToPlay!==undefined) {
         synth.triggerAttack(noteToPlay, now(), volOfFreq(noteToPlay));//, e.velocity);

@@ -54,7 +54,7 @@ function noteOn(e) {
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(synth, activeNotes, currentChord, fundamental, note); // this also plays the note
+        updateDynamicTuning(synth, tune, activeNotes, currentChord, fundamental, note); // this also plays the note
         updateMetrics(activeNotes);
     }
     else {
@@ -80,7 +80,7 @@ function noteOff(e) {
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(synth, activeNotes, currentChord, fundamental);
+        updateDynamicTuning(synth, tune, activeNotes, currentChord, fundamental);
         updateMetrics(activeNotes);
     }
 }
