@@ -42,23 +42,20 @@ function noteOn(e) {
     }
     else {
         activeNotes[notename] = note;
-
-        // make this note active in the visualization
-        activateKey(e.note.number);
     }
-
-    // play note
-    //synth.triggerAttack(note, now(), volOfFreq(note));//, e.velocity);
 
     var currentChord = updateMetrics(activeNotes);
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(synth, tune, activeNotes, currentChord, fundamental, note); // this also plays the note
+        updateDynamicTuning(synth, tune, activeNotes, currentChord, fundamental, note, e.note.number); // this also plays the note
         updateMetrics(activeNotes);
     }
     else {
         synth.triggerAttack(note, now(), volOfFreq(note));//, e.velocity);
+
+        // make this note active in the visualization
+        activateKey(e.note.number, note);
     }
 }
 

@@ -10,17 +10,42 @@
     width: 40px;
     height: 200px;
     border: 1px solid black;
+
+    /* Tuning annotations */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-align: center;
+    padding-bottom: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: transparent;
 }
 
-#keyboard .blackKey {
+#keyboard .key.blackKey {
     z-index: 2;
     width: 24px;
     height: 120px;
     margin-left: -12px;
     margin-right: -12px;
     background-color: black;
+
+    /* Tuning annotations */
+    font-size: 10px;
 }
 
 #keyboard .key.active {
     background-color: firebrick;
+}
+
+#keyboard .key.newAdjustment {
+    color: black;
+}
+
+#keyboard .key.blackKey.newAdjustment {
+    color: white;
+}
+
+#keyboard .key.active.newAdjustment {
+    color: white;
 }

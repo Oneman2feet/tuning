@@ -1,5 +1,7 @@
 import './keyboard.css'
 
+import {centsFromEqual} from './utility.js';
+
 var blackKeys = [1,3,6,8,10];
 
 export function generateKeyboard() {
@@ -20,15 +22,30 @@ export function generateKeyboard() {
     }
 }
 
-export function activateKey(midiVal) {
+export function activateKey(midiVal, freqVal) {
     [...document.querySelectorAll('#keyboard .key[data-midi-value="' + midiVal + '"]')].forEach((key) => {
         key.classList.add("active");
+
+        // annotate key with tuning information
+        if (freqVal) {
+            var adjustment = centsFromEqual(midiVal, freqVal);
+            if (adjustment!==key.innerHTML) {
+                if (key.innerHTML!=="") {
+                    key.classList.add("newAdjustment");
+                }
+                key.innerHTML = adjustment;
+            }
+        }
+        else {
+            key.innerHTML = "";
+        }
     });
 }
 
 export function deactivateKey(midiVal) {
     [...document.querySelectorAll('#keyboard .key[data-midi-value="' + midiVal + '"]')].forEach((key) => {
         key.classList.remove("active");
+        key.classList.remove("newAdjustment");
     });
 }
 

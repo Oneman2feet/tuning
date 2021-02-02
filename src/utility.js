@@ -10,6 +10,12 @@ export function differenceInCents(a, b) {
     return cents;
 }
 
+// compute interval between two frequencies in unit of cents
+export function centsFromEqual(midi, freq) {
+    var equal = Frequency(midi, "midi").toFrequency();
+    return differenceInCents(freq, equal);
+}
+
 // convert midi key number to a properly typeset note name
 export function midiToNotation(midi) {
     return Frequency(midi, "midi").toNote().replace(/[0-9]/g, "").replace("#", "\u266f");
