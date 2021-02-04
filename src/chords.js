@@ -64,7 +64,7 @@ export const chordTypes = {
     "0,4,7,8": { "root": 3, "type": "Augmented-Major Seventh (first inversion)", "notation": "X+M7/Y"},
     "0,3,4,8": { "root": 2, "type": "Augmented-Major Seventh (second inversion)", "notation": "X+M7/Y"},
     "0,1,5,9": { "root": 1, "type": "Augmented-Major Seventh (third inversion)", "notation": "X+M7/Y"},
-    "0,4,6,10": { "root": 0, "type": "Major-Minor Seventh (fifth lowered)", "notation": "X7b5"},
+    "0,4,6,10": { "root": 0, "type": "Major-Minor Seventh (fifth lowered)", "notation": "X7\u266d5"},
     "0,2,4,10": { "root": 0, "type": "Dominant Ninth (fifth omitted)", "notation": "X9", "tuning": "8:9:10:14"}
 };
 

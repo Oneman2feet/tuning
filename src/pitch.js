@@ -34,7 +34,7 @@ export default class Pitch {
 
     // Without octave numbers
     getPitchClassName(useFlats) {
-        return noteName(useFlats).replace(/[0-9]/g, "");
+        return this.getNoteName(useFlats).replace(/[0-9]/g, "");
     }
 
     // Interval as frequency ratio

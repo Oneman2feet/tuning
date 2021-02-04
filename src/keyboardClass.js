@@ -93,6 +93,15 @@ export default class Keyboard {
         return chordTypes[this.chordClass.join(",")];
     }
 
+    // Returns the pitch corresponding to the root of the chord as per chord inference.
+    get root() {
+        var rootInteger = this.chordClass[this.chordType.root];
+        var bass = this.bass;
+        
+        // find the lowest pitch matching the root
+        return Object.values(this.pitches).find((pitch) => Pitch.differenceInSemitones(pitch, bass) == rootInteger);
+    }
+
     clear() {
         this.pitches = {};
     }

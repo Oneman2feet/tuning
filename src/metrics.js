@@ -70,6 +70,7 @@ function updateLowestSharedOvertone(keyboard) {
 }
 
 function updateChordNames(keyboard, activeNotes) {
+    // TODO remove dependency on currentChord data structure
     var currentChord = {};
     var notes = [];
     for (var key in activeNotes) {
@@ -86,32 +87,27 @@ function updateChordNames(keyboard, activeNotes) {
     }
     // reduce to integer notation, drop all notes to the same octave
     currentChord.integer = [...new Set(notes.map(note => currentChord.midi[note]))].sort((a, b) => a - b).join(",");
-    var chordType = chordTypes[currentChord.integer];
 
-    // using keyboard class
-    var chordClass = keyboard.chordClass;
-    chordType = chordTypes[chordClass.join(",")];
+
+    // Using keyboard
+    var chordType = keyboard.chordType;
     if (chordType) {
-        // find out what note is the root using the midi mapping
-        var rootInt = currentChord.integer.split(",")[chordType.root];
-        var rootMidi = Object.keys(currentChord.midi).find(key => currentChord.midi[key]==rootInt);
-        var root = midiToNotation(rootMidi);
         if (chordType.notation)
         {
-            var bassMidi = Object.keys(currentChord.midi).find(key => currentChord.midi[key]==0);
-            var bass = midiToNotation(bassMidi);
-            var shortName = chordType.notation.replace("X", root).replace("Y", bass);
+            var shortName = chordType.notation.replace("X", keyboard.root.getPitchClassName()).replace("Y", keyboard.bass.getPitchClassName());
             document.getElementById("chordtype").innerHTML = shortName;
         }
         else
         {
-            var fullName = root + " " + chordType.type; // old long notation for chord
+            var fullName = keyboard.root.getNoteName() + " " + chordType.type; // old long notation for chord
             document.getElementById("chordtype").innerHTML = fullName;
         }
     }
     else {
         document.getElementById("chordtype").innerHTML = "";
     }
+
+    // TODO remove
     return currentChord;
 }
 
