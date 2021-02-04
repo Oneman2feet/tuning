@@ -73,6 +73,23 @@ export default class Keyboard {
         return notes[0];
     }
 
+    // Returns an array of notes in integer notation
+    get chord() {
+        var notes = Object.values(this.pitches);
+        if (notes.length > 0) {
+            // integer notation is the number of semitones from the bass of the chord
+            var bass = notes[0];
+            notes = notes.map((pitch) => Pitch.differenceInSemitones(pitch, bass));
+            return notes;
+        }
+        return [];
+    }
+
+    // Equivalence class for chords. Reduces all notes to within an octave of the bass.
+    get chordClass() {
+        return Array.from(new Set(this.chord.map((integer) => integer % 12))).sort();
+    }
+
     clear() {
         this.pitches = {};
     }

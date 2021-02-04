@@ -63,6 +63,11 @@ export default class Pitch {
         return Pitch.differenceInCentsPrint(this, equal);
     }
 
+    // Just like subtraction, the result is positive if the first argument is greater
+    static differenceInSemitones(pitchA, pitchB) {
+        return pitchA.midiNoteNumber -  pitchB.midiNoteNumber;
+    }
+
     toString() {
         return this.getNoteName() + " " + this.centsFromEqualPrint;
     }

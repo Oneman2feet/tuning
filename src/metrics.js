@@ -12,7 +12,7 @@ export default function updateMetrics(keyboard, activeNotes) {
     updateNoteRatios(keyboard);
     updateImpliedFundamental(keyboard);
     updateLowestSharedOvertone(keyboard);
-    var currentChord = updateChordNames(activeNotes);
+    var currentChord = updateChordNames(keyboard, activeNotes);
     updateChordTunings();
     updateTuningList(activeNotes);
     return currentChord;
@@ -69,7 +69,8 @@ function updateLowestSharedOvertone(keyboard) {
     }
 }
 
-function updateChordNames(activeNotes) {
+function updateChordNames(keyboard, activeNotes) {
+    console.log(keyboard.chordClass);
     var currentChord = {};
     var notes = [];
     for (var key in activeNotes) {
