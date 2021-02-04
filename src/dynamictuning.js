@@ -3,6 +3,7 @@ import {now, Frequency} from 'tone';
 import {chordTypes} from './chords.js';
 import {differenceInCents, toPitchClass, volOfFreq} from './utility.js';
 import {activateKey} from './keyboard.js';
+import Pitch from './pitch.js';
 
 /*
  * DYNAMIC TUNING
@@ -10,7 +11,7 @@ import {activateKey} from './keyboard.js';
 
 // given an anchor note, tune the current chord
 // using the chord types dictionary
-function tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteToPlay) {
+function tuneDynamically(keyboard, synth, anchor, notes, activeNotes, currentChord, noteToPlay) {
     var chordInt = currentChord.integer;
     var dynamicTuning = chordTypes[chordInt].tuning;
     var anchorInt = currentChord.midi[anchor.midi];
@@ -45,6 +46,7 @@ function tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteTo
         // always play this note if this is the noteToPlay
         if (activeNotes[currentName]==noteToPlay) {
             synth.triggerAttack(currentFreq, now(), volOfFreq(currentFreq));
+            keyboard.addPitch(new Pitch(currentMidi, currentFreq));
             activeNotes[currentName] = currentFreq;
 
             // update visualization
@@ -56,6 +58,7 @@ function tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteTo
             // TODO: change pitch without triggering a new attack
             synth.triggerRelease(activeNotes[currentName], now());
             synth.triggerAttack(currentFreq, now(), volOfFreq(currentFreq));
+            keyboard.getPitch(currentMidi).frequencyHz = currentFreq;
             activeNotes[currentName] = currentFreq;
 
             // update visualization
@@ -64,7 +67,7 @@ function tuneDynamically(synth, anchor, notes, activeNotes, currentChord, noteTo
     }
 }
 
-export default function updateDynamicTuning(synth, tune, activeNotes, currentChord, fundamental, noteToPlay, noteToPlayMidi) {
+export default function updateDynamicTuning(keyboard, synth, tune, activeNotes, currentChord, fundamental, noteToPlay, noteToPlayMidi) {
     if (chordTypes[currentChord.integer]
         && chordTypes[currentChord.integer]
         && chordTypes[currentChord.integer].tuning) {
@@ -103,7 +106,7 @@ export default function updateDynamicTuning(synth, tune, activeNotes, currentCho
                 anchorNote.freq = just;
 
                 console.log("tuning around "+anchorNote.name);
-                tuneDynamically(synth, anchorNote, notes, activeNotes, currentChord, noteToPlay);
+                tuneDynamically(keyboard, synth, anchorNote, notes, activeNotes, currentChord, noteToPlay);
                 tuned = true;
             }
 
@@ -114,6 +117,7 @@ export default function updateDynamicTuning(synth, tune, activeNotes, currentCho
         // Fallback on playing the note
         if (!tuned && noteToPlay!==undefined) {
             synth.triggerAttack(noteToPlay, now(), volOfFreq(noteToPlay));//, e.velocity);
+            keyboard.addPitch(new Pitch(noteToPlayMidi, noteToPlay));
 
             // update visualization
             activateKey(noteToPlayMidi, noteToPlay);
@@ -121,6 +125,7 @@ export default function updateDynamicTuning(synth, tune, activeNotes, currentCho
     }
     else if (noteToPlay!==undefined) {
         synth.triggerAttack(noteToPlay, now(), volOfFreq(noteToPlay));//, e.velocity);
+        keyboard.addPitch(new Pitch(noteToPlayMidi, noteToPlay));
 
         // update visualization
         activateKey(noteToPlayMidi, noteToPlay);

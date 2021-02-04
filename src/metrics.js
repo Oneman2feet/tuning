@@ -1,19 +1,17 @@
-import {gcd, lcm} from 'mathjs';
-import Fraction from 'fraction.js';
+import {lcm} from 'mathjs';
 import {Frequency} from 'tone';
 
 import {chordTypes, chordTunings, reduceChord} from './chords.js';
-import {centsFromEqual, differenceInCents, midiToNotation, toPitchClass} from './utility.js';
+import {differenceInCents, midiToNotation, toPitchClass} from './utility.js';
 
 // GLOBALS
-var activeNoteRatios;
 var tuningList = {};
 
-export default function updateMetrics(activeNotes) {
+export default function updateMetrics(keyboard, activeNotes) {
     updateNotes(activeNotes);
-    updateNoteRatios(activeNotes);
-    updateImpliedFundamental(activeNotes);
-    updateLowestSharedOvertone(activeNotes);
+    updateNoteRatios(keyboard);
+    updateImpliedFundamental(keyboard, activeNotes);
+    updateLowestSharedOvertone(keyboard, activeNotes);
     //updateStability(activeNotes);
     var currentChord = updateChordNames(activeNotes);
     updateChordTunings();
@@ -60,32 +58,11 @@ function updateTuningList(activeNotes) {
     document.getElementById("tuningList").innerHTML = list;
 }
 
-function updateNoteRatios(activeNotes) {
-    var notes = [];
-    var ratios = "";
-    for (var key in activeNotes) {
-        if (activeNotes[key]) {
-            notes.push(activeNotes[key]);
-        }
-    }
-    notes.sort((a, b) => a - b);
-    if (notes.length > 1) {
-        var lowest = notes[0];
-        notes = notes.map(note => new Fraction(note / lowest).simplify());
-        var den = 1;
-        for (var note in notes) {
-            den *= notes[note].d;
-        }
-        notes = notes.map(note => Math.round(note * den)); // rounding for floating point errors
-        var greatestCommonDivisor = gcd.apply(null, notes); // reduce ration by gcd
-        notes = notes.map(note => note / greatestCommonDivisor);
-        activeNoteRatios = notes.slice(0); // clone array
-        ratios = notes.join("/");
-    }
-    document.getElementById("ratios").innerHTML = ratios;
+function updateNoteRatios(keyboard) {
+    document.getElementById("ratios").innerHTML = keyboard.frequencyRatios.join("/");
 }
 
-function updateImpliedFundamental(activeNotes) {
+function updateImpliedFundamental(keyboard, activeNotes) {
     // The implied fundamental of a series of notes
     // is given by the relative frequency ratios of those notes
     var undertone = "";
@@ -98,13 +75,13 @@ function updateImpliedFundamental(activeNotes) {
     if (notes.length > 1)
     {
         notes.sort(); // sort notes lowest to highest
-        var fundamental = notes[0] / activeNoteRatios[0];
+        var fundamental = notes[0] / keyboard.frequencyRatios[0];
         undertone = Frequency(fundamental).toNote();
     }
     document.getElementById("undertone").innerHTML = undertone;
 }
 
-function updateLowestSharedOvertone(activeNotes) {
+function updateLowestSharedOvertone(keyboard, activeNotes) {
     // The lowest shared overtone of a series of notes
     // is by definition the smallest integer solution to
     // ax=by=cz=...
@@ -125,8 +102,8 @@ function updateLowestSharedOvertone(activeNotes) {
     if (notes.length > 1)
     {
         notes.sort(); // sort notes lowest to highest
-        var x = lcm.apply(this, activeNoteRatios);
-        var freq = x / activeNoteRatios[0] * notes[0];
+        var x = lcm.apply(this, keyboard.frequencyRatios);
+        var freq = x / keyboard.frequencyRatios[0] * notes[0];
         overtone = Frequency(freq).toNote();
     }
     document.getElementById("overtone").innerHTML = overtone;

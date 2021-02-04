@@ -11,6 +11,10 @@ export default class Keyboard {
         this.pitches[pitch.midiNoteNumber] = pitch;
     }
 
+    getPitch(midiNoteNumber) {
+        return this.pitches[midiNoteNumber];
+    }
+
     removePitch(midiNoteNumber) {
         delete this.pitches[midiNoteNumber];
     }
@@ -24,10 +28,13 @@ export default class Keyboard {
             var ratios = ratios.map((frac) => Math.round(frac * den)); // rounding for floating point errors
             var greatestCommonDivisor = gcd.apply(null, ratios);
             ratios = ratios.map(ratio => ratio / greatestCommonDivisor); // reduce ratio by gcd
-            ratios = ratios.join("/");
             return ratios;
         }
-        return "";
+        return [];
+    }
+
+    clear() {
+        this.pitches = {};
     }
 
     toString() {

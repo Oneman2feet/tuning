@@ -41,8 +41,6 @@ function noteOn(e) {
     // Make a pitch
     var pitch = new Pitch(e.note.number, note);
     keyboard.addPitch(pitch);
-    console.log(keyboard.frequencyRatios);
-    //console.log(keyboard.toString());
 
     // keep track of this note
     var notename = e.note.name + e.note.octave;
@@ -54,12 +52,12 @@ function noteOn(e) {
         activeNotes[notename] = note;
     }
 
-    var currentChord = updateMetrics(activeNotes);
+    var currentChord = updateMetrics(keyboard, activeNotes);
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(synth, tune, activeNotes, currentChord, fundamental, note, e.note.number); // this also plays the note
-        updateMetrics(activeNotes);
+        updateDynamicTuning(keyboard, synth, tune, activeNotes, currentChord, fundamental, note, e.note.number); // this also plays the note
+        updateMetrics(keyboard, activeNotes);
     }
     else {
         synth.triggerAttack(note, now(), volOfFreq(note));//, e.velocity);
@@ -86,12 +84,12 @@ function noteOff(e) {
         console.log("released note that was not pressed: " + notename);
     }
 
-    var currentChord = updateMetrics(activeNotes);
+    var currentChord = updateMetrics(keyboard, activeNotes);
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(synth, tune, activeNotes, currentChord, fundamental);
-        updateMetrics(activeNotes);
+        updateDynamicTuning(keyboard, synth, tune, activeNotes, currentChord, fundamental);
+        updateMetrics(keyboard, activeNotes);
     }
 }
 
@@ -122,8 +120,9 @@ window.onload = function() {
     document.getElementById("clearNotes").onclick = function() {
         synth.releaseAll();
         activeNotes = {};
+        keyboard.clear();
         deactivateAllKeys();
-        updateMetrics(activeNotes);
+        updateMetrics(keyboard, activeNotes);
     }
 
     document.getElementById("volslider").oninput = function() {
