@@ -16,7 +16,6 @@ var fundamental = {
    "frequency": undefined,
    "semitonesFromC3": undefined
 };
-var activeNotes = {};
 
 var keyboard;
 
@@ -38,26 +37,24 @@ function noteOn(e) {
     // convert from midi to scale
     var note = tune.note(e.note.number - fundamental['semitonesFromC3'] - 60, 1);
 
+    // Release this note if already playing
+    var playing = keyboard.getPitch(e.note.number);
+    if (playing) {
+        console.log("this key is already pressed: " + playing.getNoteName());
+        synth.triggerRelease(playing.frequencyHz, now());
+    }
+
     // Make a pitch
     var pitch = new Pitch(e.note.number, note);
     keyboard.addPitch(pitch);
+    console.log(keyboard.toString());
 
-    // keep track of this note
-    var notename = e.note.name + e.note.octave;
-    if (activeNotes[notename]) {
-        console.log("this key is already pressed: " + notename);
-        synth.triggerRelease([activeNotes[notename]], now());
-    }
-    else {
-        activeNotes[notename] = note;
-    }
-
-    var currentChord = updateMetrics(keyboard, activeNotes);
+    updateMetrics(keyboard);
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(keyboard, synth, tune, activeNotes, currentChord, fundamental, note, e.note.number); // this also plays the note
-        updateMetrics(keyboard, activeNotes);
+        updateDynamicTuning(keyboard, synth, tune, fundamental, note, e.note.number); // this also plays the note
+        updateMetrics(keyboard);
     }
     else {
         synth.triggerAttack(note, now(), volOfFreq(note));//, e.velocity);
@@ -68,28 +65,25 @@ function noteOn(e) {
 }
 
 function noteOff(e) {
-    // update keyboard class
-    keyboard.removePitch(e.note.number);
-
     // release the note(s) that are currently held from this midi key
-    var notename = e.note.name + e.note.octave;
-    if (activeNotes[notename]) {
-        synth.triggerRelease([activeNotes[notename]], now());
-        delete activeNotes[notename];
+    var playing = keyboard.getPitch(e.note.number);
+    if (playing) {
+        synth.triggerRelease(playing.frequencyHz, now());
+        keyboard.removePitch(playing.midiNoteNumber);
 
         // make this note inactive in the visualization
         deactivateKey(e.note.number);
     }
     else {
-        console.log("released note that was not pressed: " + notename);
+        console.log("released note that was not pressed: " + e.note.name + e.note.octave);
     }
 
-    var currentChord = updateMetrics(keyboard, activeNotes);
+    updateMetrics(keyboard);
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(keyboard, synth, tune, activeNotes, currentChord, fundamental);
-        updateMetrics(keyboard, activeNotes);
+        updateDynamicTuning(keyboard, synth, tune, fundamental);
+        updateMetrics(keyboard);
     }
 }
 
@@ -119,11 +113,10 @@ window.onload = function() {
 
     document.getElementById("clearNotes").onclick = function() {
         synth.releaseAll();
-        activeNotes = {};
         keyboard.clear();
         deactivateAllKeys();
         clearMetrics(keyboard);
-        updateMetrics(keyboard, activeNotes);
+        updateMetrics(keyboard);
     }
 
     document.getElementById("volslider").oninput = function() {

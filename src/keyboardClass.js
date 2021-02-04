@@ -23,6 +23,7 @@ export default class Keyboard {
     }
 
     removePitch(midiNoteNumber) {
+        console.log("removing " + midiNoteNumber);
         delete this.pitches[midiNoteNumber];
     }
 

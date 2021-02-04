@@ -1,7 +1,7 @@
-import {now, Frequency} from 'tone';
+import {now} from 'tone';
 
-import {chordTunings, chordTypes} from './chords.js';
-import {differenceInCents, toPitchClass, volOfFreq} from './utility.js';
+import {chordTypes} from './chords.js';
+import {volOfFreq} from './utility.js';
 import {activateKey} from './keyboard.js';
 import Pitch from './pitch.js';
 
@@ -107,7 +107,7 @@ function tuneChord(keyboard, synth, anchor, noteToPlayMidi) {
             console.log("adjusting note from " + pitch.toString() + " to " + currPitch.toString());
             // TODO: change pitch without triggering a new attack
             console.log("hello");
-            synth.triggerRelease(pitch.midiNoteNumber, now());
+            synth.triggerRelease(pitch.frequencyHz, now());
             synth.triggerAttack(currentFreq, now(), volOfFreq(currentFreq));
             pitch.frequencyHz = currentFreq;
             //activeNotes[currentName] = currentFreq;
@@ -128,7 +128,7 @@ function resetOctave(pitch) {
     }
 }
 
-export default function updateDynamicTuning(keyboard, synth, tune, activeNotes, currentChord, fundamental, noteToPlay, noteToPlayMidi) {
+export default function updateDynamicTuning(keyboard, synth, tune, fundamental, noteToPlay, noteToPlayMidi) {
     var chordType = keyboard.chordType;
     if (chordType && chordType.tuning) {
         var tuned = false;

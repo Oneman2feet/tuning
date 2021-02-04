@@ -1,21 +1,16 @@
-import {lcm} from 'mathjs';
-import {Frequency} from 'tone';
-
-import {chordTypes, chordTunings, reduceChord} from './chords.js';
-import {differenceInCents, midiToNotation, toPitchClass} from './utility.js';
+import {chordTunings, reduceChord} from './chords.js';
 
 // GLOBALS
 var tuningList = {};
 
-export function updateMetrics(keyboard, activeNotes) {
+export function updateMetrics(keyboard) {
     updateNotes(keyboard);
     updateNoteRatios(keyboard);
     updateImpliedFundamental(keyboard);
     updateLowestSharedOvertone(keyboard);
-    var currentChord = updateChordNames(keyboard, activeNotes);
+    updateChordNames(keyboard);
     updateChordTunings(keyboard);
     updateTuningList(keyboard);
-    return currentChord;
 }
 
 export function clearMetrics(keyboard) {
@@ -68,27 +63,7 @@ function updateLowestSharedOvertone(keyboard) {
     }
 }
 
-function updateChordNames(keyboard, activeNotes) {
-    // TODO remove dependency on currentChord data structure
-    var currentChord = {};
-    var notes = [];
-    for (var key in activeNotes) {
-        if (activeNotes[key]) {
-            notes.push(Frequency(key).toMidi());
-        }
-    }
-    notes.sort();
-    var bass = notes[0];
-    // make mapping of midi notes to integer notation
-    currentChord.midi = {};
-    for (var note in notes) {
-        currentChord.midi[notes[note]] = toPitchClass(notes[note] - bass);
-    }
-    // reduce to integer notation, drop all notes to the same octave
-    currentChord.integer = [...new Set(notes.map(note => currentChord.midi[note]))].sort((a, b) => a - b).join(",");
-
-
-    // Using keyboard
+function updateChordNames(keyboard) {
     var chordType = keyboard.chordType;
     if (chordType) {
         if (chordType.notation)
@@ -105,9 +80,6 @@ function updateChordNames(keyboard, activeNotes) {
     else {
         document.getElementById("chordtype").innerHTML = "";
     }
-
-    // TODO remove
-    return currentChord;
 }
 
 function updateChordTunings(keyboard) {
