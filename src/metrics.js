@@ -70,7 +70,6 @@ function updateLowestSharedOvertone(keyboard) {
 }
 
 function updateChordNames(keyboard, activeNotes) {
-    console.log(keyboard.chordClass);
     var currentChord = {};
     var notes = [];
     for (var key in activeNotes) {
@@ -88,6 +87,10 @@ function updateChordNames(keyboard, activeNotes) {
     // reduce to integer notation, drop all notes to the same octave
     currentChord.integer = [...new Set(notes.map(note => currentChord.midi[note]))].sort((a, b) => a - b).join(",");
     var chordType = chordTypes[currentChord.integer];
+
+    // using keyboard class
+    var chordClass = keyboard.chordClass;
+    chordType = chordTypes[chordClass.join(",")];
     if (chordType) {
         // find out what note is the root using the midi mapping
         var rootInt = currentChord.integer.split(",")[chordType.root];

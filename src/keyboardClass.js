@@ -1,6 +1,7 @@
 import Pitch from './pitch.js';
 import {Frequency} from 'tone';
 import {gcd, lcm} from 'mathjs';
+import {chordTypes} from './chords.js';
 
 export default class Keyboard {
     constructor() {
@@ -24,8 +25,7 @@ export default class Keyboard {
     get frequencyRatios() {
         var notes = Object.values(this.pitches);
         if (notes.length > 1) {
-            var lowest = notes[0];
-            var ratios = notes.map((pitch) => Pitch.getFrequencyRatio(pitch, lowest));
+            var ratios = notes.map((pitch) => Pitch.getFrequencyRatio(pitch, notes[0]));
             var den = ratios.reduce((den, ratio) => den * ratio.d, 1);
             var ratios = ratios.map((frac) => Math.round(frac * den)); // rounding for floating point errors
             var greatestCommonDivisor = gcd.apply(null, ratios);
@@ -42,7 +42,7 @@ export default class Keyboard {
         {
             // The implied fundamental of a series of notes
             // is given by the relative frequency ratios of those notes
-            var fundamentalFreq = notes[0].frequencyHz / this.frequencyRatios[0];
+            var fundamentalFreq = this.bass.frequencyHz / this.frequencyRatios[0];
             var midiValue = Frequency(fundamentalFreq).toMidi(); // shortcut - round to nearest equal tempered key
             return new Pitch(midiValue, fundamentalFreq);
         }
@@ -73,21 +73,24 @@ export default class Keyboard {
         return notes[0];
     }
 
+    // Returns the lowest pitch
+    get bass() {
+        return Object.values(this.pitches)[0];
+    }
+
     // Returns an array of notes in integer notation
     get chord() {
         var notes = Object.values(this.pitches);
-        if (notes.length > 0) {
-            // integer notation is the number of semitones from the bass of the chord
-            var bass = notes[0];
-            notes = notes.map((pitch) => Pitch.differenceInSemitones(pitch, bass));
-            return notes;
-        }
-        return [];
+        return notes.map((pitch) => Pitch.differenceInSemitones(pitch, this.bass));
     }
 
     // Equivalence class for chords. Reduces all notes to within an octave of the bass.
     get chordClass() {
-        return Array.from(new Set(this.chord.map((integer) => integer % 12))).sort();
+        return Array.from(new Set(this.chord.map((integer) => integer % 12))).sort((a,b) => a-b);
+    }
+
+    get chordType() {
+        return chordTypes[this.chordClass.join(",")];
     }
 
     clear() {
