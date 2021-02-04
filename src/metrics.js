@@ -11,7 +11,7 @@ export default function updateMetrics(keyboard, activeNotes) {
     updateNotes(activeNotes);
     updateNoteRatios(keyboard);
     updateImpliedFundamental(keyboard);
-    updateLowestSharedOvertone(keyboard, activeNotes);
+    updateLowestSharedOvertone(keyboard);
     //updateStability(activeNotes);
     var currentChord = updateChordNames(activeNotes);
     updateChordTunings();
@@ -72,32 +72,14 @@ function updateImpliedFundamental(keyboard) {
     }
 }
 
-function updateLowestSharedOvertone(keyboard, activeNotes) {
-    // The lowest shared overtone of a series of notes
-    // is by definition the smallest integer solution to
-    // ax=by=cz=...
-    // where a,b,c are the integer frequency ratios of those notes.
-    // When the smallest nonzero integer solution is found,
-    // each of these terms will evaluate to the least common multiple
-    // of their coefficients.
-    // Therefore, the frequency of the lowest overtone can be found
-    // as the frequency of the lowest note divided by its coefficient
-    //  times the least common multiple of the whole ratio.
-    var overtone = "";
-    var notes = [];
-    for (var key in activeNotes) {
-        if (activeNotes[key]) {
-            notes.push(activeNotes[key]);
-        }
+function updateLowestSharedOvertone(keyboard) {
+    var overtone = keyboard.overtone;
+    if (overtone) {
+        document.getElementById("overtone").innerHTML = overtone.getNoteName();
     }
-    if (notes.length > 1)
-    {
-        notes.sort(); // sort notes lowest to highest
-        var x = lcm.apply(this, keyboard.frequencyRatios);
-        var freq = x / keyboard.frequencyRatios[0] * notes[0];
-        overtone = Frequency(freq).toNote();
+    else {
+        document.getElementById("overtone").innerHTML = "";
     }
-    document.getElementById("overtone").innerHTML = overtone;
 }
 
 function updateStability(activeNotes) {
