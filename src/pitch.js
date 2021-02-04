@@ -15,10 +15,20 @@ export default class Pitch {
         }
     }
 
+    // Returns the pitch's equal-tempered counterpart
+    get equal() {
+        return new Pitch(this.midiNoteNumber);
+    }
+
     // Pitch class is semitones away from C
-    // Returns [0, 11]
     get pitchClass() {
-        return ((this.midiNoteNumber % 12) + 12) % 12;
+        return Pitch.toPitchClass(this.midiNoteNumber);
+    }
+
+    // Equivalence class for semitones independant of octave
+    // Returns [0, 11]
+    static toPitchClass(semitones) {
+        return ((semitones % 12) + 12) % 12;
     }
 
     // Using scientific pitch notation
@@ -54,18 +64,22 @@ export default class Pitch {
     }
 
     get centsFromEqual() {
-        var equal = new Pitch(this.midiNoteNumber);
-        return Pitch.differenceInCents(this, equal);
+        return Pitch.differenceInCents(this, this.equal);
     }
 
     get centsFromEqualPrint() {
-        var equal = new Pitch(this.midiNoteNumber);
-        return Pitch.differenceInCentsPrint(this, equal);
+        return Pitch.differenceInCentsPrint(this, this.equal);
     }
 
     // Just like subtraction, the result is positive if the first argument is greater
     static differenceInSemitones(pitchA, pitchB) {
         return pitchA.midiNoteNumber -  pitchB.midiNoteNumber;
+    }
+
+    // Moves this pitch by an integer number of octaves
+    shiftOctave(number) {
+        this.midiNoteNumber += number * 12;
+        this.frequencyHz *= Math.pow(2, number);
     }
 
     toString() {

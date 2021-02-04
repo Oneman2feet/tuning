@@ -9,7 +9,7 @@ export const chordTypes = {
     "0,3": { "root": 0, "type": "Minor Third", "notation": "X m3", "tuning": "5:6"}, // just is 5:6, septimal is 6:7
     "0,4": { "root": 0, "type": "Major Third", "notation": "X M3", "tuning": "4:5"},
     "0,5": { "root": 0, "type": "Perfect Fourth", "notation": "X P4", "tuning": "3:4"},
-    "0,6": { "root": 0, "type": "Tritone", "notation": "X A4"},
+    "0,6": { "root": 0, "type": "Tritone", "notation": "X A4", "tuning": "5:7"},
     "0,7": { "root": 0, "type": "Perfect Fifth", "notation": "X P5", "tuning": "2:3"},
     "0,8": { "root": 0, "type": "Minor Sixth", "notation": "X m6", "tuning": "5:8"},
     "0,9": { "root": 0, "type": "Major Sixth", "notation": "X M6", "tuning": "3:5"},

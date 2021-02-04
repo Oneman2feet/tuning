@@ -17,6 +17,11 @@ export default class Keyboard {
         return this.pitches[midiNoteNumber];
     }
 
+    // Returns a pitch of the given pitch class, if any
+    getPitchClass(pitchClass) {
+        return this.pitchList.find((pitch) => pitch.pitchClass == pitchClass);
+    }
+
     removePitch(midiNoteNumber) {
         delete this.pitches[midiNoteNumber];
     }
@@ -91,6 +96,12 @@ export default class Keyboard {
     // Equivalence class for chords. Reduces all notes to within an octave of the bass.
     get chordClass() {
         return Array.from(new Set(this.chord.map((integer) => integer % 12))).sort((a,b) => a-b);
+    }
+
+    // Returns the integer notation of a given pitch relative to the current chord
+    // Assumes that this pitch is in the chord already
+    getInteger(pitch) {
+        return Pitch.differenceInSemitones(pitch, this.bass);
     }
 
     get chordType() {

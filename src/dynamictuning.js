@@ -1,6 +1,6 @@
 import {now, Frequency} from 'tone';
 
-import {chordTypes} from './chords.js';
+import {chordTunings, chordTypes} from './chords.js';
 import {differenceInCents, toPitchClass, volOfFreq} from './utility.js';
 import {activateKey} from './keyboard.js';
 import Pitch from './pitch.js';
@@ -9,6 +9,7 @@ import Pitch from './pitch.js';
  * DYNAMIC TUNING
  */
 
+/*
 // given an anchor note, tune the current chord
 // using the chord types dictionary
 function tuneDynamically(keyboard, synth, anchor, notes, activeNotes, currentChord, noteToPlay) {
@@ -66,8 +67,107 @@ function tuneDynamically(keyboard, synth, anchor, notes, activeNotes, currentCho
         }
     }
 }
+*/
+
+function tuneChord(keyboard, synth, anchor, noteToPlayMidi) {
+    var chordClass = keyboard.chordClass;
+    var chordIntegerNotation = chordClass.join(",");
+    var dynamicTuning = chordTypes[chordIntegerNotation].tuning;
+    var anchorInt = keyboard.getInteger(anchor);
+
+    // based on the frequency ratios of the dynamic tuning
+    // and the anchor note and frequency
+    // compute the frequencies needed for the chord
+    var anchorIndex = chordClass.findIndex(el => el==anchorInt);
+    var anchorRatio = dynamicTuning.split(":")[anchorIndex];
+    var harmonicSeriesFundamental = anchor.frequencyHz / anchorRatio;
+
+    // for each note in the chord, compute the adjusted frequency to use
+    keyboard.pitchList.forEach((pitch) => {
+        // determine what the ratio will be above the fundamental
+        var currentInteger = keyboard.getInteger(pitch);
+        var currentIndex = chordClass.findIndex(el => el==currentInteger);
+        var currentRatio = dynamicTuning.split(":")[currentIndex];
+        var currentFreq = harmonicSeriesFundamental * currentRatio;
+        var currPitch = new Pitch(pitch.midiNoteNumber, currentFreq);
+        resetOctave(currPitch);
+
+        // always play this note if this is the noteToPlay
+        if (pitch.midiNoteNumber == noteToPlayMidi) {
+            synth.triggerAttack(currentFreq, now(), volOfFreq(currentFreq));
+            keyboard.addPitch(currPitch);
+            //activeNotes[currentName] = currentFreq;
+
+            // update visualization
+            activateKey(pitch.midiNoteNumber, currentFreq);
+        }
+        // adjust the synth for any note that should be retuned
+        else if (Pitch.differenceInCents(keyboard.getPitch(pitch.midiNoteNumber), currPitch) !== 0)
+        {
+            console.log("adjusting note from " + pitch.toString() + " to " + currPitch.toString());
+            // TODO: change pitch without triggering a new attack
+            console.log("hello");
+            synth.triggerRelease(pitch.midiNoteNumber, now());
+            synth.triggerAttack(currentFreq, now(), volOfFreq(currentFreq));
+            pitch.frequencyHz = currentFreq;
+            //activeNotes[currentName] = currentFreq;
+
+            // update visualization
+            activateKey(pitch.midiNoteNumber, currentFreq);
+        }
+    });
+}
+
+function resetOctave(pitch) {
+    while (pitch.centsFromEqual > 600) {
+        pitch.shiftOctave(-1);
+    }
+
+    while (pitch.centsFromEqual < -600) {
+        pitch.shiftOctave(1);
+    }
+}
 
 export default function updateDynamicTuning(keyboard, synth, tune, activeNotes, currentChord, fundamental, noteToPlay, noteToPlayMidi) {
+    var chordType = keyboard.chordType;
+    if (chordType && chordType.tuning) {
+        var tuned = false;
+        var anchorPriority = [0, 7, 5, 9, 2, 4, 11, 3, 8, 10, 1, 6]; // 0=I (tonic), 7=V, 5=IV, 9=vi, 2=ii, 4=iii, 11=vii, 3=biii, 8=bvi, 10=bvii, 1=#I, 6=bV
+        var anchorIndex = 0;
+
+        while (!tuned && anchorIndex < anchorPriority.length) {
+            // see if anchor is being played
+            var anchorPitchClass = Pitch.toPitchClass(fundamental['semitonesFromC3'] + anchorPriority[anchorIndex]);
+            var anchor = keyboard.getPitchClass(anchorPitchClass);
+            if (anchor) {
+                // tune the anchor to the fundamental first
+                var just = new Pitch(anchor.midiNoteNumber, tune.note(anchor.midiNoteNumber - fundamental['semitonesFromC3'] - 60, 1));
+                resetOctave(just);
+
+                console.log("tuning around " + just.getNoteName());
+                tuneChord(keyboard, synth, just, noteToPlayMidi);
+
+                tuned = true;
+            }
+
+            // otherwise move on to the next anchor
+            anchorIndex++;
+        }
+        // Fallback on playing the note
+        if (!tuned) {
+            console.log("should be impossible");
+        }
+    }
+    else if (noteToPlay!==undefined) {
+        console.log("hola");
+        synth.triggerAttack(noteToPlay, now(), volOfFreq(noteToPlay));//, e.velocity);
+        keyboard.addPitch(new Pitch(noteToPlayMidi, noteToPlay));
+
+        // update visualization
+        activateKey(noteToPlayMidi, noteToPlay);
+    }
+
+    /*
     if (chordTypes[currentChord.integer]
         && chordTypes[currentChord.integer]
         && chordTypes[currentChord.integer].tuning) {
@@ -130,4 +230,5 @@ export default function updateDynamicTuning(keyboard, synth, tune, activeNotes, 
         // update visualization
         activateKey(noteToPlayMidi, noteToPlay);
     }
+    */
 }
