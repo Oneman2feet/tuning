@@ -1,6 +1,7 @@
 import {now, start, PolySynth, Frequency} from 'tone';
 
 import Tune from './tune.js';
+import Pitch from './pitch.js'
 import {differenceInCents, volOfFreq} from './utility.js';
 import setupMidiInput from './input.js';
 import {activateKey, deactivateKey, deactivateAllKeys, generateKeyboard} from './keyboard.js';
@@ -33,6 +34,10 @@ function adjustFundamental(ratio, semitones) {
 function noteOn(e) {
     // convert from midi to scale
     var note = tune.note(e.note.number - fundamental['semitonesFromC3'] - 60, 1);
+
+    // Make a pitch
+    var pitch = new Pitch(e.note.number, note);
+    console.log(pitch);
 
     // keep track of this note
     var notename = e.note.name + e.note.octave;
