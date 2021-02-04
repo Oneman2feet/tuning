@@ -12,7 +12,6 @@ export default function updateMetrics(keyboard, activeNotes) {
     updateNoteRatios(keyboard);
     updateImpliedFundamental(keyboard);
     updateLowestSharedOvertone(keyboard);
-    //updateStability(activeNotes);
     var currentChord = updateChordNames(activeNotes);
     updateChordTunings();
     updateTuningList(activeNotes);
@@ -80,55 +79,6 @@ function updateLowestSharedOvertone(keyboard) {
     else {
         document.getElementById("overtone").innerHTML = "";
     }
-}
-
-function updateStability(activeNotes) {
-    var notes = [];
-    var partials = [...Array(Math.pow(2,4)).keys()];
-    var stability = "";
-    for (var key in activeNotes) {
-        if (activeNotes[key]) {
-            notes.push(activeNotes[key]);
-        }
-    }
-    if (notes.length > 1)
-    {
-        var overtones = notes.map(note => partials.map(partial => note*partial));
-
-        // intersection of sorted arrays, two pointers method using comparitor
-        var intersection = function(equal, a, b) {
-            var common = [];
-            var i = 0;
-            var j = 0;
-
-            while (i < a.length && j < b.length)
-            {
-                if (equal(a[i],b[j])) {
-                    common.push(a[i]);
-                    i++;
-                    j++;
-                }
-                else if (a[i] < b[j]) {
-                    i++;
-                }
-                else {
-                    j++;
-                }
-            }
-
-            return common
-        }
-
-        // loose equality function for two frequencies within one cent
-        var isEqual = function(a, b) {
-            return parseInt(differenceInCents(a, b))===0;
-        }
-
-        // find all shared overtones
-        var sharedHarmonics = overtones.reduce(intersection.bind(this, isEqual));
-        stability = sharedHarmonics.map(freq => Frequency(freq).toNote()).toString();//sharedHarmonics.length;
-    }
-    document.getElementById("stability").innerHTML = stability;
 }
 
 function updateChordNames(activeNotes) {
