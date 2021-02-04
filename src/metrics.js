@@ -7,41 +7,40 @@ import {differenceInCents, midiToNotation, toPitchClass} from './utility.js';
 // GLOBALS
 var tuningList = {};
 
-export default function updateMetrics(keyboard, activeNotes) {
+export function updateMetrics(keyboard, activeNotes) {
     updateNotes(keyboard);
     updateNoteRatios(keyboard);
     updateImpliedFundamental(keyboard);
     updateLowestSharedOvertone(keyboard);
     var currentChord = updateChordNames(keyboard, activeNotes);
-    updateChordTunings();
-    updateTuningList(activeNotes);
+    updateChordTunings(keyboard);
+    updateTuningList(keyboard);
     return currentChord;
 }
 
+export function clearMetrics(keyboard) {
+    tuningList = {};
+    updateTuningList(keyboard);
+}
+
 function updateNotes(keyboard) {
-    var pitches = Object.values(keyboard.pitches).reverse();
+    var pitches = keyboard.pitchList.reverse();
     pitches = pitches.map((pitch) => "<tr><td>" + pitch.getNoteName() + "</td><td>" + pitch.centsFromEqualPrint + "</td></tr>").join("");
     document.getElementById("notes").innerHTML = pitches;
 }
 
-function updateTuningList(activeNotes) {
-    for (var key in activeNotes) {
-        if (activeNotes[key]) {
-            // calculate notename and cents offset
-            var noteName = key.replace(/[0-9]/g, '');
-            var equal = Frequency(key).toFrequency();
-            var cents = differenceInCents(activeNotes[key], equal);
-
-            // update data structure with new tuning
-            if (!tuningList[noteName]) {
-                tuningList[noteName] = new Set();
-            }
-            tuningList[noteName].add(cents);
+function updateTuningList(keyboard) {
+    keyboard.pitchList.forEach((pitch) => {
+        var pitchClass = pitch.getPitchClassName();
+        if (!tuningList[pitchClass]) {
+            tuningList[pitchClass] = new Set();
         }
-    }
+        // update data structure with new tuning
+        tuningList[pitchClass].add(pitch.centsFromEqualPrint);
+    });
 
     // parse tuningList and update UI
-    var list = Object.keys(tuningList).sort().map((noteName) => "<tr><td>" + noteName + "</td><td>" + Array.from(tuningList[noteName]).join(", ") + "</td></tr>").join("");
+    var list = Object.keys(tuningList).sort().map((pitchClass) => "<tr><td>" + pitchClass + "</td><td>" + Array.from(tuningList[pitchClass]).join(", ") + "</td></tr>").join("");
     document.getElementById("tuningList").innerHTML = list;
 }
 
@@ -111,8 +110,8 @@ function updateChordNames(keyboard, activeNotes) {
     return currentChord;
 }
 
-function updateChordTunings() {
-    var ratios = document.getElementById("ratios").innerHTML;
+function updateChordTunings(keyboard) {
+    var ratios = keyboard.frequencyRatios.join("/");
     var chordTuning = chordTunings[reduceChord(ratios)];
     if (chordTuning) {
         document.getElementById("chordtuning").innerHTML = chordTuning;

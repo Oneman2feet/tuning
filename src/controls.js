@@ -6,7 +6,7 @@ import Keyboard from './keyboardClass.js';
 import {differenceInCents, volOfFreq} from './utility.js';
 import setupMidiInput from './input.js';
 import {activateKey, deactivateKey, deactivateAllKeys, generateKeyboard} from './keyboard.js';
-import updateMetrics from './metrics.js';
+import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
 import './style.css';
 
@@ -122,6 +122,7 @@ window.onload = function() {
         activeNotes = {};
         keyboard.clear();
         deactivateAllKeys();
+        clearMetrics(keyboard);
         updateMetrics(keyboard, activeNotes);
     }
 

@@ -21,9 +21,13 @@ export default class Keyboard {
         delete this.pitches[midiNoteNumber];
     }
 
+    get pitchList() {
+        return Object.values(this.pitches);
+    }
+
     // Returns a list of integers in reduced form
     get frequencyRatios() {
-        var notes = Object.values(this.pitches);
+        var notes = this.pitchList;
         if (notes.length > 1) {
             var ratios = notes.map((pitch) => Pitch.getFrequencyRatio(pitch, notes[0]));
             var den = ratios.reduce((den, ratio) => den * ratio.d, 1);
@@ -37,7 +41,7 @@ export default class Keyboard {
 
     // Returns a pitch representing the implied fundamental
     get undertone() {
-        var notes = Object.values(this.pitches);
+        var notes = this.pitchList;
         if (notes.length > 1)
         {
             // The implied fundamental of a series of notes
@@ -51,7 +55,7 @@ export default class Keyboard {
 
     // Returns a pitch representing the lowest shared overtone
     get overtone() {
-        var notes = Object.values(this.pitches);
+        var notes = this.pitchList;
         if (notes.length > 1)
         {
             // The lowest shared overtone of a series of notes
@@ -75,12 +79,12 @@ export default class Keyboard {
 
     // Returns the lowest pitch
     get bass() {
-        return Object.values(this.pitches)[0];
+        return this.pitchList[0];
     }
 
     // Returns an array of notes in integer notation
     get chord() {
-        var notes = Object.values(this.pitches);
+        var notes = this.pitchList;
         return notes.map((pitch) => Pitch.differenceInSemitones(pitch, this.bass));
     }
 
@@ -97,9 +101,9 @@ export default class Keyboard {
     get root() {
         var rootInteger = this.chordClass[this.chordType.root];
         var bass = this.bass;
-        
+
         // find the lowest pitch matching the root
-        return Object.values(this.pitches).find((pitch) => Pitch.differenceInSemitones(pitch, bass) == rootInteger);
+        return this.pitchList.find((pitch) => Pitch.differenceInSemitones(pitch, bass) == rootInteger);
     }
 
     clear() {
@@ -107,6 +111,6 @@ export default class Keyboard {
     }
 
     toString() {
-        return Object.values(this.pitches).map((pitch) => pitch.toString());
+        return this.pitchList.map((pitch) => pitch.toString());
     }
 }
