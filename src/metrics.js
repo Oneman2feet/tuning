@@ -3,10 +3,11 @@ import Fraction from 'fraction.js';
 import {Frequency} from 'tone';
 
 import {chordTypes, chordTunings, reduceChord} from './chords.js';
-import {differenceInCents, midiToNotation, toPitchClass} from './utility.js';
+import {centsFromEqual, differenceInCents, midiToNotation, toPitchClass} from './utility.js';
 
 // GLOBALS
 var activeNoteRatios;
+var tuningList = {};
 
 export default function updateMetrics(activeNotes) {
     updateNotes(activeNotes);
@@ -16,6 +17,7 @@ export default function updateMetrics(activeNotes) {
     //updateStability(activeNotes);
     var currentChord = updateChordNames(activeNotes);
     updateChordTunings();
+    updateTuningList(activeNotes);
     return currentChord;
 }
 
@@ -33,8 +35,29 @@ function updateNotes(activeNotes) {
         }
     }
     notes.sort((a, b) => b.freq - a.freq); // high notes first
-    notes = notes.map((el) => "<tr><td>" + el.name+"</td><td>" + el.cents + "</td></tr>").join("");
+    notes = notes.map((el) => "<tr><td>" + el.name + "</td><td>" + el.cents + "</td></tr>").join("");
     document.getElementById("notes").innerHTML = notes;
+}
+
+function updateTuningList(activeNotes) {
+    for (var key in activeNotes) {
+        if (activeNotes[key]) {
+            // calculate notename and cents offset
+            var noteName = key.replace(/[0-9]/g, '');
+            var equal = Frequency(key).toFrequency();
+            var cents = differenceInCents(activeNotes[key], equal);
+
+            // update data structure with new tuning
+            if (!tuningList[noteName]) {
+                tuningList[noteName] = new Set();
+            }
+            tuningList[noteName].add(cents);
+        }
+    }
+
+    // parse tuningList and update UI
+    var list = Object.keys(tuningList).sort().map((noteName) => "<tr><td>" + noteName + "</td><td>" + Array.from(tuningList[noteName]).join(", ") + "</td></tr>").join("");
+    document.getElementById("tuningList").innerHTML = list;
 }
 
 function updateNoteRatios(activeNotes) {

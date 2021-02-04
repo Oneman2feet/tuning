@@ -170,9 +170,16 @@ input[type="radio"]:hover + label {
 }
 
 #metrics #chords, #metrics #tunings {
-    width: 500px;
     display: flex;
     flex-direction: column;
+}
+
+#metrics #chords {
+    width: 400px;
+}
+
+#metrics #tunings {
+    width: 350px;
 }
 
 #metrics p {
@@ -189,6 +196,15 @@ input[type="radio"]:hover + label {
 
 #metrics #ratios {
     font-size: 42px;
+}
+
+#tuningList td {
+    font-size: 20px;
+    min-width: 40px;
+}
+
+#tuningList td:first-child {
+    font-weight: bold;
 }
 
 #setFundamental {
