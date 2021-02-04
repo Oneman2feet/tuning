@@ -8,7 +8,7 @@ import {differenceInCents, midiToNotation, toPitchClass} from './utility.js';
 var tuningList = {};
 
 export default function updateMetrics(keyboard, activeNotes) {
-    updateNotes(activeNotes);
+    updateNotes(keyboard);
     updateNoteRatios(keyboard);
     updateImpliedFundamental(keyboard);
     updateLowestSharedOvertone(keyboard);
@@ -18,22 +18,10 @@ export default function updateMetrics(keyboard, activeNotes) {
     return currentChord;
 }
 
-function updateNotes(activeNotes) {
-    var notes = [];
-    for (var key in activeNotes) {
-        if (activeNotes[key]) {
-            var equal = Frequency(key).toFrequency();
-            var cents = differenceInCents(activeNotes[key], equal);
-            notes.push({
-                "name": key,
-                "freq": activeNotes[key],
-                "cents": cents
-            });
-        }
-    }
-    notes.sort((a, b) => b.freq - a.freq); // high notes first
-    notes = notes.map((el) => "<tr><td>" + el.name + "</td><td>" + el.cents + "</td></tr>").join("");
-    document.getElementById("notes").innerHTML = notes;
+function updateNotes(keyboard) {
+    var pitches = Object.values(keyboard.pitches).reverse();
+    pitches = pitches.map((pitch) => "<tr><td>" + pitch.getNoteName() + "</td><td>" + pitch.centsFromEqualPrint + "</td></tr>").join("");
+    document.getElementById("notes").innerHTML = pitches;
 }
 
 function updateTuningList(activeNotes) {
