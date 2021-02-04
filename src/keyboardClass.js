@@ -1,4 +1,5 @@
 import Pitch from './pitch.js';
+import {Frequency} from 'tone';
 import {gcd} from 'mathjs';
 
 export default class Keyboard {
@@ -19,6 +20,7 @@ export default class Keyboard {
         delete this.pitches[midiNoteNumber];
     }
 
+    // Returns a list of integers in reduced form
     get frequencyRatios() {
         var notes = Object.values(this.pitches);
         if (notes.length > 1) {
@@ -31,6 +33,20 @@ export default class Keyboard {
             return ratios;
         }
         return [];
+    }
+
+    // Returns a pitch representing the implied fundamental
+    get undertone() {
+        var notes = Object.values(this.pitches);
+        if (notes.length > 1)
+        {
+            // The implied fundamental of a series of notes
+            // is given by the relative frequency ratios of those notes
+            var fundamentalFreq = notes[0].frequencyHz / this.frequencyRatios[0];
+            var midiValue = Frequency(fundamentalFreq).toMidi(); // shortcut - round to nearest equal tempered key
+            return new Pitch(midiValue, fundamentalFreq);
+        }
+        return notes[0];
     }
 
     clear() {

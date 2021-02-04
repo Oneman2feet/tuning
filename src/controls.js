@@ -41,6 +41,7 @@ function noteOn(e) {
     // Make a pitch
     var pitch = new Pitch(e.note.number, note);
     keyboard.addPitch(pitch);
+    console.log(keyboard.undertone);
 
     // keep track of this note
     var notename = e.note.name + e.note.octave;

@@ -10,7 +10,7 @@ var tuningList = {};
 export default function updateMetrics(keyboard, activeNotes) {
     updateNotes(activeNotes);
     updateNoteRatios(keyboard);
-    updateImpliedFundamental(keyboard, activeNotes);
+    updateImpliedFundamental(keyboard);
     updateLowestSharedOvertone(keyboard, activeNotes);
     //updateStability(activeNotes);
     var currentChord = updateChordNames(activeNotes);
@@ -62,23 +62,14 @@ function updateNoteRatios(keyboard) {
     document.getElementById("ratios").innerHTML = keyboard.frequencyRatios.join("/");
 }
 
-function updateImpliedFundamental(keyboard, activeNotes) {
-    // The implied fundamental of a series of notes
-    // is given by the relative frequency ratios of those notes
-    var undertone = "";
-    var notes = [];
-    for (var key in activeNotes) {
-        if (activeNotes[key]) {
-            notes.push(activeNotes[key]);
-        }
+function updateImpliedFundamental(keyboard) {
+    var undertone = keyboard.undertone;
+    if (undertone) {
+        document.getElementById("undertone").innerHTML = undertone.getNoteName();
     }
-    if (notes.length > 1)
-    {
-        notes.sort(); // sort notes lowest to highest
-        var fundamental = notes[0] / keyboard.frequencyRatios[0];
-        undertone = Frequency(fundamental).toNote();
+    else {
+        document.getElementById("undertone").innerHTML = "";
     }
-    document.getElementById("undertone").innerHTML = undertone;
 }
 
 function updateLowestSharedOvertone(keyboard, activeNotes) {
