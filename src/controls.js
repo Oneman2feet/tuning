@@ -2,6 +2,7 @@ import {now, start, PolySynth, Frequency} from 'tone';
 
 import Tune from './tune.js';
 import Pitch from './pitch.js'
+import Keyboard from './keyboardClass.js';
 import {differenceInCents, volOfFreq} from './utility.js';
 import setupMidiInput from './input.js';
 import {activateKey, deactivateKey, deactivateAllKeys, generateKeyboard} from './keyboard.js';
@@ -16,6 +17,8 @@ var fundamental = {
    "semitonesFromC3": undefined
 };
 var activeNotes = {};
+
+var keyboard;
 
 function setFundamental(freq, semitones) {
     fundamental['frequency'] = freq;
@@ -37,7 +40,9 @@ function noteOn(e) {
 
     // Make a pitch
     var pitch = new Pitch(e.note.number, note);
-    console.log(pitch);
+    keyboard.addPitch(pitch);
+    console.log(keyboard.frequencyRatios);
+    //console.log(keyboard.toString());
 
     // keep track of this note
     var notename = e.note.name + e.note.octave;
@@ -65,6 +70,9 @@ function noteOn(e) {
 }
 
 function noteOff(e) {
+    // update keyboard class
+    keyboard.removePitch(e.note.number);
+
     // release the note(s) that are currently held from this midi key
     var notename = e.note.name + e.note.octave;
     if (activeNotes[notename]) {
@@ -90,6 +98,9 @@ function noteOff(e) {
 window.onload = function() {
     // UI
     generateKeyboard();
+
+    // Experimental keyboard class
+    keyboard = new Keyboard();
 
     // Controls
     [...document.getElementsByName("temperament")].forEach((elem) => {

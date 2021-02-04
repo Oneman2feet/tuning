@@ -1,4 +1,5 @@
 import {Frequency} from 'tone';
+import {Fraction} from 'mathjs';
 
 export default class Pitch {
     // A Pitch is a midi key played at a particular frequency.
@@ -36,19 +37,33 @@ export default class Pitch {
         return noteName(useFlats).replace(/[0-9]/g, "");
     }
 
+    // Interval as frequency ratio
+    static getFrequencyRatio(pitchA, pitchB) {
+        return new Fraction(pitchA.frequencyHz / pitchB.frequencyHz).simplify()
+    }
+
     // Just like subtraction, the result is positive if the first argument is greater
-    differenceInCents(pitchA, pitchB) {
+    static differenceInCents(pitchA, pitchB) {
         return Math.round(1200 * Math.log(pitchA.frequencyHz / pitchB.frequencyHz) / Math.log(2));
     }
 
-    differenceInCentsPrint(pitchA, pitchB) {
-        var cents = differenceInCents(pitchA, pitchB);
+    static differenceInCentsPrint(pitchA, pitchB) {
+        var cents = Pitch.differenceInCents(pitchA, pitchB);
         cents = (cents < 0 ? "" : "+") + cents; // add +/-
         return cents;
     }
 
     get centsFromEqual() {
-        var equal = new Pitch(midiNoteNumber);
-        return differenceInCents(this, equal);
+        var equal = new Pitch(this.midiNoteNumber);
+        return Pitch.differenceInCents(this, equal);
+    }
+
+    get centsFromEqualPrint() {
+        var equal = new Pitch(this.midiNoteNumber);
+        return Pitch.differenceInCentsPrint(this, equal);
+    }
+
+    toString() {
+        return this.getNoteName() + " " + this.centsFromEqualPrint;
     }
 }

@@ -77,7 +77,6 @@ function updateNoteRatios(activeNotes) {
             den *= notes[note].d;
         }
         notes = notes.map(note => Math.round(note * den)); // rounding for floating point errors
-
         var greatestCommonDivisor = gcd.apply(null, notes); // reduce ration by gcd
         notes = notes.map(note => note / greatestCommonDivisor);
         activeNoteRatios = notes.slice(0); // clone array
