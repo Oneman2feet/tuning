@@ -82,6 +82,17 @@ export default class Pitch {
         this.frequencyHz *= Math.pow(2, number);
     }
 
+    // Adjusts the octave of this pitch to match its midi note number
+    resetOctave() {
+        while (this.centsFromEqual > 600) {
+            this.frequencyHz /= 2;
+        }
+
+        while (this.centsFromEqual < -600) {
+            this.frequencyHz *= 2;
+        }
+    }
+
     toString() {
         return this.getNoteName() + " " + this.centsFromEqualPrint;
     }

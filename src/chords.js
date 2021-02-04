@@ -13,7 +13,7 @@ export const chordTypes = {
     "0,7": { "root": 0, "type": "Perfect Fifth", "notation": "X P5", "tuning": "2:3"},
     "0,8": { "root": 0, "type": "Minor Sixth", "notation": "X m6", "tuning": "5:8"},
     "0,9": { "root": 0, "type": "Major Sixth", "notation": "X M6", "tuning": "3:5"},
-    "0,10": { "root": 0, "type": "Minor Seventh", "notation": "X m7"},
+    "0,10": { "root": 0, "type": "Minor Seventh", "notation": "X m7", "tuning": "4:7"},
     "0,11": { "root": 0, "type": "Major Seventh", "notation": "X M7", "tuning": "8:15"},
     //"0,12": { "root": 0, "type": "Octave"},
     //"0,13": { "root": 0, "type": "Minor Ninth"},

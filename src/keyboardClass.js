@@ -102,7 +102,7 @@ export default class Keyboard {
     // Returns the integer notation of a given pitch relative to the current chord
     // Assumes that this pitch is in the chord already
     getInteger(pitch) {
-        return Pitch.differenceInSemitones(pitch, this.bass);
+        return Pitch.differenceInSemitones(pitch, this.bass) % 12;
     }
 
     get chordType() {
