@@ -1,7 +1,7 @@
 import Pitch from './pitch.js';
 import {Frequency} from 'tone';
 import {gcd, lcm} from 'mathjs';
-import {chordTypes} from './chordTypes.js';
+import {chordTypes, chordTunings} from './chordTypes.js';
 
 export default class Chord {
 
@@ -33,6 +33,18 @@ export default class Chord {
             return ratios;
         }
         return [];
+    }
+
+    // Returns a frequency ratio list with octaves reduced
+    get frequencyRatioEquivalenceClass() {
+        var removeOctave = function(number) {
+            var num = parseInt(number);
+            while (num % 2 == 0) {
+                num /= 2;
+            }
+            return num;
+        };
+        return Array.from(new Set(this.frequencyRatios.map(removeOctave))).sort();
     }
 
     // Returns a pitch representing the implied fundamental
@@ -69,6 +81,10 @@ export default class Chord {
             return new Pitch(midiValue, overtoneFreq);
         }
         return this.bass;
+    }
+
+    get tuning() {
+        return chordTunings[this.frequencyRatioEquivalenceClass.join("/")];
     }
 
     // Returns the lowest pitch

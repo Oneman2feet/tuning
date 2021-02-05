@@ -47,7 +47,6 @@ function noteOn(e) {
     // Make a pitch
     var pitch = new Pitch(e.note.number, note);
     keyboard.addPitch(pitch);
-    console.log(keyboard.toString());
 
     updateMetrics(keyboard);
 

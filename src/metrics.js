@@ -3,14 +3,20 @@ import {chordTunings, reduceChord} from './chordTypes.js';
 // GLOBALS
 var tuningList = {};
 
+// TODO migrate to chord only?
 export function updateMetrics(keyboard) {
+    // Pitch analysis
     updateNotes(keyboard);
-    updateNoteRatios(keyboard);
-    updateImpliedFundamental(keyboard);
-    updateLowestSharedOvertone(keyboard);
-    updateChordNames(keyboard);
-    updateChordTunings(keyboard);
     updateTuningList(keyboard);
+
+    // Chord analysis
+    var chord = keyboard.chord;
+    updateNoteRatios(chord);
+    updateImpliedFundamental(chord);
+    updateLowestSharedOvertone(chord);
+    updateChordNames(chord);
+    updateChordTunings(chord);
+
 }
 
 export function clearMetrics(keyboard) {
@@ -39,12 +45,12 @@ function updateTuningList(keyboard) {
     document.getElementById("tuningList").innerHTML = list;
 }
 
-function updateNoteRatios(keyboard) {
-    document.getElementById("ratios").innerHTML = keyboard.frequencyRatios.join("/");
+function updateNoteRatios(chord) {
+    document.getElementById("ratios").innerHTML = chord.frequencyRatios.join("/");
 }
 
-function updateImpliedFundamental(keyboard) {
-    var undertone = keyboard.undertone;
+function updateImpliedFundamental(chord) {
+    var undertone = chord.undertone;
     if (undertone) {
         document.getElementById("undertone").innerHTML = undertone.getNoteName();
     }
@@ -53,8 +59,8 @@ function updateImpliedFundamental(keyboard) {
     }
 }
 
-function updateLowestSharedOvertone(keyboard) {
-    var overtone = keyboard.overtone;
+function updateLowestSharedOvertone(chord) {
+    var overtone = chord.overtone;
     if (overtone) {
         document.getElementById("overtone").innerHTML = overtone.getNoteName();
     }
@@ -63,8 +69,7 @@ function updateLowestSharedOvertone(keyboard) {
     }
 }
 
-function updateChordNames(keyboard) {
-    var chord = keyboard.chord;
+function updateChordNames(chord) {
     var notation = chord.notation;
     var name = chord.name;
     if (notation) {
@@ -78,11 +83,10 @@ function updateChordNames(keyboard) {
     }
 }
 
-function updateChordTunings(keyboard) {
-    var ratios = keyboard.frequencyRatios.join("/");
-    var chordTuning = chordTunings[reduceChord(ratios)];
-    if (chordTuning) {
-        document.getElementById("chordtuning").innerHTML = chordTuning;
+function updateChordTunings(chord) {
+    var tuning = chord.tuning;
+    if (tuning) {
+        document.getElementById("chordtuning").innerHTML = tuning;
     }
     else {
         document.getElementById("chordtuning").innerHTML = "";

@@ -15,9 +15,6 @@ export const chordTypes = {
     "0,9": { "root": 0, "name": "Major Sixth", "notation": "X M6", "tuning": "3:5"},
     "0,10": { "root": 0, "name": "Minor Seventh", "notation": "X m7", "tuning": "4:7"},
     "0,11": { "root": 0, "name": "Major Seventh", "notation": "X M7", "tuning": "8:15"},
-    //"0,12": { "root": 0, "name": "Octave"},
-    //"0,13": { "root": 0, "name": "Minor Ninth"},
-    //"0,14": { "root": 0, "name": "Major Ninth"},
 
 // ------------- TRIADS ---------------------------
 
@@ -66,6 +63,7 @@ export const chordTypes = {
     "0,1,5,9": { "root": 1, "name": "Augmented-Major Seventh (third inversion)", "notation": "X+M7/Y"},
     "0,4,6,10": { "root": 0, "name": "Major-Minor Seventh (fifth lowered)", "notation": "X7\u266d5"},
     "0,2,4,10": { "root": 0, "name": "Dominant Ninth (fifth omitted)", "notation": "X9", "tuning": "8:9:10:14"}
+
 };
 
 
@@ -120,22 +118,3 @@ export const chordTunings = {
     "27/45/75/125": "Diminished Seventh"
 
 };
-
-// divides a number by two as many times as possible
-function removeOctave(number) {
-    var num = parseInt(number);
-    while (num % 2 == 0) {
-        num /= 2;
-    }
-    return num;
-};
-
-// lower all notes to their lowest possible octave in the harmonic series
-export function reduceChord(chord) {
-    // lower notes and sort
-    var ratios = chord.split("/").map(removeOctave).sort((a, b) => a - b);
-    // remove duplicates
-    var ratios = [...new Set(ratios)];
-    // return result
-    return ratios.join("/");
-}
