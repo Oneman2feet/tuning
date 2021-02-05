@@ -1,4 +1,4 @@
-import {chordTunings, reduceChord} from './chords.js';
+import {chordTunings, reduceChord} from './chordTypes.js';
 
 // GLOBALS
 var tuningList = {};
@@ -64,18 +64,14 @@ function updateLowestSharedOvertone(keyboard) {
 }
 
 function updateChordNames(keyboard) {
-    var chordType = keyboard.chordType;
-    if (chordType) {
-        if (chordType.notation)
-        {
-            var shortName = chordType.notation.replace("X", keyboard.root.getPitchClassName()).replace("Y", keyboard.bass.getPitchClassName());
-            document.getElementById("chordtype").innerHTML = shortName;
-        }
-        else
-        {
-            var fullName = keyboard.root.getNoteName() + " " + chordType.type; // old long notation for chord
-            document.getElementById("chordtype").innerHTML = fullName;
-        }
+    var chord = keyboard.chord;
+    var notation = chord.notation;
+    var name = chord.name;
+    if (notation) {
+        document.getElementById("chordtype").innerHTML = notation;
+    }
+    else if (name) {
+        document.getElementById("chordtype").innerHTML = name;
     }
     else {
         document.getElementById("chordtype").innerHTML = "";

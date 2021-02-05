@@ -1,6 +1,6 @@
 import {now} from 'tone';
 
-import {chordTypes} from './chords.js';
+import {chordTypes} from './chordTypes.js';
 import {volOfFreq} from './utility.js';
 import {activateKey} from './keyboard.js';
 import Pitch from './pitch.js';
