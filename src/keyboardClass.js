@@ -1,6 +1,12 @@
+import './keyboard.css';
+
 import Chord from './chord.js';
 
+// Constant for which pitch classes are black keys
+const blackKeys = [1,3,6,8,10];
+
 export default class Keyboard {
+
     constructor() {
         this.pitches = {};
     }
@@ -33,6 +39,55 @@ export default class Keyboard {
 
     clear() {
         this.pitches = {};
+    }
+
+    static draw() {
+        var container = document.getElementById("keyboard");
+        var midiStart = 36;
+        var numKeys = 37;
+        for (var i=0; i<numKeys; i++)
+        {
+            var midiVal = midiStart + i;
+            var blackKey = blackKeys.includes(midiVal % 12);
+            var key = document.createElement("div");
+            key.classList = "key";
+            if (blackKey) {
+                key.classList.add("blackKey");
+            }
+            key.dataset.midiValue = midiVal;
+            container.appendChild(key);
+        }
+    }
+
+    static activateKey(pitch) {
+        [...document.querySelectorAll('#keyboard .key[data-midi-value="' + pitch.midiNoteNumber + '"]')].forEach((key) => {
+            key.classList.add("active");
+    
+            // annotate key with tuning information
+            var cents = pitch.centsFromEqualPrint;
+            if (cents != key.innerHTML) {
+                if (key.innerHTML!=="") {
+                    key.classList.add("newAdjustment");
+                }
+                key.innerHTML = cents;
+            }
+            else {
+                key.innerHTML = "";
+            }
+        });
+    }
+
+    static deactivateKey(pitch) {
+        [...document.querySelectorAll('#keyboard .key[data-midi-value="' + pitch.midiNoteNumber + '"]')].forEach((key) => {
+            key.classList.remove("active");
+            key.classList.remove("newAdjustment");
+        });
+    }
+
+    static deactivateAllKeys() {
+        [...document.querySelectorAll('#keyboard .key')].forEach((key) => {
+            key.classList.remove("active");
+        });
     }
 
     toString() {

@@ -5,7 +5,6 @@ import Pitch from './pitch.js'
 import Keyboard from './keyboardClass.js';
 import {differenceInCents, volOfFreq} from './utility.js';
 import setupMidiInput from './input.js';
-import {activateKey, deactivateKey, deactivateAllKeys, generateKeyboard} from './keyboard.js';
 import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
 import './style.css';
@@ -59,7 +58,7 @@ function noteOn(e) {
         synth.triggerAttack(note, now(), volOfFreq(note));//, e.velocity);
 
         // make this note active in the visualization
-        activateKey(e.note.number, note);
+        Keyboard.activateKey(pitch);
     }
 }
 
@@ -71,7 +70,7 @@ function noteOff(e) {
         keyboard.removePitch(playing.midiNoteNumber);
 
         // make this note inactive in the visualization
-        deactivateKey(e.note.number);
+        Keyboard.deactivateKey(playing);
     }
     else {
         console.log("released note that was not pressed: " + e.note.name + e.note.octave);
@@ -87,11 +86,9 @@ function noteOff(e) {
 }
 
 window.onload = function() {
-    // UI
-    generateKeyboard();
-
-    // Experimental keyboard class
+    // Initialize keyboard with UI
     keyboard = new Keyboard();
+    Keyboard.draw();
 
     // Controls
     [...document.getElementsByName("temperament")].forEach((elem) => {
@@ -113,7 +110,7 @@ window.onload = function() {
     document.getElementById("clearNotes").onclick = function() {
         synth.releaseAll();
         keyboard.clear();
-        deactivateAllKeys();
+        Keyboard.deactivateAllKeys();
         clearMetrics(keyboard);
         updateMetrics(keyboard);
     }

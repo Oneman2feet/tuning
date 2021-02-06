@@ -2,14 +2,14 @@ import {now} from 'tone';
 
 import {chordTypes} from './chordTypes.js';
 import {volOfFreq} from './utility.js';
-import {activateKey} from './keyboard.js';
 import Pitch from './pitch.js';
+import Keyboard from './keyboardClass.js';
 
 function tuneChord(keyboard, synth, anchor, noteToPlayMidi) {
-    var chordClass = keyboard.chordClass;
+    var chordClass = keyboard.chord.equivalenceClass;
     var chordIntegerNotation = chordClass.join(",");
     var dynamicTuning = chordTypes[chordIntegerNotation].tuning;
-    var anchorInt = keyboard.getInteger(anchor);
+    var anchorInt = keyboard.chord.getInteger(anchor);
 
     // based on the frequency ratios of the dynamic tuning
     // and the anchor note and frequency
@@ -21,7 +21,7 @@ function tuneChord(keyboard, synth, anchor, noteToPlayMidi) {
     // for each note in the chord, compute the adjusted frequency to use
     keyboard.pitchList.forEach((pitch) => {
         // determine what the ratio will be above the fundamental
-        var currentInteger = keyboard.getInteger(pitch);
+        var currentInteger = keyboard.chord.getInteger(pitch);
         var currentIndex = chordClass.findIndex(el => el==currentInteger);
         var currentRatio = dynamicTuning.split(":")[currentIndex];
         var currPitch = new Pitch(pitch.midiNoteNumber, harmonicSeriesFundamental * currentRatio);
@@ -33,7 +33,7 @@ function tuneChord(keyboard, synth, anchor, noteToPlayMidi) {
             keyboard.addPitch(currPitch);
 
             // update visualization
-            activateKey(pitch.midiNoteNumber, currPitch.frequencyHz);
+            Keyboard.activateKey(currPitch);
         }
         // adjust the synth for any note that should be retuned
         else if (Pitch.differenceInCents(keyboard.getPitch(pitch.midiNoteNumber), currPitch) !== 0)
@@ -45,13 +45,13 @@ function tuneChord(keyboard, synth, anchor, noteToPlayMidi) {
             pitch.frequencyHz = currPitch.frequencyHz;
 
             // update visualization
-            activateKey(pitch.midiNoteNumber, currPitch.frequencyHz);
+            Keyboard.activateKey(currPitch);
         }
     });
 }
 
 export default function updateDynamicTuning(keyboard, synth, tune, fundamental, noteToPlay, noteToPlayMidi) {
-    var chordType = keyboard.chordType;
+    var chordType = keyboard.chord.type;
     if (chordType && chordType.tuning) {
         var tuned = false;
         var anchorPriority = [0, 7, 5, 9, 2, 4, 11, 3, 8, 10, 1, 6]; // 0=I (tonic), 7=V, 5=IV, 9=vi, 2=ii, 4=iii, 11=vii, 3=biii, 8=bvi, 10=bvii, 1=#I, 6=bV
@@ -60,7 +60,7 @@ export default function updateDynamicTuning(keyboard, synth, tune, fundamental, 
         while (!tuned && anchorIndex < anchorPriority.length) {
             // see if anchor is being played
             var anchorPitchClass = Pitch.toPitchClass(fundamental['semitonesFromC3'] + anchorPriority[anchorIndex]);
-            var anchor = keyboard.getPitchClass(anchorPitchClass);
+            var anchor = keyboard.chord.getPitchClass(anchorPitchClass);
             if (anchor) {
                 // tune the anchor to the fundamental first
                 var just = new Pitch(anchor.midiNoteNumber, tune.note(anchor.midiNoteNumber - fundamental['semitonesFromC3'] - 60, 1));
@@ -85,6 +85,6 @@ export default function updateDynamicTuning(keyboard, synth, tune, fundamental, 
         keyboard.addPitch(new Pitch(noteToPlayMidi, noteToPlay));
 
         // update visualization
-        activateKey(noteToPlayMidi, noteToPlay);
+        Keyboard.activateKey(new Pitch(noteToPlayMidi, noteToPlay));
     }
 }
