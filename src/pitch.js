@@ -32,9 +32,9 @@ export default class Pitch {
     }
 
     // Using scientific pitch notation
-    getNoteName(useFlats) {
+    getNoteName(useSharps) {
         var notation = Frequency(this.midiNoteNumber, "midi").toNote();
-        if (useFlats && notation.includes("#")) {
+        if (!useSharps && notation.includes("#")) {
             // Flat the note above this one
             notation = Frequency(this.midiNoteNumber + 1, "midi").toNote();
             return notation[0] + "\u266d" + notation.slice(1);
@@ -43,8 +43,8 @@ export default class Pitch {
     }
 
     // Without octave numbers
-    getPitchClassName(useFlats) {
-        return this.getNoteName(useFlats).replace(/[0-9]/g, "");
+    getPitchClassName(useSharps) {
+        return this.getNoteName(useSharps).replace(/[0-9]/g, "");
     }
 
     // Interval as frequency ratio
