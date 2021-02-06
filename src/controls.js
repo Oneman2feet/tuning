@@ -2,7 +2,7 @@ import {now, start, PolySynth, Frequency} from 'tone';
 
 import Tune from './tune.js';
 import Pitch from './pitch.js'
-import Keyboard from './keyboardClass.js';
+import Keyboard from './keyboard.js';
 import {differenceInCents, volOfFreq} from './utility.js';
 import setupMidiInput from './input.js';
 import {clearMetrics, updateMetrics} from './metrics.js';

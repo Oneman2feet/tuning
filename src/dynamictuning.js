@@ -3,7 +3,7 @@ import {now} from 'tone';
 import {chordTypes} from './chordTypes.js';
 import {volOfFreq} from './utility.js';
 import Pitch from './pitch.js';
-import Keyboard from './keyboardClass.js';
+import Keyboard from './keyboard.js';
 
 function tuneChord(keyboard, synth, anchor, noteToPlayMidi) {
     var chordClass = keyboard.chord.equivalenceClass;
