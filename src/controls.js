@@ -36,7 +36,7 @@ function noteOn(e) {
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(keyboard, tune, fundamental, pitch); // this also plays the note
+        updateDynamicTuning(keyboard, fundamental, pitch); // this also plays the note
         updateMetrics(keyboard);
     }
     else {
@@ -60,7 +60,7 @@ function noteOff(e) {
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(keyboard, tune, fundamental);
+        updateDynamicTuning(keyboard, fundamental);
         updateMetrics(keyboard);
     }
 }

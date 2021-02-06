@@ -127,7 +127,7 @@ export default class Keyboard {
 
     // Chord using all playing and queued pitches
     get chord() {
-        return new Chord(this.pitchList.concat(this.queue));
+        return new Chord(this.pitchList.concat(this.queue).sort((a, b) => a.frequencyHz - b.frequencyHz));
     }
 
     static draw() {
