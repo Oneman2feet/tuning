@@ -1,6 +1,6 @@
 import Pitch from './pitch.js';
 
-function tuneChord(keyboard, anchor, noteToPlayMidi) {
+function tuneChord(keyboard, anchor, noteToPlay) {
     var chordClass = keyboard.chord.equivalenceClass;
     var dynamicTuning = keyboard.chord.type.tuning;
     var anchorInt = keyboard.chord.getInteger(anchor);
@@ -22,19 +22,24 @@ function tuneChord(keyboard, anchor, noteToPlayMidi) {
         currPitch.resetOctave();
 
         // always play this note if this is the noteToPlay
-        if (pitch.midiNoteNumber == noteToPlayMidi) {
+        if (noteToPlay && pitch.midiNoteNumber == noteToPlay.midiNoteNumber) {
             keyboard.play(currPitch);
         }
         // adjust any note that should be retuned
         else if (Pitch.differenceInCents(keyboard.getPitch(pitch.midiNoteNumber), currPitch) !== 0)
         {
-            console.log("adjusting note from " + pitch.toString() + " to " + currPitch.toString());
+            //console.log("adjusting note from " + pitch.toString() + " to " + currPitch.toString());
             keyboard.retune(pitch, currPitch);
         }
     });
 }
 
-export default function updateDynamicTuning(keyboard, tune, fundamental, noteToPlay, noteToPlayMidi) {
+export default function updateDynamicTuning(keyboard, tune, fundamental, noteToPlay) {
+    if (noteToPlay) {
+        // add the note without playing it for analysis
+        keyboard.addPitch(noteToPlay);
+    }
+
     var chordType = keyboard.chord.type;
     if (chordType && chordType.tuning) {
         var tuned = false;
@@ -51,7 +56,7 @@ export default function updateDynamicTuning(keyboard, tune, fundamental, noteToP
                 just.resetOctave();
 
                 //console.log("tuning around " + just.getNoteName());
-                tuneChord(keyboard, just, noteToPlayMidi);
+                tuneChord(keyboard, just, noteToPlay);
 
                 tuned = true;
             }
@@ -64,7 +69,7 @@ export default function updateDynamicTuning(keyboard, tune, fundamental, noteToP
             console.log("should be impossible");
         }
     }
-    else if (noteToPlay!==undefined) {
-        keyboard.play(new Pitch(noteToPlayMidi, noteToPlay));
+    else if (noteToPlay) {
+        keyboard.play(noteToPlay);
     }
 }

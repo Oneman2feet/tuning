@@ -1,5 +1,3 @@
-import {chordTunings, reduceChord} from './chordTypes.js';
-
 // GLOBALS
 var tuningList = {};
 

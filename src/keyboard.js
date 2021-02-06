@@ -1,7 +1,7 @@
 import './keyboard.css';
 
 import Chord from './chord.js';
-import {now} from 'tone';
+import {now, PolySynth} from 'tone';
 import {volOfFreq} from './utility.js';
 
 // Constant for which pitch classes are black keys
@@ -12,9 +12,31 @@ const blackKeys = [1,3,6,8,10];
 // Sound is managed with a synth from tone.js
 export default class Keyboard {
 
-    constructor(synth) {
-        this.synth = synth;
+    constructor() {
+        // create a synth and connect it to the main output
+        this.synth = new PolySynth().toDestination();
+
+        // configure the synth
+        this.synth.set({
+            "envelope": {
+                "attack": 0.1,
+                "decay": 0
+            },
+            "oscillator": {
+                "type": "custom", // set to "custom" for partials to be used
+                "partialCount": 16,
+                "partials": [
+                    1, 0.1, 0.2, 0.1, 0.2, 0.01,
+                    0.008, 0.008, 0.0025, 0.004, 0.0025, 0.0025, 0.004, 0.0025, 0.0005, 0.0025
+                ]
+            }
+        });
+
+        // no notes playing yet
         this.pitches = {};
+
+        // initialize UI
+        Keyboard.draw();
     }
 
     play(pitch) {
@@ -59,6 +81,10 @@ export default class Keyboard {
         this.pitches = {};
         // Visual
         Keyboard.deactivateAllKeys();
+    }
+
+    set volume(volume) {
+        this.synth.volume.value = volume;
     }
 
     addPitch(pitch) {

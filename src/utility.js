@@ -1,7 +1,6 @@
 /*
- *  Utility methods for computing with midi, pitch classes, frequencies, etc.
+ *  Utility methods that don't make sense in any of the main classes.
  */
-import {Frequency} from 'tone';
 
 // compute interval between two frequencies in unit of cents
 export function differenceInCents(a, b) {
@@ -10,24 +9,13 @@ export function differenceInCents(a, b) {
     return cents;
 }
 
-// compute interval between two frequencies in unit of cents
-export function centsFromEqual(midi, freq) {
-    var equal = Frequency(midi, "midi").toFrequency();
-    return differenceInCents(freq, equal);
-}
-
-// convert midi key number to a properly typeset note name
-export function midiToNotation(midi) {
-    return Frequency(midi, "midi").toNote().replace(/[0-9]/g, "").replace("#", "\u266f");
-}
-
-// returns [0,11] for pitch class
-export function toPitchClass(semitones) {
-    return ((semitones % 12) + 12) % 12;
-}
-
 // play higher frequencies softer
 export function volOfFreq(freq) {
     var vol = Math.min(1, 15000 / Math.pow(freq, 2));
     return vol;
+}
+
+// convert slider value to perceptual loudness value [0,1]
+export function sliderVolume(value) {
+    return 8.3 + 1000 / (-value-20); // y-intercept of -40, x-intercept of 0
 }
