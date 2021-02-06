@@ -2,7 +2,7 @@ import './keyboard.css';
 
 import Chord from './chord.js';
 import {now, PolySynth} from 'tone';
-import {volOfFreq} from './utility.js';
+import {colorFromCents, volOfFreq} from './utility.js';
 
 // Constant for which pitch classes are black keys
 const blackKeys = [1,3,6,8,10];
@@ -134,6 +134,7 @@ export default class Keyboard {
     static activateKey(pitch) {
         [...document.querySelectorAll('#keyboard .key[data-midi-value="' + pitch.midiNoteNumber + '"]')].forEach((key) => {
             key.classList.add("active");
+            key.style.backgroundColor = colorFromCents(pitch.centsFromEqualPrint);
     
             // annotate key with tuning information
             var cents = pitch.centsFromEqualPrint;
@@ -153,12 +154,14 @@ export default class Keyboard {
         [...document.querySelectorAll('#keyboard .key[data-midi-value="' + pitch.midiNoteNumber + '"]')].forEach((key) => {
             key.classList.remove("active");
             key.classList.remove("newAdjustment");
+            key.style.backgroundColor = "";
         });
     }
 
     static deactivateAllKeys() {
         [...document.querySelectorAll('#keyboard .key')].forEach((key) => {
             key.classList.remove("active");
+            key.style.backgroundColor = "";
         });
     }
 
