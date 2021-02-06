@@ -44,7 +44,13 @@ export default function updateDynamicTuning(keyboard, tune, fundamental, noteToP
             // see if anchor is being played
             var anchorPitchClass = Pitch.toPitchClass(fundamental.midiNoteNumber + anchorPriority[anchorIndex]);
             var anchor = keyboard.chord.getPitchClass(anchorPitchClass);
-            if (anchor) {
+
+            // leave the new note for last
+            if (anchor && (!noteToPlay || noteToPlay.pitchClass != anchor.pitchClass)) {
+                if (noteToPlay && anchor.pitchClass == noteToPlay.pitchClass) {
+                    console.log("tuning to the newly played note!");
+                }
+
                 // tune the anchor to the fundamental first
                 var just = new Pitch(anchor.midiNoteNumber, tune.note(anchor.midiNoteNumber - fundamental.midiNoteNumber - 12, 1));
                 just.resetOctave();
@@ -60,7 +66,11 @@ export default function updateDynamicTuning(keyboard, tune, fundamental, noteToP
         }
         // Fallback on playing the note
         if (!tuned) {
-            console.log("should be impossible");
+            if (noteToPlay) {
+                keyboard.play(noteToPlay);
+            } else {
+                console.log("should be impossible");
+            }
         }
     }
     else if (noteToPlay) {
