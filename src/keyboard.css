@@ -49,3 +49,7 @@
 #keyboard .key.active.newAdjustment {
     color: white;
 }
+
+#keyboard .key.anchor {
+    border-width: 4px;
+}

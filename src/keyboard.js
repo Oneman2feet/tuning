@@ -165,6 +165,18 @@ export default class Keyboard {
         });
     }
 
+    static setAnchor(pitch) {
+        [...document.querySelectorAll('#keyboard .key[data-midi-value="' + pitch.midiNoteNumber + '"]')].forEach((key) => {
+            key.classList.add("anchor");
+        });
+    }
+
+    static removeAnchor() {
+        [...document.querySelectorAll('#keyboard .key')].forEach((key) => {
+            key.classList.remove("anchor");
+        });
+    }
+
     toString() {
         return this.pitchList.map((pitch) => pitch.toString());
     }

@@ -1,6 +1,11 @@
 import Pitch from './pitch.js';
+import Keyboard from './keyboard.js';
 
 function tuneChord(keyboard, anchor, noteToPlay) {
+    // Update UI
+    Keyboard.removeAnchor();
+    Keyboard.setAnchor(anchor);
+
     // based on the frequency ratios of the dynamic tuning
     // and the anchor note and frequency
     // compute the frequencies needed for the chord
@@ -75,5 +80,8 @@ export default function updateDynamicTuning(keyboard, tune, fundamental, noteToP
     }
     else if (noteToPlay) {
         keyboard.play(noteToPlay);
+    }
+    else {
+        Keyboard.removeAnchor();
     }
 }
