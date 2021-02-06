@@ -1,3 +1,5 @@
+import { colorFromCents } from "./utility";
+
 // GLOBALS
 var tuningList = {};
 
@@ -39,7 +41,7 @@ function updateTuningList(keyboard) {
     });
 
     // parse tuningList and update UI
-    var list = Object.keys(tuningList).sort().map((pitchClass) => "<tr><td>" + pitchClass + "</td><td>" + Array.from(tuningList[pitchClass]).join(", ") + "</td></tr>").join("");
+    var list = Object.keys(tuningList).sort().map((pitchClass) => "<tr><td>" + pitchClass + "</td><td>" + Array.from(tuningList[pitchClass]).map((cents) => "<span style='color:" + colorFromCents(cents) + ";'>" + cents + "</span>").join(", ") + "</td></tr>").join("");
     document.getElementById("tuningList").innerHTML = list;
 }
 
