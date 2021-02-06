@@ -2,13 +2,6 @@
  *  Utility methods that don't make sense in any of the main classes.
  */
 
-// compute interval between two frequencies in unit of cents
-export function differenceInCents(a, b) {
-    var cents = Math.round(1200 * Math.log(a / b) / Math.log(2));
-    cents = (cents < 0 ? "" : "+") + cents; // add +/-
-    return cents;
-}
-
 // play higher frequencies softer
 export function volOfFreq(freq) {
     var vol = Math.min(1, 15000 / Math.pow(freq, 2));

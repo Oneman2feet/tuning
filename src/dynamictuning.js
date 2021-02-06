@@ -48,11 +48,11 @@ export default function updateDynamicTuning(keyboard, tune, fundamental, noteToP
 
         while (!tuned && anchorIndex < anchorPriority.length) {
             // see if anchor is being played
-            var anchorPitchClass = Pitch.toPitchClass(fundamental['semitonesFromC3'] + anchorPriority[anchorIndex]);
+            var anchorPitchClass = Pitch.toPitchClass(fundamental.midiNoteNumber + anchorPriority[anchorIndex]);
             var anchor = keyboard.chord.getPitchClass(anchorPitchClass);
             if (anchor) {
                 // tune the anchor to the fundamental first
-                var just = new Pitch(anchor.midiNoteNumber, tune.note(anchor.midiNoteNumber - fundamental['semitonesFromC3'] - 60, 1));
+                var just = new Pitch(anchor.midiNoteNumber, tune.note(anchor.midiNoteNumber - fundamental.midiNoteNumber - 12, 1));
                 just.resetOctave();
 
                 //console.log("tuning around " + just.getNoteName());

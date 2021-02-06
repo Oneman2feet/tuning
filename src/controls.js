@@ -1,33 +1,29 @@
-import {start, Frequency} from 'tone';
+import {start} from 'tone';
 
 import Tune from './tune.js';
 import Pitch from './pitch.js'
 import Keyboard from './keyboard.js';
-import {differenceInCents, sliderVolume} from './utility.js';
+import {sliderVolume} from './utility.js';
 import setupMidiInput from './input.js';
 import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
 import './style.css';
 
 var tune;
-var fundamental = {
-   "frequency": undefined,
-   "semitonesFromC3": undefined
-};
-
+var fundamental;
 var keyboard;
 
-function setFundamental(freq, semitones) {
-    fundamental['frequency'] = freq;
-    fundamental['semitonesFromC3'] = semitones;
-    tune.tonicize(freq);
-    var equal = Frequency("C3").transpose(semitones);
-    document.getElementById("fundamental").innerHTML = "<strong>" + equal.toNote() + "</strong> " + differenceInCents(freq, equal.toFrequency()) + " <em>(" + freq.toFixed(2) + ")</em>";
+const C4 = 60;
+
+function setFundamental(pitchClass) {
+    fundamental = new Pitch(parseInt(pitchClass) + C4);
+    tune.tonicize(fundamental.frequencyHz);
+    document.getElementById("fundamental").innerHTML = "<strong>" + fundamental.getNoteName() + "</strong> " + fundamental.centsFromEqualPrint + " <em>(" + fundamental.frequencyHz.toFixed(2) + ")</em>";
 }
 
 function noteOn(e) {
     // convert from midi to scale
-    var note = tune.note(e.note.number - fundamental['semitonesFromC3'] - 60, 1);
+    var note = tune.note(e.note.number - fundamental.midiNoteNumber - 12, 1);
 
     // Check if this note is already playing
     var playing = keyboard.getPitch(e.note.number);
@@ -79,12 +75,8 @@ window.onload = function() {
 
     [...document.getElementsByName("tonic")].forEach((elem) => {
         elem.onclick = () => {
-
             // elem.value is the number of semitones above C3
-            var semitones = elem.value
-            // set fundamental using equal temperament
-            var freq = Frequency("C3").transpose(semitones).toFrequency();
-            setFundamental(freq, semitones);
+            setFundamental(elem.value);
         };
     });
 
@@ -101,9 +93,8 @@ window.onload = function() {
     // Start audio system
     document.getElementById("enterBtn").addEventListener('click', async () => {
         var succeeded = setupMidiInput(noteOn, noteOff);
-
         if (succeeded) {
-            // start the audio system
+            // start tone.js
             await start();
 
             // initialize keyboard
@@ -120,9 +111,8 @@ window.onload = function() {
             tune.loadScale(scale);
 
             // Set the fundamental using equal temperament and checked tonic
-            var semitones = document.querySelector('input[name="tonic"]:checked').value;
-            var freq = Frequency("C3").transpose(semitones).toFrequency();
-            setFundamental(freq, semitones);
+            var pitchClass = document.querySelector('input[name="tonic"]:checked').value;
+            setFundamental(pitchClass);
 
             // change UI
             document.getElementById("enterScreen").className = "entered";
