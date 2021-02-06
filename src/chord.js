@@ -44,7 +44,7 @@ export default class Chord {
             }
             return num;
         };
-        return Array.from(new Set(this.frequencyRatios.map(removeOctave))).sort();
+        return Array.from(new Set(this.frequencyRatios.map(removeOctave))).sort((a, b) => a-b);
     }
 
     // Returns a pitch representing the implied fundamental

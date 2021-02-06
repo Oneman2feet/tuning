@@ -1,14 +1,28 @@
 import './keyboard.css';
 
 import Chord from './chord.js';
+import {now} from 'tone';
+import {volOfFreq} from './utility.js';
 
 // Constant for which pitch classes are black keys
 const blackKeys = [1,3,6,8,10];
 
+// Keyboard class manages the playing of pitches to create chords.
+// A pitch can be played or stopped, visual feedback is shown in UI.
+// Sound is managed with a synth from tone.js
 export default class Keyboard {
 
-    constructor() {
+    constructor(synth) {
+        this.synth = synth;
         this.pitches = {};
+    }
+
+    play(pitch) {
+        this.synth.triggerAttack(pitch.frequencyHz, now(), volOfFreq(pitch.frequencyHz));
+    }
+
+    release(pitch) {
+        this.synth.triggerRelease(pitch.frequencyHz, now());
     }
 
     addPitch(pitch) {
@@ -39,6 +53,7 @@ export default class Keyboard {
 
     clear() {
         this.pitches = {};
+        this.synth.releaseAll();
     }
 
     static draw() {

@@ -1,9 +1,9 @@
-import {now, start, PolySynth, Frequency} from 'tone';
+import {start, PolySynth, Frequency} from 'tone';
 
 import Tune from './tune.js';
 import Pitch from './pitch.js'
 import Keyboard from './keyboard.js';
-import {differenceInCents, volOfFreq} from './utility.js';
+import {differenceInCents} from './utility.js';
 import setupMidiInput from './input.js';
 import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
@@ -40,7 +40,8 @@ function noteOn(e) {
     var playing = keyboard.getPitch(e.note.number);
     if (playing) {
         console.log("this key is already pressed: " + playing.getNoteName());
-        synth.triggerRelease(playing.frequencyHz, now());
+        keyboard.release(playing);
+        //synth.triggerRelease(playing.frequencyHz, now());
     }
 
     // Make a pitch
@@ -55,7 +56,8 @@ function noteOn(e) {
         updateMetrics(keyboard);
     }
     else {
-        synth.triggerAttack(note, now(), volOfFreq(note));//, e.velocity);
+        keyboard.play(pitch);
+        //synth.triggerAttack(note, now(), volOfFreq(note));//, e.velocity);
 
         // make this note active in the visualization
         Keyboard.activateKey(pitch);
@@ -66,7 +68,8 @@ function noteOff(e) {
     // release the note(s) that are currently held from this midi key
     var playing = keyboard.getPitch(e.note.number);
     if (playing) {
-        synth.triggerRelease(playing.frequencyHz, now());
+        keyboard.release(playing);
+        //synth.triggerRelease(playing.frequencyHz, now());
         keyboard.removePitch(playing.midiNoteNumber);
 
         // make this note inactive in the visualization
@@ -86,10 +89,6 @@ function noteOff(e) {
 }
 
 window.onload = function() {
-    // Initialize keyboard with UI
-    keyboard = new Keyboard();
-    Keyboard.draw();
-
     // Controls
     [...document.getElementsByName("temperament")].forEach((elem) => {
         elem.onclick = () => {
@@ -108,7 +107,7 @@ window.onload = function() {
     });
 
     document.getElementById("clearNotes").onclick = function() {
-        synth.releaseAll();
+        //synth.releaseAll();
         keyboard.clear();
         Keyboard.deactivateAllKeys();
         clearMetrics(keyboard);
@@ -146,6 +145,10 @@ window.onload = function() {
 
             // set the volume
             synth.volume.value = 8.3 + 1000 / (-document.getElementById("volslider").value-20);
+
+            // initialize keyboard with UI
+            keyboard = new Keyboard(synth);
+            Keyboard.draw();
 
             // create a Tune.js instance
             tune = new Tune();
