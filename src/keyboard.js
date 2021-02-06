@@ -25,6 +25,12 @@ export default class Keyboard {
         this.synth.triggerRelease(pitch.frequencyHz, now());
     }
 
+    retune(pitch, newPitch) {
+        // TODO: change pitch without triggering a new attack
+        this.synth.triggerRelease(pitch.frequencyHz, now());
+        this.synth.triggerAttack(newPitch.frequencyHz, now(), volOfFreq(newPitch.frequencyHz));
+    }
+
     addPitch(pitch) {
         // todo check if already added
         this.pitches[pitch.midiNoteNumber] = pitch;

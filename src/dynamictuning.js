@@ -1,11 +1,8 @@
-import {now} from 'tone';
-
 import {chordTypes} from './chordTypes.js';
-import {volOfFreq} from './utility.js';
 import Pitch from './pitch.js';
 import Keyboard from './keyboard.js';
 
-function tuneChord(keyboard, synth, anchor, noteToPlayMidi) {
+function tuneChord(keyboard, anchor, noteToPlayMidi) {
     var chordClass = keyboard.chord.equivalenceClass;
     var chordIntegerNotation = chordClass.join(",");
     var dynamicTuning = chordTypes[chordIntegerNotation].tuning;
@@ -29,19 +26,17 @@ function tuneChord(keyboard, synth, anchor, noteToPlayMidi) {
 
         // always play this note if this is the noteToPlay
         if (pitch.midiNoteNumber == noteToPlayMidi) {
-            synth.triggerAttack(currPitch.frequencyHz, now(), volOfFreq(currPitch.frequencyHz));
+            keyboard.play(currPitch);
             keyboard.addPitch(currPitch);
 
             // update visualization
             Keyboard.activateKey(currPitch);
         }
-        // adjust the synth for any note that should be retuned
+        // adjust any note that should be retuned
         else if (Pitch.differenceInCents(keyboard.getPitch(pitch.midiNoteNumber), currPitch) !== 0)
         {
             console.log("adjusting note from " + pitch.toString() + " to " + currPitch.toString());
-            // TODO: change pitch without triggering a new attack
-            synth.triggerRelease(pitch.frequencyHz, now());
-            synth.triggerAttack(currPitch.frequencyHz, now(), volOfFreq(currPitch.frequencyHz));
+            keyboard.retune(pitch, currPitch);
             pitch.frequencyHz = currPitch.frequencyHz;
 
             // update visualization
@@ -50,7 +45,7 @@ function tuneChord(keyboard, synth, anchor, noteToPlayMidi) {
     });
 }
 
-export default function updateDynamicTuning(keyboard, synth, tune, fundamental, noteToPlay, noteToPlayMidi) {
+export default function updateDynamicTuning(keyboard, tune, fundamental, noteToPlay, noteToPlayMidi) {
     var chordType = keyboard.chord.type;
     if (chordType && chordType.tuning) {
         var tuned = false;
@@ -66,8 +61,8 @@ export default function updateDynamicTuning(keyboard, synth, tune, fundamental, 
                 var just = new Pitch(anchor.midiNoteNumber, tune.note(anchor.midiNoteNumber - fundamental['semitonesFromC3'] - 60, 1));
                 just.resetOctave();
 
-                console.log("tuning around " + just.getNoteName());
-                tuneChord(keyboard, synth, just, noteToPlayMidi);
+                //console.log("tuning around " + just.getNoteName());
+                tuneChord(keyboard, just, noteToPlayMidi);
 
                 tuned = true;
             }
@@ -81,10 +76,11 @@ export default function updateDynamicTuning(keyboard, synth, tune, fundamental, 
         }
     }
     else if (noteToPlay!==undefined) {
-        synth.triggerAttack(noteToPlay, now(), volOfFreq(noteToPlay));//, e.velocity);
-        keyboard.addPitch(new Pitch(noteToPlayMidi, noteToPlay));
+        var toPlay = new Pitch(noteToPlayMidi, noteToPlay);
+        keyboard.play(toPlay);
+        keyboard.addPitch(toPlay);
 
         // update visualization
-        Keyboard.activateKey(new Pitch(noteToPlayMidi, noteToPlay));
+        Keyboard.activateKey(toPlay);
     }
 }

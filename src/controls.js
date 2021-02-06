@@ -52,12 +52,11 @@ function noteOn(e) {
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(keyboard, synth, tune, fundamental, note, e.note.number); // this also plays the note
+        updateDynamicTuning(keyboard, tune, fundamental, note, e.note.number); // this also plays the note
         updateMetrics(keyboard);
     }
     else {
         keyboard.play(pitch);
-        //synth.triggerAttack(note, now(), volOfFreq(note));//, e.velocity);
 
         // make this note active in the visualization
         Keyboard.activateKey(pitch);
@@ -69,7 +68,6 @@ function noteOff(e) {
     var playing = keyboard.getPitch(e.note.number);
     if (playing) {
         keyboard.release(playing);
-        //synth.triggerRelease(playing.frequencyHz, now());
         keyboard.removePitch(playing.midiNoteNumber);
 
         // make this note inactive in the visualization
@@ -83,7 +81,7 @@ function noteOff(e) {
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(keyboard, synth, tune, fundamental);
+        updateDynamicTuning(keyboard, tune, fundamental);
         updateMetrics(keyboard);
     }
 }
@@ -107,7 +105,6 @@ window.onload = function() {
     });
 
     document.getElementById("clearNotes").onclick = function() {
-        //synth.releaseAll();
         keyboard.clear();
         Keyboard.deactivateAllKeys();
         clearMetrics(keyboard);
