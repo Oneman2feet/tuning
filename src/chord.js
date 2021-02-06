@@ -121,6 +121,17 @@ export default class Chord {
         return chordTypes[this.equivalenceClass.join(",")];
     }
 
+    // Returns a mapping of integer notation to frequency ratio as determined by the chord type
+    get tuningMap() {
+        var integer = this.equivalenceClass;
+        var type = this.type;
+        var map = {};
+        for (var int in integer) {
+            map[integer[int]] = parseInt(type.tuning.split(":")[int]);
+        }
+        return map;
+    }
+
     get name() {
         var type = this.type;
         if (type) {

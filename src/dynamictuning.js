@@ -1,35 +1,29 @@
 import Pitch from './pitch.js';
 
 function tuneChord(keyboard, anchor, noteToPlay) {
-    var chordClass = keyboard.chord.equivalenceClass;
-    var dynamicTuning = keyboard.chord.type.tuning;
-    var anchorInt = keyboard.chord.getInteger(anchor);
-
     // based on the frequency ratios of the dynamic tuning
     // and the anchor note and frequency
     // compute the frequencies needed for the chord
-    var anchorIndex = chordClass.findIndex(el => el==anchorInt);
-    var anchorRatio = dynamicTuning.split(":")[anchorIndex];
+    var tuningMap = keyboard.chord.tuningMap;
+
+    var anchorRatio = tuningMap[keyboard.chord.getInteger(anchor)];
     var harmonicSeriesFundamental = anchor.frequencyHz / anchorRatio;
 
     // for each note in the chord, compute the adjusted frequency to use
     keyboard.pitchList.forEach((pitch) => {
         // determine what the ratio will be above the fundamental
-        var currentInteger = keyboard.chord.getInteger(pitch);
-        var currentIndex = chordClass.findIndex(el => el==currentInteger);
-        var currentRatio = dynamicTuning.split(":")[currentIndex];
-        var currPitch = new Pitch(pitch.midiNoteNumber, harmonicSeriesFundamental * currentRatio);
-        currPitch.resetOctave();
+        var currentRatio = keyboard.chord.tuningMap[keyboard.chord.getInteger(pitch)];
+        var tuned = new Pitch(pitch.midiNoteNumber, harmonicSeriesFundamental * currentRatio);
+        tuned.resetOctave();
 
         // always play this note if this is the noteToPlay
         if (noteToPlay && pitch.midiNoteNumber == noteToPlay.midiNoteNumber) {
-            keyboard.play(currPitch);
+            keyboard.play(tuned);
         }
         // adjust any note that should be retuned
-        else if (Pitch.differenceInCents(keyboard.getPitch(pitch.midiNoteNumber), currPitch) !== 0)
+        else if (Pitch.differenceInCents(pitch, tuned) !== 0)
         {
-            //console.log("adjusting note from " + pitch.toString() + " to " + currPitch.toString());
-            keyboard.retune(pitch, currPitch);
+            keyboard.retune(pitch, tuned);
         }
     });
 }
