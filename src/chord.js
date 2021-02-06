@@ -32,7 +32,7 @@ export default class Chord {
             ratios = ratios.map(ratio => ratio / greatestCommonDivisor); // reduce ratio by gcd
             return ratios;
         }
-        return [];
+        return this.pitchList.map(() => 1);
     }
 
     // Returns a frequency ratio list with octaves reduced

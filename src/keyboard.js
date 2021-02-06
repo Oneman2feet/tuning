@@ -18,17 +18,47 @@ export default class Keyboard {
     }
 
     play(pitch) {
+        // Sound
         this.synth.triggerAttack(pitch.frequencyHz, now(), volOfFreq(pitch.frequencyHz));
+        // Data
+        this.addPitch(pitch);
+        // Visual
+        Keyboard.activateKey(pitch);
     }
 
     release(pitch) {
+        // Sound
         this.synth.triggerRelease(pitch.frequencyHz, now());
+        // Data
+        this.removePitch(pitch.midiNoteNumber);
+        // Visual
+        Keyboard.deactivateKey(pitch);
     }
 
+    // TODO: change pitch without triggering a new attack
     retune(pitch, newPitch) {
-        // TODO: change pitch without triggering a new attack
+        // Sound
         this.synth.triggerRelease(pitch.frequencyHz, now());
         this.synth.triggerAttack(newPitch.frequencyHz, now(), volOfFreq(newPitch.frequencyHz));
+        // Data
+        if (pitch.midiNoteNumber == newPitch.midiNoteNumber) {
+            this.pitches[pitch.midiNoteNumber] = newPitch;
+        }
+        else {
+            console.log("trying to retune two pitches of different midi note numbers");
+        }
+        // Visual
+        Keyboard.deactivateKey(pitch);
+        Keyboard.activateKey(newPitch);
+    }
+
+    clear() {
+        // Sound
+        this.synth.releaseAll();
+        // Data
+        this.pitches = {};
+        // Visual
+        Keyboard.deactivateAllKeys();
     }
 
     addPitch(pitch) {
@@ -55,11 +85,6 @@ export default class Keyboard {
 
     get chord() {
         return new Chord(this.pitchList);
-    }
-
-    clear() {
-        this.pitches = {};
-        this.synth.releaseAll();
     }
 
     static draw() {

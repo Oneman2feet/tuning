@@ -1,11 +1,8 @@
-import {chordTypes} from './chordTypes.js';
 import Pitch from './pitch.js';
-import Keyboard from './keyboard.js';
 
 function tuneChord(keyboard, anchor, noteToPlayMidi) {
     var chordClass = keyboard.chord.equivalenceClass;
-    var chordIntegerNotation = chordClass.join(",");
-    var dynamicTuning = chordTypes[chordIntegerNotation].tuning;
+    var dynamicTuning = keyboard.chord.type.tuning;
     var anchorInt = keyboard.chord.getInteger(anchor);
 
     // based on the frequency ratios of the dynamic tuning
@@ -27,20 +24,12 @@ function tuneChord(keyboard, anchor, noteToPlayMidi) {
         // always play this note if this is the noteToPlay
         if (pitch.midiNoteNumber == noteToPlayMidi) {
             keyboard.play(currPitch);
-            keyboard.addPitch(currPitch);
-
-            // update visualization
-            Keyboard.activateKey(currPitch);
         }
         // adjust any note that should be retuned
         else if (Pitch.differenceInCents(keyboard.getPitch(pitch.midiNoteNumber), currPitch) !== 0)
         {
             console.log("adjusting note from " + pitch.toString() + " to " + currPitch.toString());
             keyboard.retune(pitch, currPitch);
-            pitch.frequencyHz = currPitch.frequencyHz;
-
-            // update visualization
-            Keyboard.activateKey(currPitch);
         }
     });
 }
@@ -76,11 +65,6 @@ export default function updateDynamicTuning(keyboard, tune, fundamental, noteToP
         }
     }
     else if (noteToPlay!==undefined) {
-        var toPlay = new Pitch(noteToPlayMidi, noteToPlay);
-        keyboard.play(toPlay);
-        keyboard.addPitch(toPlay);
-
-        // update visualization
-        Keyboard.activateKey(toPlay);
+        keyboard.play(new Pitch(noteToPlayMidi, noteToPlay));
     }
 }

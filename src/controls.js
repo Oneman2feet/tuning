@@ -36,30 +36,27 @@ function noteOn(e) {
     // convert from midi to scale
     var note = tune.note(e.note.number - fundamental['semitonesFromC3'] - 60, 1);
 
-    // Release this note if already playing
+    // Check if this note is already playing
     var playing = keyboard.getPitch(e.note.number);
     if (playing) {
         console.log("this key is already pressed: " + playing.getNoteName());
-        keyboard.release(playing);
+        //keyboard.release(playing);
         //synth.triggerRelease(playing.frequencyHz, now());
     }
 
     // Make a pitch
     var pitch = new Pitch(e.note.number, note);
-    keyboard.addPitch(pitch);
-
-    updateMetrics(keyboard);
 
     // dynamic tuning
     if (document.getElementById("dynamic").checked) {
+        keyboard.addPitch(pitch); // so that the dynamic tuning can happen
+        updateMetrics(keyboard);
         updateDynamicTuning(keyboard, tune, fundamental, note, e.note.number); // this also plays the note
         updateMetrics(keyboard);
     }
     else {
         keyboard.play(pitch);
-
-        // make this note active in the visualization
-        Keyboard.activateKey(pitch);
+        updateMetrics(keyboard);
     }
 }
 
@@ -68,10 +65,6 @@ function noteOff(e) {
     var playing = keyboard.getPitch(e.note.number);
     if (playing) {
         keyboard.release(playing);
-        keyboard.removePitch(playing.midiNoteNumber);
-
-        // make this note inactive in the visualization
-        Keyboard.deactivateKey(playing);
     }
     else {
         console.log("released note that was not pressed: " + e.note.name + e.note.octave);
@@ -106,7 +99,6 @@ window.onload = function() {
 
     document.getElementById("clearNotes").onclick = function() {
         keyboard.clear();
-        Keyboard.deactivateAllKeys();
         clearMetrics(keyboard);
         updateMetrics(keyboard);
     }
