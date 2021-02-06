@@ -1,12 +1,15 @@
 import WebMidi from 'webmidi';
 
 WebMidi.enable(function (err) {
-    for (var input in WebMidi.inputs) {
-        var option = document.createElement("option");
-        option.value = WebMidi.inputs[input].name;
-        option.innerHTML = WebMidi.inputs[input].name;
-        document.getElementById("selectMidi").appendChild(option);
-    }
+    WebMidi.inputs.forEach((input) => {
+        var name = input.name;
+        if (!document.querySelector("#selectMidi option[value='" + name + "']")) {
+            var option = document.createElement("option");
+            option.value = name;
+            option.innerHTML = name;
+            document.getElementById("selectMidi").appendChild(option);
+        }
+    });
 });
 
 export default function setupMidiInput(noteon, noteoff) {
