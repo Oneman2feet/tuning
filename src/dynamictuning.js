@@ -15,15 +15,15 @@ function tuneChord(keyboard, anchor, noteToPlay) {
     var harmonicSeriesFundamental = anchor.frequencyHz / anchorRatio;
 
     // for each note in the chord, compute the adjusted frequency to use
-    keyboard.pitchList.forEach((pitch) => {
+    keyboard.chord.pitchList.forEach((pitch) => {
         // determine what the ratio will be above the fundamental
         var currentRatio = keyboard.chord.tuningMap[keyboard.chord.getInteger(pitch)];
         var tuned = new Pitch(pitch.midiNoteNumber, harmonicSeriesFundamental * currentRatio);
         tuned.resetOctave();
 
-        // always play this note if this is the noteToPlay
+        // adjust the noteToPlay without retune since it is still queued
         if (noteToPlay && pitch.midiNoteNumber == noteToPlay.midiNoteNumber) {
-            keyboard.play(tuned);
+            noteToPlay.frequencyHz = tuned.frequencyHz;
         }
         // adjust any note that should be retuned
         else if (Pitch.differenceInCents(pitch, tuned) !== 0)
@@ -35,9 +35,11 @@ function tuneChord(keyboard, anchor, noteToPlay) {
 
 export default function updateDynamicTuning(keyboard, tune, fundamental, noteToPlay) {
     if (noteToPlay) {
-        // add the note without playing it for analysis
-        keyboard.addPitch(noteToPlay);
+        // queue the pitch for analysis
+        keyboard.queuePitch(noteToPlay);
     }
+
+    console.log(keyboard.toString());
 
     var chordType = keyboard.chord.type;
     if (chordType && chordType.tuning) {
@@ -51,17 +53,17 @@ export default function updateDynamicTuning(keyboard, tune, fundamental, noteToP
             var anchor = keyboard.chord.getPitchClass(anchorPitchClass);
 
             // leave the new note for last
-            if (anchor && (!noteToPlay || noteToPlay.pitchClass != anchor.pitchClass)) {
+            if (anchor && (!noteToPlay || noteToPlay.midiNoteNumber != anchor.midiNoteNumber)) {
                 if (noteToPlay && anchor.pitchClass == noteToPlay.pitchClass) {
                     console.log("tuning to the newly played note!");
                 }
 
                 // tune the anchor to the fundamental first
-                var just = new Pitch(anchor.midiNoteNumber, tune.note(anchor.midiNoteNumber - fundamental.midiNoteNumber - 12, 1));
-                just.resetOctave();
+                //var just = new Pitch(anchor.midiNoteNumber, tune.note(anchor.midiNoteNumber - fundamental.midiNoteNumber - 12, 1));
+                //just.resetOctave();
 
                 //console.log("tuning around " + just.getNoteName());
-                tuneChord(keyboard, just, noteToPlay);
+                tuneChord(keyboard, anchor, noteToPlay);
 
                 tuned = true;
             }
@@ -69,19 +71,21 @@ export default function updateDynamicTuning(keyboard, tune, fundamental, noteToP
             // otherwise move on to the next anchor
             anchorIndex++;
         }
-        // Fallback on playing the note
-        if (!tuned) {
-            if (noteToPlay) {
-                keyboard.play(noteToPlay);
-            } else {
-                console.log("should be impossible");
-            }
-        }
-    }
-    else if (noteToPlay) {
-        keyboard.play(noteToPlay);
+        // // Fallback on playing the note
+        // if (!tuned) {
+        //     if (noteToPlay) {
+        //         keyboard.play(noteToPlay);
+        //     } else {
+        //         console.log("should be impossible");
+        //     }
+        // }
     }
     else {
         Keyboard.removeAnchor();
+    }
+
+    if (noteToPlay) {
+        keyboard.pushQueue();
+        //keyboard.play(noteToPlay);
     }
 }

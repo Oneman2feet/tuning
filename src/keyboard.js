@@ -32,8 +32,9 @@ export default class Keyboard {
             }
         });
 
-        // no notes playing yet
+        // no notes playing yet, none queued
         this.pitches = {};
+        this.queue = [];
 
         // initialize UI
         Keyboard.draw();
@@ -43,7 +44,7 @@ export default class Keyboard {
         // Sound
         this.synth.triggerAttack(pitch.frequencyHz, now(), volOfFreq(pitch.frequencyHz));
         // Data
-        this.addPitch(pitch);
+        this.addPlayingPitch(pitch);
         // Visual
         Keyboard.activateKey(pitch);
     }
@@ -52,7 +53,7 @@ export default class Keyboard {
         // Sound
         this.synth.triggerRelease(pitch.frequencyHz, now());
         // Data
-        this.removePitch(pitch.midiNoteNumber);
+        this.removePlayingPitch(pitch.midiNoteNumber);
         // Visual
         Keyboard.deactivateKey(pitch);
     }
@@ -64,7 +65,8 @@ export default class Keyboard {
         this.synth.triggerAttack(newPitch.frequencyHz, now(), volOfFreq(newPitch.frequencyHz));
         // Data
         if (pitch.midiNoteNumber == newPitch.midiNoteNumber) {
-            this.pitches[pitch.midiNoteNumber] = newPitch;
+            //this.pitches[pitch.midiNoteNumber] = newPitch;
+            pitch.frequencyHz = newPitch.frequencyHz;
         }
         else {
             console.log("trying to retune two pitches of different midi note numbers");
@@ -87,30 +89,45 @@ export default class Keyboard {
         this.synth.volume.value = volume;
     }
 
-    addPitch(pitch) {
+    addPlayingPitch(pitch) {
         // todo check if already added
         this.pitches[pitch.midiNoteNumber] = pitch;
     }
 
-    getPitch(midiNoteNumber) {
+    // Add a pitch to be played at a later time, used for chord analysis
+    queuePitch(pitch) {
+        this.queue.push(pitch);
+    }
+
+    // Play all notes in the queue
+    pushQueue() {
+        this.queue.forEach((pitch) => {
+            this.play(pitch);
+        });
+        this.queue = [];
+    }
+
+    getPlayingPitch(midiNoteNumber) {
         return this.pitches[midiNoteNumber];
     }
 
-    // Returns a pitch of the given pitch class, if any
-    getPitchClass(pitchClass) {
+    // Returns a pitch of the given pitch class, if any playing
+    getPlayingPitchClass(pitchClass) {
         return this.pitchList.find((pitch) => pitch.pitchClass == pitchClass);
     }
 
-    removePitch(midiNoteNumber) {
+    removePlayingPitch(midiNoteNumber) {
         delete this.pitches[midiNoteNumber];
     }
 
+    // List of all playing pitches
     get pitchList() {
         return Object.values(this.pitches);
     }
 
+    // Chord using all playing and queued pitches
     get chord() {
-        return new Chord(this.pitchList);
+        return new Chord(this.pitchList.concat(this.queue));
     }
 
     static draw() {
@@ -178,6 +195,6 @@ export default class Keyboard {
     }
 
     toString() {
-        return this.pitchList.map((pitch) => pitch.toString());
+        return "Playing: " + this.pitchList.map((pitch) => pitch.toString()) + "; Queued: " + this.queue.map((pitch) => pitch.toString());
     }
 }

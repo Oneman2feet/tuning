@@ -26,7 +26,7 @@ function noteOn(e) {
     var note = tune.note(e.note.number - fundamental.midiNoteNumber - 12, 1);
 
     // Check if this note is already playing
-    var playing = keyboard.getPitch(e.note.number);
+    var playing = keyboard.getPlayingPitch(e.note.number);
     if (playing) {
         console.log("this key is already pressed: " + playing.getNoteName());
     }
@@ -48,7 +48,7 @@ function noteOn(e) {
 
 function noteOff(e) {
     // release the note(s) that are currently held from this midi key
-    var playing = keyboard.getPitch(e.note.number);
+    var playing = keyboard.getPlayingPitch(e.note.number);
     if (playing) {
         keyboard.release(playing);
     }
