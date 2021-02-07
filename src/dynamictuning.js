@@ -21,9 +21,6 @@ function tuneChord(keyboard, anchor, noteToPlay) {
         var tuned = new Pitch(pitch.midiNoteNumber, harmonicSeriesFundamental * currentRatio);
         tuned.resetOctave();
 
-        console.log(pitch.toString());
-        console.log(tuned.toString());
-
         // adjust the noteToPlay without retune since it is still queued
         if (noteToPlay && pitch.midiNoteNumber == noteToPlay.midiNoteNumber) {
             noteToPlay.frequencyHz = tuned.frequencyHz;
@@ -54,6 +51,7 @@ export default function updateDynamicTuning(keyboard, fundamental, noteToPlay) {
             var anchor = keyboard.getPlayingPitchClass(anchorPitchClass);
 
             // leave the new note for last
+            // TODO: unless it is the fundamental!!
             if (anchor && !(noteToPlay && noteToPlay.midiNoteNumber == anchor.midiNoteNumber)) {
                 tuneChord(keyboard, anchor, noteToPlay);
                 tuned = true;

@@ -83,6 +83,7 @@ export default class Keyboard {
         this.pitches = {};
         // Visual
         Keyboard.deactivateAllKeys();
+        Keyboard.removeAnchor();
     }
 
     set volume(volume) {
@@ -179,6 +180,7 @@ export default class Keyboard {
         [...document.querySelectorAll('#keyboard .key')].forEach((key) => {
             key.classList.remove("active");
             key.style.backgroundColor = "";
+            key.innerHTML = "";
         });
     }
 
