@@ -39,27 +39,18 @@ export default function updateCircleOfFifthsTuning(keyboard, fundamental, noteTo
         keyboard.queuePitch(noteToPlay);
     }
 
+    var chord = keyboard.chord;
     var chordType = keyboard.chord.type;
     if (chordType && chordType.tuning) {
-        var tuned = false;
-        var anchorPriority = [0, 7, 5, 9, 2, 4, 11, 3, 8, 10, 1, 6]; // 0=I (tonic), 7=V, 5=IV, 9=vi, 2=ii, 4=iii, 11=vii, 3=biii, 8=bvi, 10=bvii, 1=#I, 6=bV
-        var anchorIndex = 0;
 
-        while (!tuned && anchorIndex < anchorPriority.length) {
-            // see if anchor is being played
-            var anchorPitchClass = Pitch.toPitchClass(fundamental.midiNoteNumber + anchorPriority[anchorIndex]);
-            var anchor = keyboard.getPlayingPitchClass(anchorPitchClass);
+        var root = chord.root;
+        console.log(root.toString());
 
-            // leave the new note for last
-            // TODO: unless it is the fundamental!!
-            if (anchor && ((anchor.pitchClass == fundamental.pitchClass) || !(noteToPlay && noteToPlay.midiNoteNumber == anchor.midiNoteNumber))) {
-                tuneChord(keyboard, anchor, noteToPlay);
-                tuned = true;
-            }
+        // tune chord around the root
+        tuneChord(keyboard, root, noteToPlay);
 
-            // otherwise move on to the next anchor
-            anchorIndex++;
-        }
+        // TODO: detect the function of the root in relation to the fundamental
+        // and tune according to the circle of fifths
     }
     else {
         Keyboard.removeAnchor();

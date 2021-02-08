@@ -14,9 +14,9 @@ export function updateMetrics(keyboard) {
     updateNoteRatios(chord);
     updateImpliedFundamental(chord);
     updateLowestSharedOvertone(chord);
+    updateRoot(chord);
     updateChordNames(chord);
     updateChordTunings(chord);
-
 }
 
 export function clearMetrics(keyboard) {
@@ -66,6 +66,16 @@ function updateLowestSharedOvertone(chord) {
     }
     else {
         document.getElementById("overtone").innerHTML = "";
+    }
+}
+
+function updateRoot(chord) {
+    var root = chord.root;
+    if (root) {
+        document.getElementById("root").innerHTML = root.getNoteName() + " <em>" + root.centsFromEqualPrint + "</em>";
+    }
+    else {
+        document.getElementById("root").innerHTML = "";
     }
 }
 

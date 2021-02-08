@@ -148,11 +148,14 @@ export default class Chord {
 
     // Returns the pitch corresponding to the root of the chord as per chord inference.
     get root() {
-        var rootInteger = this.equivalenceClass[this.type.root];
-        var bass = this.bass;
+        var type = this.type;
+        if (type) {
+            var rootInteger = this.equivalenceClass[this.type.root];
+            var bass = this.bass;
 
-        // find the lowest pitch matching the root
-        return this.pitchList.find((pitch) => Pitch.differenceInSemitones(pitch, bass) == rootInteger);
+            // find the lowest pitch matching the root
+            return this.pitchList.find((pitch) => Pitch.differenceInSemitones(pitch, bass) == rootInteger);
+        }
     }
 
     toString() {
