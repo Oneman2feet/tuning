@@ -68,7 +68,7 @@ export const chordTypes = {
     "0,4,7,8": { "root": 3, "name": "Augmented-Major Seventh (first inversion)", "notation": "X+M7/Y"},
     "0,3,4,8": { "root": 2, "name": "Augmented-Major Seventh (second inversion)", "notation": "X+M7/Y"},
     "0,1,5,9": { "root": 1, "name": "Augmented-Major Seventh (third inversion)", "notation": "X+M7/Y"},
-    "0,4,6,10": { "root": 0, "name": "Major-Minor Seventh (fifth lowered)", "notation": "X7\u266d5", "tuning": "20:25:28:35"}, // Or 12:15:17:21
+    "0,4,6,10": { "root": 0, "name": "Major-Minor Seventh (fifth lowered)", "notation": "X7\u266d5", "tuning": "12:15:17:21"}, // 20:25:28:35 or 8:10:11:14 or 12:15:17:21
     "0,2,4,10": { "root": 0, "name": "Dominant Ninth (fifth omitted)", "notation": "X9", "tuning": "8:9:10:14"}
 
 };
@@ -116,11 +116,13 @@ export const chordTunings = {
     "3/5/7/9": "Half-diminished Seventh",
     "1/5/7/9": "Dominant Ninth",
     "1/3/5/9": "Just Major Added Ninth",
+    "1/5/7/11": "11-Limit Dominant Seventh Flat Five",
     "1/3/5/15": "Just Major Seventh",
     "3/5/9/15": "Just Minor Seventh",
     "3/7/9/21": "Septimal Minor Seventh",
+    "3/15/17/21": "21-Limit Dominant Seventh Flat Five",
     "9/15/21/25": "Diminished Seventh",
-    "5/7/25/35": "Dominant Seventh Flat Five",
+    "5/7/25/35": "35-Limit Dominant Seventh Flat Five",
     "9/15/25/45": "45-Limit Half-diminished Seventh",
     "3/5/15/75": "Minor-major Seventh",
     "5/9/25/125": "Augmented Dominant Seventh",

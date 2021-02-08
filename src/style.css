@@ -95,7 +95,7 @@ button {
 }
 
 input[name="temperament"], input[name="temperament"] + label {
-    width: 200px;
+    width: 150px;
 }
 
 input[name="tonic"], input[name="tonic"] + label {

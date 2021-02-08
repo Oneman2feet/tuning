@@ -7,6 +7,7 @@ import {sliderVolume} from './utility.js';
 import setupMidiInput from './input.js';
 import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
+import updateCircleOfFifthsTuning from './circletuning.js';
 import './style.css';
 
 var tune;
@@ -34,10 +35,12 @@ function noteOn(e) {
     // Make a pitch
     var pitch = new Pitch(e.note.number, note);
 
-    // dynamic tuning
+    // dynamic and circle of fifths tuning
     if (document.getElementById("dynamic").checked) {
         updateDynamicTuning(keyboard, fundamental, pitch); // this also plays the note
-        updateMetrics(keyboard);
+    }
+    else if (document.getElementById("circle").checked) {
+        updateCircleOfFifthsTuning(keyboard, fundamental, pitch); // this also plays the note
     }
     else {
         keyboard.play(pitch);
@@ -58,9 +61,13 @@ function noteOff(e) {
 
     updateMetrics(keyboard);
 
-    // dynamic tuning
+    // dynamic and circle of fifths tuning
     if (document.getElementById("dynamic").checked) {
         updateDynamicTuning(keyboard, fundamental);
+        updateMetrics(keyboard);
+    }
+    else if (document.getElementById("circle").checked) {
+        updateCircleOfFifthsTuning(keyboard, fundamental);
         updateMetrics(keyboard);
     }
 }
