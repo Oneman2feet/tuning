@@ -72,11 +72,15 @@ function updateLowestSharedOvertone(chord) {
 function updateChordNames(chord) {
     var notation = chord.notation;
     var name = chord.name;
+    var integerNotation = chord.integerNotation;
     if (notation) {
         document.getElementById("chordtype").innerHTML = notation;
     }
     else if (name) {
         document.getElementById("chordtype").innerHTML = name;
+    }
+    else if (integerNotation) {
+        document.getElementById("chordtype").innerHTML = integerNotation;
     }
     else {
         document.getElementById("chordtype").innerHTML = "";

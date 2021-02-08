@@ -52,7 +52,7 @@ export default function updateDynamicTuning(keyboard, fundamental, noteToPlay) {
 
             // leave the new note for last
             // TODO: unless it is the fundamental!!
-            if (anchor && !(noteToPlay && noteToPlay.midiNoteNumber == anchor.midiNoteNumber)) {
+            if (anchor && ((anchor.pitchClass == fundamental.pitchClass) || !(noteToPlay && noteToPlay.midiNoteNumber == anchor.midiNoteNumber))) {
                 tuneChord(keyboard, anchor, noteToPlay);
                 tuned = true;
             }

@@ -22,13 +22,20 @@ export const chordTypes = {
     "0,3,8": { "root": 2, "name": "Major (first inversion)", "notation": "X/Y", "tuning": "5:6:8"},
     "0,5,9": { "root": 1, "name": "Major (second inversion)", "notation": "X/Y", "tuning": "6:8:10"},
     "0,3,7": { "root": 0, "name": "Minor", "notation": "Xm", "tuning": "10:12:15"}, // just minor triad
-    "0,4,9": { "root": 2, "name": "Minor (first inversion)", "notation": "Xm/Y"},
-    "0,5,8": { "root": 1, "name": "Minor (second inversion)", "notation": "Xm/Y"},
+    "0,4,9": { "root": 2, "name": "Minor (first inversion)", "notation": "Xm/Y", "tuning": "12:15:20"},
+    "0,5,8": { "root": 1, "name": "Minor (second inversion)", "notation": "Xm/Y", "tuning": "15:20:24"},
     "0,3,6": { "root": 0, "name": "Diminished", "notation": "X<sup>\u006f</sup>", "tuning": "5:6:7"}, // also "25:30:36"
-    "0,3,9": { "root": 2, "name": "Diminished (first inversion)", "notation": "X<sup>\u006f</sup>/Y"},
-    "0,6,9": { "root": 1, "name": "Diminished (second inversion)", "notation": "X<sup>\u006f</sup>/Y"},
+    "0,3,9": { "root": 2, "name": "Diminished (first inversion)", "notation": "X<sup>\u006f</sup>/Y", "tuning": "6:7:10"},
+    "0,6,9": { "root": 1, "name": "Diminished (second inversion)", "notation": "X<sup>\u006f</sup>/Y", "tuning": "7:10:12"},
     "0,4,8": { "root": 0, "name": "Augmented", "notation": "X+", "tuning": "8:10:13"}, // perfect augmented
     "0,4,10": { "root": 0, "name": "Dominant Seventh (fifth omitted)", "tuning": "4:5:7"},
+
+    "0,2,5": { "root": 1, "name": "Minor Seventh (fifth omitted, second inversion)", "tuning": "9:10:12"},
+    "0,3,5": { "root": 2, "name": "Dominant Seventh (third omitted, first inversion)", "tuning": "6:7:8"},
+    "0,4,6": { "root": 2, "name": "Half-diminished Seventh (third omitted, first inversion)", "tuning": "7:9:10"},
+    "0,5,7": { "root": 0, "name": "Sus4", "tuning": "6:8:9"},
+    "0,7,10": { "root": 0, "name": "Dominant Seventh (third omitted)", "tuning": "4:6:7"},
+    "0,7,11": {"root": 0, "name": "Major Seventh (third omitted)", "tuning": "8:12:15"},
 
 // -------------- TETRADS -------------------------
 
@@ -38,17 +45,17 @@ export const chordTypes = {
     "0,2,6,9": { "root": 1, "name": "Dominant Seventh (third inversion)", "notation": "X7/Y", "tuning": "7:8:10:12"},
     "0,3,7,10": { "root": 0, "name": "Minor Seventh", "notation": "Xm7", "tuning": "10:12:15:18"}, // note there is also septimal tuning
     "0,4,7,9": { "root": 0, "name": "Major Sixth", "notation": "XM6", "tuning": "12:15:18:20"},
-    "0,3,5,8": { "root": 3, "name": "Major Sixth (first inversion)", "notation": "XM6/Y"},
-    "0,2,5,9": { "root": 2, "name": "Major Sixth (second inversion)", "notation": "XM6/Y"},
+    "0,3,5,8": { "root": 3, "name": "Major Sixth (first inversion)", "notation": "XM6/Y", "tuning": "15:18:20:24"},
+    "0,2,5,9": { "root": 2, "name": "Major Sixth (second inversion)", "notation": "XM6/Y", "tuning": "9:10:12:15"},
     "0,3,6,10": { "root": 0, "name": "Half-diminished Seventh", "notation":"X<sup>\u00f8</sup>", "tuning": "5:6:7:9"},
     "0,3,7,9": { "root": 3, "name": "Half-diminished Seventh (first inversion)", "notation":"X<sup>\u00f8</sup>/Y", "tuning": "6:7:9:10"},
-    "0,4,6,9": { "root": 2, "name": "Half-diminished Seventh (second inversion)", "notation":"X<sup>\u00f8</sup>/Y"},
-    "0,2,5,8": { "root": 1, "name": "Half-diminished Seventh (third inversion)", "notation":"X<sup>\u00f8</sup>/Y"},
+    "0,4,6,9": { "root": 2, "name": "Half-diminished Seventh (second inversion)", "notation":"X<sup>\u00f8</sup>/Y", "tuning": "7:9:10:12"},
+    "0,2,5,8": { "root": 1, "name": "Half-diminished Seventh (third inversion)", "notation":"X<sup>\u00f8</sup>/Y", "tuning": "9:10:12:14"},
     "0,4,7,11": { "root": 0, "name": "Major Seventh", "notation": "XM7", "tuning": "8:10:12:15"},
     "0,3,7,8": { "root": 0, "name": "Minor Sixth", "notation": "Xm6", "tuning": "10:12:15:16"},
     "0,4,5,9": { "root": 3, "name": "Minor Sixth (first inversion)", "notation": "Xm6/Y", "tuning": "12:15:16:20"},
     "0,1,5,8": { "root": 2, "name": "Minor Sixth (second inversion)", "notation": "Xm6/Y", "tuning": "15:16:20:24"},
-    "0,3,6,9": { "root": 0, "name": "Diminished Seventh", "notation": "X<sup>\u006f</sup>7"},
+    "0,3,6,9": { "root": 0, "name": "Diminished Seventh", "notation": "X<sup>\u006f</sup>7", "tuning": "15:18:21:25"},
     "0,3,7,11": { "root": 0, "name": "Minor-Major Seventh", "notation": "Xm+7"},
     "0,4,8,9": { "root": 3, "name": "Minor-Major Seventh (first inversion)", "notation": "Xm+7/Y"},
     "0,4,5,8": { "root": 2, "name": "Minor-Major Seventh (second inversion)", "notation": "Xm+7/Y"},
@@ -61,7 +68,7 @@ export const chordTypes = {
     "0,4,7,8": { "root": 3, "name": "Augmented-Major Seventh (first inversion)", "notation": "X+M7/Y"},
     "0,3,4,8": { "root": 2, "name": "Augmented-Major Seventh (second inversion)", "notation": "X+M7/Y"},
     "0,1,5,9": { "root": 1, "name": "Augmented-Major Seventh (third inversion)", "notation": "X+M7/Y"},
-    "0,4,6,10": { "root": 0, "name": "Major-Minor Seventh (fifth lowered)", "notation": "X7\u266d5"},
+    "0,4,6,10": { "root": 0, "name": "Major-Minor Seventh (fifth lowered)", "notation": "X7\u266d5", "tuning": "20:25:28:35"}, // Or 12:15:17:21
     "0,2,4,10": { "root": 0, "name": "Dominant Ninth (fifth omitted)", "notation": "X9", "tuning": "8:9:10:14"}
 
 };
@@ -112,6 +119,8 @@ export const chordTunings = {
     "1/3/5/15": "Just Major Seventh",
     "3/5/9/15": "Just Minor Seventh",
     "3/7/9/21": "Septimal Minor Seventh",
+    "9/15/21/25": "Diminished Seventh",
+    "5/7/25/35": "Dominant Seventh Flat Five",
     "9/15/25/45": "45-Limit Half-diminished Seventh",
     "3/5/15/75": "Minor-major Seventh",
     "5/9/25/125": "Augmented Dominant Seventh",
