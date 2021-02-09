@@ -46,7 +46,7 @@ function noteOn(e) {
         keyboard.play(pitch);
     }
 
-    updateMetrics(keyboard);
+    updateMetrics(keyboard, fundamental);
 }
 
 function noteOff(e) {
@@ -59,17 +59,15 @@ function noteOff(e) {
         console.log("released note that was not pressed: " + e.note.name + e.note.octave);
     }
 
-    updateMetrics(keyboard);
-
     // dynamic and circle of fifths tuning
     if (document.getElementById("dynamic").checked) {
         updateDynamicTuning(keyboard, fundamental);
-        updateMetrics(keyboard);
     }
     else if (document.getElementById("circle").checked) {
         updateCircleOfFifthsTuning(keyboard, fundamental);
-        updateMetrics(keyboard);
     }
+
+    updateMetrics(keyboard, fundamental);
 }
 
 window.onload = function() {
@@ -90,7 +88,6 @@ window.onload = function() {
     document.getElementById("clearNotes").onclick = function() {
         keyboard.clear();
         clearMetrics(keyboard);
-        updateMetrics(keyboard);
     }
 
     document.getElementById("volslider").oninput = function() {

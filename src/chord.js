@@ -1,4 +1,5 @@
 import Pitch from './pitch.js';
+import Scale from './scale.js';
 import {Frequency} from 'tone';
 import {gcd, lcm} from 'mathjs';
 import {chordTypes, chordTunings} from './chordTypes.js';
@@ -141,8 +142,9 @@ export default class Chord {
 
     get notation() {
         var type = this.type;
+        var root = this.root;
         if (type && type.notation) {
-            return type.notation.replace("X", this.root.getPitchClassName()).replace("Y", this.bass.getPitchClassName());
+            return type.notation.replace("X", root.getPitchClassName()).replace("x", root.getPitchClassName()).replace("Y", this.bass.getPitchClassName());
         }
     }
 
@@ -155,6 +157,18 @@ export default class Chord {
 
             // find the lowest pitch matching the root
             return this.pitchList.find((pitch) => Pitch.differenceInSemitones(pitch, bass) == rootInteger);
+        }
+    }
+
+    toRoman(scale) {
+        var root = this.root;
+        if (root) {
+            var major = scale.toRoman(root);
+            var minor = major.toLowerCase();
+            var type = this.type;
+            if (type && type.notation) {
+                return type.notation.replace("x", minor).replace("Xm", minor).replace("X", major).replace("/Y", "");
+            }
         }
     }
 

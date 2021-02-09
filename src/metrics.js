@@ -1,10 +1,11 @@
+import Scale from "./scale.js";
 import { colorFromCents } from "./utility";
 
 // GLOBALS
 var tuningList = {};
 
 // TODO migrate to chord only?
-export function updateMetrics(keyboard) {
+export function updateMetrics(keyboard, fundamental) {
     // Pitch analysis
     updateNotes(keyboard);
     updateTuningList(keyboard);
@@ -15,13 +16,13 @@ export function updateMetrics(keyboard) {
     updateImpliedFundamental(chord);
     updateLowestSharedOvertone(chord);
     updateRoot(chord);
-    updateChordNames(chord);
+    updateChordNames(chord, fundamental);
     updateChordTunings(chord);
 }
 
 export function clearMetrics(keyboard) {
     tuningList = {};
-    updateTuningList(keyboard);
+    updateMetrics(keyboard);
 }
 
 function updateNotes(keyboard) {
@@ -79,11 +80,16 @@ function updateRoot(chord) {
     }
 }
 
-function updateChordNames(chord) {
+function updateChordNames(chord, fundamental) {
+    var scale = new Scale(fundamental);
+    var roman = chord.toRoman(scale);
     var notation = chord.notation;
     var name = chord.name;
     var integerNotation = chord.integerNotation;
-    if (notation) {
+    if (roman) {
+        document.getElementById("chordtype").innerHTML = roman;
+    }
+    else if (notation) {
         document.getElementById("chordtype").innerHTML = notation;
     }
     else if (name) {

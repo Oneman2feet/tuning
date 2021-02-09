@@ -1,4 +1,5 @@
 import Pitch from './pitch.js';
+import Scale from './scale.js';
 import Keyboard from './keyboard.js';
 
 function tuneChord(keyboard, anchor, noteToPlay) {
@@ -42,15 +43,20 @@ export default function updateCircleOfFifthsTuning(keyboard, fundamental, noteTo
     var chord = keyboard.chord;
     var chordType = keyboard.chord.type;
     if (chordType && chordType.tuning) {
-
+        // Tune root by circle of fifths
         var root = chord.root;
-        console.log(root.toString());
+        var scale = new Scale(fundamental);
+        var ratio = scale.toCircleOfFifthsRatio(root);
 
         // tune chord around the root
-        tuneChord(keyboard, root, noteToPlay);
-
-        // TODO: detect the function of the root in relation to the fundamental
-        // and tune according to the circle of fifths
+        if (ratio) {
+            var anchor = new Pitch(root.midiNoteNumber, fundamental.frequencyHz * ratio);
+            anchor.resetOctave();
+            tuneChord(keyboard, anchor, noteToPlay);
+        }
+        else {
+            tuneChord(keyboard, root, noteToPlay);
+        }
     }
     else {
         Keyboard.removeAnchor();
