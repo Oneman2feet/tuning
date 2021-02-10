@@ -6,7 +6,7 @@ import Pitch from './pitch.js';
 
 // For now we use this to compute roman numeral and scale degree
 
-const romanNumeral = ["I", "bII", "II", "bIII", "III", "IV", "bV", "V", "bVI", "VI", "bVII", "VII"];
+const romanNumeral = ["I", "\u266dII", "II", "\u266dIII", "III", "IV", "\u266dV", "V", "\u266dVI", "VI", "\u266dVII", "VII"];
 const circleOfFifths = ["I", "IV/IV/IV/IV/IV", "V/V", "IV/IV/IV", "V/V/V/V", "IV", "x", "V", "IV/IV/IV/IV", "V/V/V", "IV/IV", "V/V/V/V/V"];
 const ratios = [1, 256/243, 9/8, 32/27, 81/64, 4/3, undefined, 3/2, 128/81, 27/16, 16/9, 243/128];
 
