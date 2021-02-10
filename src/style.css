@@ -145,6 +145,7 @@ input[type="radio"]:hover + label {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    height: 350px;
 }
 
 #metrics #notes {
@@ -226,4 +227,9 @@ input[type="radio"]:hover + label {
 #fundamental em {
     font-weight: lighter;
     font-size: 32px;
+}
+
+#tuningContainer {
+    display: flex;
+    flex-direction: row;
 }

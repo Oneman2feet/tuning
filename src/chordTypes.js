@@ -18,9 +18,9 @@ export const chordTypes = {
 
 // ------------- TRIADS ---------------------------
 
-    "0,4,7": { "root": 0, "name": "Major", "notation": "X", "tuning": "4:5:6"},
-    "0,3,8": { "root": 2, "name": "Major (first inversion)", "notation": "X/Y", "tuning": "5:6:8"},
-    "0,5,9": { "root": 1, "name": "Major (second inversion)", "notation": "X/Y", "tuning": "6:8:10"},
+    "0,4,7": { "root": 0, "name": "Major", "notation": "X", "tuning": "4:5:6", "type": "anchor"},
+    "0,3,8": { "root": 2, "name": "Major (first inversion)", "notation": "X/Y", "tuning": "5:6:8", "type": "anchor"},
+    "0,5,9": { "root": 1, "name": "Major (second inversion)", "notation": "X/Y", "tuning": "6:8:10", "type": "anchor"},
     "0,3,7": { "root": 0, "name": "Minor", "notation": "Xm", "tuning": "10:12:15"}, // just minor triad
     "0,4,9": { "root": 2, "name": "Minor (first inversion)", "notation": "Xm/Y", "tuning": "12:15:20"},
     "0,5,8": { "root": 1, "name": "Minor (second inversion)", "notation": "Xm/Y", "tuning": "15:20:24"},
@@ -38,10 +38,10 @@ export const chordTypes = {
 
 // -------------- TETRADS -------------------------
 
-    "0,4,7,10": { "root": 0, "name": "Dominant Seventh", "notation": "X<sup>7</sup>", "tuning": "4:5:6:7"},
-    "0,3,6,8": { "root": 3, "name": "Dominant Seventh (first inversion)", "notation": "X<sup>7</sup>/Y", "tuning": "5:6:7:8"},
-    "0,3,5,9": { "root": 2, "name": "Dominant Seventh (second inversion)", "notation": "X<sup>7</sup>/Y", "tuning": "6:7:8:10"},
-    "0,2,6,9": { "root": 1, "name": "Dominant Seventh (third inversion)", "notation": "X<sup>7</sup>/Y", "tuning": "7:8:10:12"},
+    "0,4,7,10": { "root": 0, "name": "Dominant Seventh", "notation": "X<sup>7</sup>", "tuning": "4:5:6:7", "type": "anchor"},
+    "0,3,6,8": { "root": 3, "name": "Dominant Seventh (first inversion)", "notation": "X<sup>7</sup>/Y", "tuning": "5:6:7:8", "type": "anchor"},
+    "0,3,5,9": { "root": 2, "name": "Dominant Seventh (second inversion)", "notation": "X<sup>7</sup>/Y", "tuning": "6:7:8:10", "type": "anchor"},
+    "0,2,6,9": { "root": 1, "name": "Dominant Seventh (third inversion)", "notation": "X<sup>7</sup>/Y", "tuning": "7:8:10:12", "type": "anchor"},
     "0,3,7,10": { "root": 0, "name": "Minor Seventh", "notation": "Xm<sup>7</sup>", "tuning": "10:12:15:18"}, // note there is also septimal tuning
     "0,4,7,9": { "root": 0, "name": "Major Sixth", "notation": "XM6", "tuning": "12:15:18:20"},
     "0,3,5,8": { "root": 3, "name": "Major Sixth (first inversion)", "notation": "XM6/Y", "tuning": "15:18:20:24"},

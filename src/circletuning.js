@@ -46,11 +46,12 @@ export default function updateCircleOfFifthsTuning(keyboard, fundamental, noteTo
     var chordType = keyboard.chord.type;
     if (chordType && chordType.tuning) {
 
-        // Get the root of the current chord
+        // Get the root and type of the current chord
         var root = chord.root;
+        var chordType = chord.type;
 
-        // Only move the tonic if we have all four voices
-        if (chord.integerNotation.length > 3) {
+        // Only move the tonic if the chord is a non-passing chord (major or seventh chord)
+        if (chordType.type && chordType.type == "anchor") {
             // If the current tonic is the fundamental, jump wherever you'd like to
             if (CircleOfFifths.getTonic() == fundamental.pitchClass) {
                 CircleOfFifths.setTonicPitch(root);

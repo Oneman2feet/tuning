@@ -1,4 +1,5 @@
 #keyboard {
+    height: 200px;
     margin: 20px;
     display: inline-flex;
     flex-direction: row;
