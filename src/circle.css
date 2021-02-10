@@ -1,0 +1,25 @@
+#circleOfFifths {
+    width: 200px;
+    height: 200px;
+    padding: 10px;
+}
+
+#circleOfFifths > div {
+    position: relative;
+}
+
+#circleOfFifths .key {
+    position: absolute;
+    text-align: center;
+    line-height: 35px;
+    width: 35px;
+    height: 35px;
+    background-color: lightgray;
+    border-radius: 100%;
+}
+
+#circleOfFifths .active {
+    background-color: gray;
+    color: white;
+    font-weight: bold;
+}

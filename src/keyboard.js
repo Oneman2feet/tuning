@@ -105,6 +105,10 @@ export default class Keyboard {
         this.queue.forEach((pitch) => {
             this.play(pitch);
         });
+        this.clearQueue();
+    }
+
+    clearQueue() {
         this.queue = [];
     }
 

@@ -1,6 +1,8 @@
 import Pitch from './pitch.js';
 import Scale from './scale.js';
 import Keyboard from './keyboard.js';
+import CircleOfFifths from './circleoffifths.js';
+import updateDynamicTuning from './dynamictuning.js';
 
 function tuneChord(keyboard, anchor, noteToPlay) {
     // Update UI
@@ -43,19 +45,46 @@ export default function updateCircleOfFifthsTuning(keyboard, fundamental, noteTo
     var chord = keyboard.chord;
     var chordType = keyboard.chord.type;
     if (chordType && chordType.tuning) {
-        // Tune root by circle of fifths
-        var root = chord.root;
-        var scale = new Scale(fundamental);
-        var ratio = scale.toCircleOfFifthsRatio(root);
 
-        // tune chord around the root
-        if (ratio) {
-            var anchor = new Pitch(root.midiNoteNumber, fundamental.frequencyHz * ratio);
-            anchor.resetOctave();
-            tuneChord(keyboard, anchor, noteToPlay);
+        // TODO: first detect if a chord is full enough to decide on (aka not just a unison or interval)
+
+        // Get the root of the current chord
+        var root = chord.root;
+
+        // If the root of the chord is two steps away, move towards it
+        if (root.pitchClass == CircleOfFifths.getSupertonic()) {
+            CircleOfFifths.moveToDominant();
+        }
+        else if (root.pitchClass == CircleOfFifths.getSubtonic()) {
+            CircleOfFifths.moveToSubdominant();
+        }
+
+        // If the root of the chord is the fundamental, return to it
+        if (root.pitchClass == fundamental.pitchClass) {
+            CircleOfFifths.setTonicPitch(root);
+        }
+
+        // If the root is within one step, tune by circle of fifths ratio with fallback on current root tuning
+        if (root.pitchClass == CircleOfFifths.getTonic() || root.pitchClass == CircleOfFifths.getDominant() || root.pitchClass == CircleOfFifths.getSubdominant()) {
+            var scale = new Scale(fundamental);
+            var ratio = scale.toCircleOfFifthsRatio(root);
+
+            if (ratio) {
+                var anchor = new Pitch(root.midiNoteNumber, fundamental.frequencyHz * ratio);
+                anchor.resetOctave();
+                console.log(anchor.toString());
+                tuneChord(keyboard, anchor, noteToPlay);
+            }
+            else {
+                tuneChord(keyboard, root, noteToPlay);
+            }
         }
         else {
-            tuneChord(keyboard, root, noteToPlay);
+            console.log("fallback");
+            // Otherwise, fallback on dynamic tuning relative to the circle of fifths tonic
+            // Todo make the tonic justly tuned
+            keyboard.clearQueue();
+            updateDynamicTuning(keyboard, new Pitch(CircleOfFifths.getTonic()), noteToPlay)
         }
     }
     else {

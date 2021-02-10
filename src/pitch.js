@@ -44,7 +44,7 @@ export default class Pitch {
 
     // Without octave numbers
     getPitchClassName(useSharps) {
-        return this.getNoteName(useSharps).replace(/[0-9]/g, "");
+        return this.getNoteName(useSharps).replace(/[0-9\-]/g, "");
     }
 
     // Interval as frequency ratio

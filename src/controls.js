@@ -1,5 +1,4 @@
 import {start} from 'tone';
-
 import Tune from './tune.js';
 import Pitch from './pitch.js'
 import Keyboard from './keyboard.js';
@@ -8,6 +7,7 @@ import setupMidiInput from './input.js';
 import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
 import updateCircleOfFifthsTuning from './circletuning.js';
+import CircleOfFifths from './circleoffifths.js';
 import './style.css';
 
 var tune;
@@ -20,6 +20,7 @@ function setFundamental(pitchClass) {
     fundamental = new Pitch(parseInt(pitchClass) + C4);
     tune.tonicize(fundamental.frequencyHz);
     document.getElementById("fundamental").innerHTML = "<strong>" + fundamental.getNoteName() + "</strong> " + fundamental.centsFromEqualPrint + " <em>(" + fundamental.frequencyHz.toFixed(2) + ")</em>";
+    CircleOfFifths.setTonicPitch(fundamental);
 }
 
 function noteOn(e) {
@@ -113,6 +114,9 @@ window.onload = function() {
             // Load the selected scale
             var scale = document.querySelector('input[name="temperament"]:checked').value;
             tune.loadScale(scale);
+
+            // initialize circle of fifths
+            CircleOfFifths.draw();
 
             // Set the fundamental using equal temperament and checked tonic
             var pitchClass = document.querySelector('input[name="tonic"]:checked').value;
