@@ -53,9 +53,14 @@ export default class Keyboard {
         }
     }
 
+    static centsToPitchBend(cents) {
+        return cents / 200; // 1 means up a whole step, -1 is down a whole step
+    }
+
     play(pitch) {
         // MIDI
         this.midiOutput.playNote(pitch.midiNoteNumber, Keyboard.pitchClassToMidiChannel(pitch.pitchClass));
+        this.midiOutput.sendPitchBend(Keyboard.centsToPitchBend(pitch.centsFromEqual), Keyboard.pitchClassToMidiChannel(pitch.pitchClass));
         // Sound
         this.synth.triggerAttack(pitch.frequencyHz, now(), volOfFreq(pitch.frequencyHz));
         // Data
@@ -77,6 +82,8 @@ export default class Keyboard {
 
     // TODO: change pitch without triggering a new attack
     retune(pitch, newPitch) {
+        // MIDI
+        this.midiOutput.sendPitchBend(Keyboard.centsToPitchBend(newPitch.centsFromEqual), Keyboard.pitchClassToMidiChannel(newPitch.pitchClass));
         // Sound
         this.synth.triggerRelease(pitch.frequencyHz, now());
         this.synth.triggerAttack(newPitch.frequencyHz, now(), volOfFreq(newPitch.frequencyHz));

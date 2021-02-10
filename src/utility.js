@@ -10,6 +10,7 @@ export function volOfFreq(freq) {
 
 // convert slider value to perceptual loudness value [0,1]
 export function sliderVolume(value) {
+    if (value == 0) return -Infinity; // go to true zero
     return 8.3 + 1000 / (-value-20); // y-intercept of -40, x-intercept of 0
 }
 

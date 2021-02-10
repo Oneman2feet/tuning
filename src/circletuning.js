@@ -85,7 +85,6 @@ export default function updateCircleOfFifthsTuning(keyboard, fundamental, noteTo
         }
         // Otherwise, fallback on dynamic tuning relative to the circle of fifths tonic
         else {
-            console.log("fallback");
             // Todo make the tonic justly tuned
             keyboard.clearQueue();
             updateDynamicTuning(keyboard, new Pitch(CircleOfFifths.getTonic()), noteToPlay)
