@@ -101,6 +101,10 @@ export default class Keyboard {
     }
 
     clear() {
+        // MIDI TODO
+        //this.pitches.forEach((pitch) => {
+        //    this.midiOutput.stopNote(pitch.midiNoteNumber, Keyboard.pitchClassToMidiChannel(pitch.pitchClass));
+        //});
         // Sound
         this.synth.releaseAll();
         // Data
