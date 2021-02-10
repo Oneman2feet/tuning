@@ -12,7 +12,10 @@ const blackKeys = [1,3,6,8,10];
 // Sound is managed with a synth from tone.js
 export default class Keyboard {
 
-    constructor() {
+    constructor(midiOutput) {
+        // Set the MIDI output
+        this.midiOutput = midiOutput;
+
         // create a synth and connect it to the main output
         this.synth = new PolySynth().toDestination();
 
@@ -40,7 +43,19 @@ export default class Keyboard {
         Keyboard.draw();
     }
 
+    // Mapping from pitch class to midi channels
+    static pitchClassToMidiChannel(pitchClass) {
+        if (pitchClass < 9) {
+            return pitchClass + 1; // one-indexed midi channels
+        }
+        else {
+            return pitchClass + 2; // avoid channel 10 which is for percussion
+        }
+    }
+
     play(pitch) {
+        // MIDI
+        this.midiOutput.playNote(pitch.midiNoteNumber, Keyboard.pitchClassToMidiChannel(pitch.pitchClass));
         // Sound
         this.synth.triggerAttack(pitch.frequencyHz, now(), volOfFreq(pitch.frequencyHz));
         // Data
@@ -50,6 +65,8 @@ export default class Keyboard {
     }
 
     release(pitch) {
+        // MIDI
+        this.midiOutput.stopNote(pitch.midiNoteNumber, Keyboard.pitchClassToMidiChannel(pitch.pitchClass));
         // Sound
         this.synth.triggerRelease(pitch.frequencyHz, now());
         // Data

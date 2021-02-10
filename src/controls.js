@@ -3,7 +3,7 @@ import Tune from './tune.js';
 import Pitch from './pitch.js'
 import Keyboard from './keyboard.js';
 import {sliderVolume} from './utility.js';
-import setupMidiInput from './input.js';
+import {setupMidiInput, setupMidiOutput} from './midi.js';
 import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
 import updateCircleOfFifthsTuning from './circletuning.js';
@@ -97,13 +97,14 @@ window.onload = function() {
 
     // Start audio system
     document.getElementById("enterBtn").addEventListener('click', async () => {
-        var succeeded = setupMidiInput(noteOn, noteOff);
-        if (succeeded) {
+        var output = setupMidiOutput();
+        var input = setupMidiInput(noteOn, noteOff);
+        if (input && output) {
             // start tone.js
             await start();
 
             // initialize keyboard
-            keyboard = new Keyboard();
+            keyboard = new Keyboard(output);
 
             // set the volume
             keyboard.volume = sliderVolume(document.getElementById("volslider").value);

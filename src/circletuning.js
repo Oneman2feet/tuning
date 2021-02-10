@@ -77,7 +77,6 @@ export default function updateCircleOfFifthsTuning(keyboard, fundamental, noteTo
             if (ratio) {
                 var anchor = new Pitch(root.midiNoteNumber, fundamental.frequencyHz * ratio);
                 anchor.resetOctave();
-                console.log(anchor.toString());
                 tuneChord(keyboard, anchor, noteToPlay);
             }
             else {
