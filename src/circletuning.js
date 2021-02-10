@@ -46,22 +46,26 @@ export default function updateCircleOfFifthsTuning(keyboard, fundamental, noteTo
     var chordType = keyboard.chord.type;
     if (chordType && chordType.tuning) {
 
-        // TODO: first detect if a chord is full enough to decide on (aka not just a unison or interval)
-
         // Get the root of the current chord
         var root = chord.root;
 
-        // If the root of the chord is two steps away, move towards it
-        if (root.pitchClass == CircleOfFifths.getSupertonic()) {
-            CircleOfFifths.moveToDominant();
-        }
-        else if (root.pitchClass == CircleOfFifths.getSubtonic()) {
-            CircleOfFifths.moveToSubdominant();
-        }
-
-        // If the root of the chord is the fundamental, return to it
-        if (root.pitchClass == fundamental.pitchClass) {
-            CircleOfFifths.setTonicPitch(root);
+        // Only move the tonic if we have all four voices
+        if (chord.integerNotation.length > 3) {
+            // If the current tonic is the fundamental, jump wherever you'd like to
+            if (CircleOfFifths.getTonic() == fundamental.pitchClass) {
+                CircleOfFifths.setTonicPitch(root);
+            }
+            // If the root of the chord is the fundamental, return to it
+            else if (root.pitchClass == fundamental.pitchClass) {
+                CircleOfFifths.setTonicPitch(root);
+            }
+            // If the root of the chord is within two steps away, move towards it
+            else if (root.pitchClass == CircleOfFifths.getSupertonic() || root.pitchClass == CircleOfFifths.getDominant()) {
+                CircleOfFifths.moveToDominant();
+            }
+            else if (root.pitchClass == CircleOfFifths.getSubtonic() || root.pitchClass == CircleOfFifths.getSubdominant()) {
+                CircleOfFifths.moveToSubdominant();
+            }
         }
 
         // If the root is within one step, tune by circle of fifths ratio with fallback on current root tuning
@@ -79,9 +83,9 @@ export default function updateCircleOfFifthsTuning(keyboard, fundamental, noteTo
                 tuneChord(keyboard, root, noteToPlay);
             }
         }
+        // Otherwise, fallback on dynamic tuning relative to the circle of fifths tonic
         else {
             console.log("fallback");
-            // Otherwise, fallback on dynamic tuning relative to the circle of fifths tonic
             // Todo make the tonic justly tuned
             keyboard.clearQueue();
             updateDynamicTuning(keyboard, new Pitch(CircleOfFifths.getTonic()), noteToPlay)
