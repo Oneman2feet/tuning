@@ -4,9 +4,15 @@ import {Fraction} from 'mathjs';
 export default class Pitch {
     // A Pitch is a midi key played at a particular frequency, with an optional channel
     constructor(midiNoteNumber, frequencyHz, channel) {
-        this.midiNoteNumber = midiNoteNumber;
+        if (midiNoteNumber !== undefined) {
+            this.midiNoteNumber = midiNoteNumber;
+        }
+        else {
+            // Determine midi from equal temperament
+            this.midiNoteNumber = Frequency(frequencyHz).toMidi();
+        }
 
-        if (frequencyHz) {
+        if (frequencyHz !== undefined) {
             this.frequencyHz = frequencyHz;
         }
         else {

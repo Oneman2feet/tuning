@@ -8,6 +8,7 @@ import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
 import updateCircleOfFifthsTuning from './circletuning.js';
 import CircleOfFifths from './circleoffifths.js';
+import setupTuner from './tuner.js';
 import './style.css';
 
 var tune;
@@ -121,6 +122,10 @@ window.onload = function() {
         };
     });
 
+    document.getElementById("followChannel").onchange = function() {
+        keyboard.setFollowedChannel(this.value);
+    };
+
     document.getElementById("presets").onchange = function() {
         var vowel = Vowels[this.value];
         if (vowel) {
@@ -161,6 +166,9 @@ window.onload = function() {
 
             // change UI
             document.getElementById("enterScreen").className = "entered";
+
+            // start Tuner
+            setupTuner(keyboard);
         }
     });
 }

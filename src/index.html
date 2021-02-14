@@ -49,30 +49,45 @@
                     <button id="clearNotes">Clear Notes</button>
                 </div>
                 <div id="channels">
-                    <h2>Mute</h2>
-                    <div>
-                        <p>Channel 1</p>
-                        <input type="checkbox" name="channel1" value="Mute">
+                    <div id="mute">
+                        <h2>Mute</h2>
+                        <div>
+                            <p>Channel 1</p>
+                            <input type="checkbox" name="channel1" value="Mute">
+                        </div>
+                        <div>
+                            <p>Channel 2</p>
+                            <input type="checkbox" name="channel2" value="Mute">
+                        </div>
+                        <div>
+                            <p>Channel 3</p>
+                            <input type="checkbox" name="channel3" value="Mute">
+                        </div>
+                        <div>
+                            <p>Channel 4</p>
+                            <input type="checkbox" name="channel4" value="Mute">
+                        </div>
+                        <div>
+                            <p>Channel 5</p>
+                            <input type="checkbox" name="channel5" value="Mute">
+                        </div>
+                        <div>
+                            <p>Channel 6</p>
+                            <input type="checkbox" name="channel6" value="Mute">
+                        </div>
                     </div>
-                    <div>
-                        <p>Channel 2</p>
-                        <input type="checkbox" name="channel2" value="Mute">
-                    </div>
-                    <div>
-                        <p>Channel 3</p>
-                        <input type="checkbox" name="channel3" value="Mute">
-                    </div>
-                    <div>
-                        <p>Channel 4</p>
-                        <input type="checkbox" name="channel4" value="Mute">
-                    </div>
-                    <div>
-                        <p>Channel 5</p>
-                        <input type="checkbox" name="channel5" value="Mute">
-                    </div>
-                    <div>
-                        <p>Channel 6</p>
-                        <input type="checkbox" name="channel6" value="Mute">
+                    <div id="follow">
+                        <h2>Follow</h2>
+                        <select name="followChannel" id="followChannel">
+                            <option>Select Channel...</option>
+                            <option value="1">Channel 1</option>
+                            <option value="2">Channel 2</option>
+                            <option value="3">Channel 3</option>
+                            <option value="4">Channel 4</option>
+                            <option value="5">Channel 5</option>
+                            <option value="6">Channel 6</option>
+                            <option value="7">Channel 7</option>
+                        </select>
                     </div>
                 </div>
                 <div id="preset">
@@ -87,6 +102,11 @@
                         <option value="a">&#97;</option>
                         <option value="A">&#593;</option>
                     </select>
+                </div>
+                <div id="tuner">
+                    <h2>Tuner</h2>
+                    <p id="sungPitch"></p>
+                    <p id="followedPitch"></p>
                 </div>
             </div>
             <div id="metrics">

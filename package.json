@@ -16,6 +16,7 @@
   "dependencies": {
     "fraction.js": "^4.0.13",
     "mathjs": "^9.1.0",
+    "pitchy": "^2.0.3",
     "tone": "^14.7.77",
     "webmidi": "^2.5.1"
   },

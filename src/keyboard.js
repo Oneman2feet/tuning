@@ -40,8 +40,9 @@ export default class Keyboard {
         this.pitches = {};
         this.queue = [];
 
-        // Default option is all channels audible
+        // Default option is all channels audible, following none
         this.mutedChannels = new Set();
+        this.followedChannel = 0;
 
         // initialize UI
         Keyboard.draw();
@@ -77,6 +78,14 @@ export default class Keyboard {
 
     setPreset(preset) {
         this.midiOutput.sendProgramChange(preset);
+    }
+
+    setFollowedChannel(channel) {
+        this.followedChannel = channel;
+    }
+
+    getFollowedPitch() {
+        return this.pitchList.find((pitch) => pitch.channel == this.followedChannel);
     }
 
     play(pitch) {
