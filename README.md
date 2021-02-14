@@ -38,3 +38,4 @@
 - [VirtualMidiSynth](https://coolsoft.altervista.org/en/virtualmidisynth) to make sound with your MIDI creations
 - [MidiEditor](https://www.midieditor.org/) for recording, adjusting, and playing back piano rolls
 - [Polyphone](https://www.polyphone-soundfonts.com/) for editing sound fonts
+- [SynthFont](http://www.synthfont.com/index.html) for editing and playing MIDI files with different sound fonts

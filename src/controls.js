@@ -3,7 +3,7 @@ import Tune from './tune.js';
 import Pitch from './pitch.js'
 import Keyboard from './keyboard.js';
 import {sliderVolume} from './utility.js';
-import {ALL_NOTES_OFF, setupMidiInput, setupMidiOutput} from './midi.js';
+import {ALL_NOTES_OFF, setupMidiInput, setupMidiOutput, Vowels} from './midi.js';
 import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
 import updateCircleOfFifthsTuning from './circletuning.js';
@@ -71,9 +71,15 @@ function noteOff(e) {
     updateMetrics(keyboard, fundamental);
 }
 
+function programchange(e) {
+    // Note that channel information is not observed
+    // since we use channel in output to tune individual pitch classes
+    keyboard.setPreset(e.value);
+}
+
 function midimessage(e) {
     if (e.data && e.data[1] && e.data[1] == ALL_NOTES_OFF) {
-        stop();
+        keyboard.clear();
     }
 }
 
@@ -115,10 +121,20 @@ window.onload = function() {
         };
     });
 
+    document.getElementById("presets").onchange = function() {
+        var vowel = Vowels[this.value];
+        if (vowel) {
+            keyboard.setPreset(vowel);
+        }
+        else {
+            keyboard.setPreset(0);
+        }
+    };
+
     // Start audio system
     document.getElementById("enterBtn").addEventListener('click', async () => {
         var output = setupMidiOutput();
-        var input = setupMidiInput(noteOn, noteOff, midimessage);
+        var input = setupMidiInput(noteOn, noteOff, programchange, midimessage);
         if (input && output) {
             // start tone.js
             await start();

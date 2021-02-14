@@ -75,6 +75,10 @@ export default class Keyboard {
         }
     }
 
+    setPreset(preset) {
+        this.midiOutput.sendProgramChange(preset);
+    }
+
     play(pitch) {
         // MIDI
         this.midiOutput.playNote(pitch.midiNoteNumber, Keyboard.pitchClassToMidiChannel(pitch.pitchClass), this.optionsForChannel(pitch.channel));
