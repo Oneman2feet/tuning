@@ -24,8 +24,6 @@ function setFundamental(pitchClass) {
 }
 
 function noteOn(e) {
-    console.log(e);
-
     // convert from midi to scale
     var note = tune.note(e.note.number - fundamental.midiNoteNumber - 12, 1);
 
@@ -36,7 +34,7 @@ function noteOn(e) {
     }
 
     // Make a pitch
-    var pitch = new Pitch(e.note.number, note);
+    var pitch = new Pitch(e.note.number, note, e.channel);
 
     // dynamic and circle of fifths tuning
     if (document.getElementById("dynamic").checked) {
@@ -103,7 +101,19 @@ window.onload = function() {
 
     document.getElementById("volslider").oninput = function() {
         keyboard.volume =  sliderVolume(this.value);
-    }
+    };
+
+    [...document.querySelectorAll('#channels input[type="checkbox"]')].forEach((elem) => {
+        elem.onchange = () => {
+            var channel = parseInt(elem.name.replace("channel", ""));
+            if (elem.checked) {
+                keyboard.muteChannel(channel);
+            }
+            else {
+                keyboard.unmuteChannel(channel);
+            }
+        };
+    });
 
     // Start audio system
     document.getElementById("enterBtn").addEventListener('click', async () => {

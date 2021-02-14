@@ -40,6 +40,9 @@ export default class Keyboard {
         this.pitches = {};
         this.queue = [];
 
+        // Default option is all channels audible
+        this.mutedChannels = new Set();
+
         // initialize UI
         Keyboard.draw();
     }
@@ -58,9 +61,23 @@ export default class Keyboard {
         return cents / 200; // 1 means up a whole step, -1 is down a whole step
     }
 
+    muteChannel(channel) {
+        this.mutedChannels.add(channel);
+    }
+
+    unmuteChannel(channel) {
+        this.mutedChannels.delete(channel);
+    }
+
+    optionsForChannel(channel) {
+        if (this.mutedChannels.has(channel)) {
+            return { "velocity": 0 };
+        }
+    }
+
     play(pitch) {
         // MIDI
-        this.midiOutput.playNote(pitch.midiNoteNumber, Keyboard.pitchClassToMidiChannel(pitch.pitchClass));
+        this.midiOutput.playNote(pitch.midiNoteNumber, Keyboard.pitchClassToMidiChannel(pitch.pitchClass), this.optionsForChannel(pitch.channel));
         this.midiOutput.sendPitchBend(Keyboard.centsToPitchBend(pitch.centsFromEqual), Keyboard.pitchClassToMidiChannel(pitch.pitchClass));
         // Sound
         this.synth.triggerAttack(pitch.frequencyHz, now(), volOfFreq(pitch.frequencyHz));
