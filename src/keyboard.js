@@ -3,6 +3,7 @@ import './keyboard.css';
 import Chord from './chord.js';
 import {now, PolySynth} from 'tone';
 import {colorFromCents, volOfFreq} from './utility.js';
+import { ALL_NOTES_OFF } from './midi';
 
 // Constant for which pitch classes are black keys
 const blackKeys = [1,3,6,8,10];
@@ -101,8 +102,8 @@ export default class Keyboard {
     }
 
     clear() {
-        // MIDI TODO
-        this.midiOutput.sendReset();
+        // MIDI
+        this.midiOutput.sendChannelMode(ALL_NOTES_OFF);
         // Sound
         this.synth.releaseAll();
         // Data

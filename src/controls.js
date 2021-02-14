@@ -3,7 +3,7 @@ import Tune from './tune.js';
 import Pitch from './pitch.js'
 import Keyboard from './keyboard.js';
 import {sliderVolume} from './utility.js';
-import {setupMidiInput, setupMidiOutput} from './midi.js';
+import {ALL_NOTES_OFF, setupMidiInput, setupMidiOutput} from './midi.js';
 import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
 import updateCircleOfFifthsTuning from './circletuning.js';
@@ -24,6 +24,8 @@ function setFundamental(pitchClass) {
 }
 
 function noteOn(e) {
+    console.log(e);
+
     // convert from midi to scale
     var note = tune.note(e.note.number - fundamental.midiNoteNumber - 12, 1);
 
@@ -71,6 +73,17 @@ function noteOff(e) {
     updateMetrics(keyboard, fundamental);
 }
 
+function midimessage(e) {
+    if (e.data && e.data[1] && e.data[1] == ALL_NOTES_OFF) {
+        stop();
+    }
+}
+
+function stop() {
+    keyboard.clear();
+    clearMetrics(keyboard);
+}
+
 window.onload = function() {
     // Controls
     [...document.getElementsByName("temperament")].forEach((elem) => {
@@ -86,10 +99,7 @@ window.onload = function() {
         };
     });
 
-    document.getElementById("clearNotes").onclick = function() {
-        keyboard.clear();
-        clearMetrics(keyboard);
-    }
+    document.getElementById("clearNotes").onclick = stop;
 
     document.getElementById("volslider").oninput = function() {
         keyboard.volume =  sliderVolume(this.value);
@@ -98,7 +108,7 @@ window.onload = function() {
     // Start audio system
     document.getElementById("enterBtn").addEventListener('click', async () => {
         var output = setupMidiOutput();
-        var input = setupMidiInput(noteOn, noteOff);
+        var input = setupMidiInput(noteOn, noteOff, midimessage);
         if (input && output) {
             // start tone.js
             await start();
