@@ -68,6 +68,10 @@ button {
     width: 120px;
 }
 
+#channels p {
+    display: inline-block;
+}
+
 #controls > div, #metrics > div {
     display: inline-block;
     vertical-align: top;
