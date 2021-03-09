@@ -8,6 +8,27 @@ import { ALL_NOTES_OFF } from './midi';
 // Constant for which pitch classes are black keys
 const blackKeys = [1,3,6,8,10];
 
+// Modeled after partials in my voice
+const voice = {
+    "type": "custom", // set to "custom" for partials to be used
+    "partialCount": 16,
+    "partials": [
+        1, 0.1, 0.2, 0.1, 0.2, 0.01,
+        0.008, 0.008, 0.0025, 0.004, 0.0025, 0.0025, 0.004, 0.0025, 0.0005, 0.0025
+    ]
+};
+
+const harmonic = {
+    "type": "custom", // set to "custom" for partials to be used
+    "partialCount": 128,
+    "partials": [
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+    ]
+}
+
 // Keyboard class manages the playing of pitches to create chords.
 // A pitch can be played or stopped, visual feedback is shown in UI.
 // Sound is managed with a synth from tone.js
@@ -26,14 +47,7 @@ export default class Keyboard {
                 "attack": 0.1,
                 "decay": 0
             },
-            "oscillator": {
-                "type": "custom", // set to "custom" for partials to be used
-                "partialCount": 16,
-                "partials": [
-                    1, 0.1, 0.2, 0.1, 0.2, 0.01,
-                    0.008, 0.008, 0.0025, 0.004, 0.0025, 0.0025, 0.004, 0.0025, 0.0005, 0.0025
-                ]
-            }
+            "oscillator": harmonic
         });
 
         // no notes playing yet, none queued
