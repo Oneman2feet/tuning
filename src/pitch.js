@@ -2,8 +2,8 @@ import {Frequency} from 'tone';
 import {Fraction} from 'mathjs';
 
 export default class Pitch {
-    // A Pitch is a midi key played at a particular frequency, with an optional channel
-    constructor(midiNoteNumber, frequencyHz, channel) {
+    // A Pitch is a midi key played at a particular frequency, with an optional channel and velocity
+    constructor(midiNoteNumber, frequencyHz, channel, velocity) {
         if (midiNoteNumber !== undefined) {
             this.midiNoteNumber = midiNoteNumber;
         }
@@ -21,6 +21,7 @@ export default class Pitch {
         }
 
         this.channel = channel;
+        this.velocity = velocity;
     }
 
     // Returns the pitch's equal-tempered counterpart

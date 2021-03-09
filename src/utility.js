@@ -25,6 +25,15 @@ export function colorFromCents(cents) {
     return "hsl(" + hue + "," + saturation + "%," + lightness + "%)";
 }
 
+// removes factors of two from the provided number
+export function removeOctave(number) {
+    var num = parseInt(number);
+    while (num % 2 == 0) {
+        num /= 2;
+    }
+    return num;
+};
+
 export function tuneChord(keyboard, anchor, noteToPlay) {
     // Update UI
     Keyboard.removeAnchor();
@@ -44,6 +53,10 @@ export function tuneChord(keyboard, anchor, noteToPlay) {
         var currentRatio = keyboard.chord.tuningMap[keyboard.chord.getInteger(pitch)];
         var tuned = new Pitch(pitch.midiNoteNumber, harmonicSeriesFundamental * currentRatio);
         tuned.resetOctave();
+
+        // experimental equation for balancing velocity based on complexity of ratio
+        var balance = 1 / Math.pow(removeOctave(currentRatio), 1/10);
+        tuned.velocity = balance;
 
         // adjust the noteToPlay without retune since it is still queued
         if (noteToPlay && pitch.midiNoteNumber == noteToPlay.midiNoteNumber) {

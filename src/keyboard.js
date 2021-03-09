@@ -124,7 +124,7 @@ export default class Keyboard {
         this.midiOutput.playNote(pitch.midiNoteNumber, Keyboard.pitchClassToMidiChannel(pitch.pitchClass), this.optionsForChannel(pitch.channel));
         this.midiOutput.sendPitchBend(Keyboard.centsToPitchBend(pitch.centsFromEqual), Keyboard.pitchClassToMidiChannel(pitch.pitchClass));
         // Sound
-        this.synth.triggerAttack(pitch.frequencyHz, now());//, volOfFreq(pitch.frequencyHz));
+        this.synth.triggerAttack(pitch.frequencyHz, now(), pitch.velocity);
         // Data
         this.addPlayingPitch(pitch);
         // Visual
@@ -148,7 +148,7 @@ export default class Keyboard {
         this.midiOutput.sendPitchBend(Keyboard.centsToPitchBend(newPitch.centsFromEqual), Keyboard.pitchClassToMidiChannel(newPitch.pitchClass));
         // Sound
         this.synth.triggerRelease(pitch.frequencyHz, now());
-        this.synth.triggerAttack(newPitch.frequencyHz, now());//, volOfFreq(newPitch.frequencyHz));
+        this.synth.triggerAttack(newPitch.frequencyHz, now(), newPitch.velocity);
         // Data
         if (pitch.midiNoteNumber == newPitch.midiNoteNumber) {
             //this.pitches[pitch.midiNoteNumber] = newPitch;

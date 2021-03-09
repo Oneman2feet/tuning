@@ -3,6 +3,7 @@ import Scale from './scale.js';
 import {Frequency} from 'tone';
 import {gcd, lcm} from 'mathjs';
 import {chordTypes, chordTunings} from './chordTypes.js';
+import {removeOctave} from './utility.js';
 
 export default class Chord {
 
@@ -38,13 +39,6 @@ export default class Chord {
 
     // Returns a frequency ratio list with octaves reduced
     get frequencyRatioEquivalenceClass() {
-        var removeOctave = function(number) {
-            var num = parseInt(number);
-            while (num % 2 == 0) {
-                num /= 2;
-            }
-            return num;
-        };
         return Array.from(new Set(this.frequencyRatios.map(removeOctave))).sort((a, b) => a-b);
     }
 
