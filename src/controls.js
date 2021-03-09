@@ -7,6 +7,7 @@ import {ALL_NOTES_OFF, setupMidiInput, setupMidiOutput, Vowels} from './midi.js'
 import {clearMetrics, updateMetrics} from './metrics.js';
 import updateDynamicTuning from './dynamictuning.js';
 import updateCircleOfFifthsTuning from './circletuning.js';
+import updateFollowedTuning from './followedtuning.js';
 import CircleOfFifths from './circleoffifths.js';
 import setupTuner from './tuner.js';
 import './style.css';
@@ -37,15 +38,20 @@ function noteOn(e) {
     // Make a pitch
     var pitch = new Pitch(e.note.number, note, e.channel);
 
-    // dynamic and circle of fifths tuning
-    if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(keyboard, fundamental, pitch); // this also plays the note
-    }
-    else if (document.getElementById("circle").checked) {
-        updateCircleOfFifthsTuning(keyboard, fundamental, pitch); // this also plays the note
-    }
-    else {
-        keyboard.play(pitch);
+    // different dynamic tuning modes
+    var mode = document.querySelector('input[name="temperament"]:checked').id;
+    switch (mode) {
+        case "followed":
+            updateFollowedTuning(keyboard, fundamental, pitch);
+            break;
+        case "dynamic":
+            updateDynamicTuning(keyboard, fundamental, pitch);
+            break;
+        case "circle":
+            updateCircleOfFifthsTuning(keyboard, fundamental, pitch);
+            break;
+        default:
+            keyboard.play(pitch); // no re-tuning needed
     }
 
     updateMetrics(keyboard, fundamental);
@@ -61,12 +67,20 @@ function noteOff(e) {
         console.log("released note that was not pressed: " + e.note.name + e.note.octave);
     }
 
-    // dynamic and circle of fifths tuning
-    if (document.getElementById("dynamic").checked) {
-        updateDynamicTuning(keyboard, fundamental);
-    }
-    else if (document.getElementById("circle").checked) {
-        updateCircleOfFifthsTuning(keyboard, fundamental);
+    // different dynamic tuning modes
+    var mode = document.querySelector('input[name="temperament"]:checked').id;
+    switch (mode) {
+        case "followed":
+            updateFollowedTuning(keyboard, fundamental);
+            break;
+        case "dynamic":
+            updateDynamicTuning(keyboard, fundamental);
+            break;
+        case "circle":
+            updateCircleOfFifthsTuning(keyboard, fundamental);
+            break;
+        default:
+            // no re-tuning needed
     }
 
     updateMetrics(keyboard, fundamental);

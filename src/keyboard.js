@@ -80,12 +80,16 @@ export default class Keyboard {
         this.midiOutput.sendProgramChange(preset);
     }
 
+    getChannelPitch(channel) {
+        return this.pitchList.find((pitch) => pitch.channel == channel);
+    }
+
     setFollowedChannel(channel) {
         this.followedChannel = channel;
     }
 
     getFollowedPitch() {
-        return this.pitchList.find((pitch) => pitch.channel == this.followedChannel);
+        return this.getChannelPitch(this.followedChannel);
     }
 
     play(pitch) {
