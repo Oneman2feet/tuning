@@ -18,6 +18,19 @@ const voice = {
     ]
 };
 
+const ring = {
+    "type": "custom", // set to "custom" for partials to be used
+    "partialCount": 48,
+    "partials": [
+        1, 1, 1, 1, 1, 1, 0.8, 1,
+        1, 1, 0.7, 1, 0, 1, 1, 1,
+        0, 0.9, 0.5, 0, 0.8, 0, 0, 0.7,
+        0.6, 0, 0, 0.5, 0, 0, 0, 0.4,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0.3, 0, 0, 0, 0, 0, 0
+    ]
+}
+
 const harmonic = {
     "type": "custom", // set to "custom" for partials to be used
     "partialCount": 128,
@@ -47,7 +60,7 @@ export default class Keyboard {
                 "attack": 0.1,
                 "decay": 0
             },
-            "oscillator": harmonic
+            "oscillator": ring
         });
 
         // no notes playing yet, none queued
@@ -111,7 +124,7 @@ export default class Keyboard {
         this.midiOutput.playNote(pitch.midiNoteNumber, Keyboard.pitchClassToMidiChannel(pitch.pitchClass), this.optionsForChannel(pitch.channel));
         this.midiOutput.sendPitchBend(Keyboard.centsToPitchBend(pitch.centsFromEqual), Keyboard.pitchClassToMidiChannel(pitch.pitchClass));
         // Sound
-        this.synth.triggerAttack(pitch.frequencyHz, now(), volOfFreq(pitch.frequencyHz));
+        this.synth.triggerAttack(pitch.frequencyHz, now());//, volOfFreq(pitch.frequencyHz));
         // Data
         this.addPlayingPitch(pitch);
         // Visual
@@ -135,7 +148,7 @@ export default class Keyboard {
         this.midiOutput.sendPitchBend(Keyboard.centsToPitchBend(newPitch.centsFromEqual), Keyboard.pitchClassToMidiChannel(newPitch.pitchClass));
         // Sound
         this.synth.triggerRelease(pitch.frequencyHz, now());
-        this.synth.triggerAttack(newPitch.frequencyHz, now(), volOfFreq(newPitch.frequencyHz));
+        this.synth.triggerAttack(newPitch.frequencyHz, now());//, volOfFreq(newPitch.frequencyHz));
         // Data
         if (pitch.midiNoteNumber == newPitch.midiNoteNumber) {
             //this.pitches[pitch.midiNoteNumber] = newPitch;
