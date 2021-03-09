@@ -40,3 +40,8 @@
 - [Polyphone](https://www.polyphone-soundfonts.com/) for editing sound fonts
 - [SynthFont](http://www.synthfont.com/index.html) for editing and playing MIDI files with different sound fonts
 - [FreePiano](https://freepiano.tiwb.com/en/) an all-in-one synthesizer with built in computer keyboard, sound font, and MIDI support
+
+# AUDIO Programs
+
+- [Audacity](https://www.audacityteam.org/) as a digital audio workstation
+- [Sonic Visualizer](https://www.sonicvisualiser.org/) for viewing and measuring spectrograms
